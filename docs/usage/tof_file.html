@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Precess and Save your data! &#8212; Badblock 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Precess and Save your data!" href="datset_file.html" />
+    <link rel="prev" title="Prepare your data!" href="data.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datset_file.html" title="Precess and Save your data!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="Prepare your data!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="data.html" accesskey="U">Prepare your data!</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sino_process_tof">
+<span id="precess-and-save-your-data"></span><h1>Precess and Save your data!<a class="headerlink" href="#module-sino_process_tof" title="Permalink to this headline">¶</a></h1>
+<p>This module is used to generate intermediate pickles before the training.</p>
+<p>Created on Thu Jun 14 16:19:07 2018
+&#64;author: bill
+&#64;update: liang</p>
+<dl class="class">
+<dt id="sino_process_tof.Sinogram_Processor">
+<em class="property">class </em><code class="descclassname">sino_process_tof.</code><code class="descname">Sinogram_Processor</code><span class="sig-paren">(</span><em>data_file</em>, <em>for_test=False</em>, <em>slices=-1</em>, <em>min_blocks=0</em>, <em>max_blocks=0</em><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.Sinogram_Processor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="sino_process_tof.Sinogram_Processor.process_data">
+<code class="descname">process_data</code><span class="sig-paren">(</span><em>file</em>, <em>tof</em>, <em>slices</em>, <em>theta</em>, <em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.Sinogram_Processor.process_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to process the sinogram file</p>
+<p>The function will first read the file with the extension .s,
+and find its corresponding good and badblock file, output a stack
+with both good and bad sinograms: Note, here we padding the axis
+to make it more suitable for the network to train, e.g. we make axis
+3 from 50 to 64 by padding wrapped pixels from up and down</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>file</dd>
+<dt>Returns:</dt>
+<dd>output_sino</dd>
+<dt>Raises:</dt>
+<dd>IOError: An error occurred accessing the file .</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sino_process_tof.Sinogram_Processor.process_sino_file">
+<code class="descname">process_sino_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.Sinogram_Processor.process_sino_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to process the sinogram file</p>
+<p>The function will first read the file with the extension .s.hdr,
+and find its corresponding good and badblock file, output a stack
+with both good and bad sinograms</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>self.file</dd>
+<dt>Returns:</dt>
+<dd>output_sino_xy</dd>
+<dt>Raises:</dt>
+<dd>IOError: An error occurred accessing the file .</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sino_process_tof.Sinogram_Processor.remove_block">
+<code class="descname">remove_block</code><span class="sig-paren">(</span><em>orig_img</em>, <em>block_num</em><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.Sinogram_Processor.remove_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is omitted.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="sino_process_tof.main">
+<code class="descclassname">sino_process_tof.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main function to call for processing all the data files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sino_process_tof.process_sinogram">
+<code class="descclassname">sino_process_tof.</code><code class="descname">process_sinogram</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#sino_process_tof.process_sinogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to process one patient.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="data.html"
+                        title="previous chapter">Prepare your data!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datset_file.html"
+                        title="next chapter">Precess and Save your data!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/tof_file.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datset_file.html" title="Precess and Save your data!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="Prepare your data!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="data.html" >Prepare your data!</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Liang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

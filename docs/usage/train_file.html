@@ -1,0 +1,166 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Train_Unet! &#8212; Badblock 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualize your results!" href="view.html" />
+    <link rel="prev" title="Train your network!" href="train.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="view.html" title="Visualize your results!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Train your network!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="train.html" accesskey="U">Train your network!</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-train_unet">
+<span id="train-unet"></span><h1>Train_Unet!<a class="headerlink" href="#module-train_unet" title="Permalink to this headline">¶</a></h1>
+<p>Created on Thu Jan 15 18:45:25 2019</p>
+<p>&#64;author: bill
+&#64;updated: Liang</p>
+<dl class="class">
+<dt id="train_unet.Network_Trainer">
+<em class="property">class </em><code class="descclassname">train_unet.</code><code class="descname">Network_Trainer</code><span class="sig-paren">(</span><em>opts</em>, <em>device_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.Network_Trainer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="train_unet.Network_Trainer.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>network</em>, <em>batch_size</em>, <em>perform_recon_loss=False</em>, <em>output_all_sinos=False</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.Network_Trainer.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="train_unet.Network_Trainer.train">
+<code class="descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.Network_Trainer.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="train_unet.Network_Trainer.visualize_progress">
+<code class="descname">visualize_progress</code><span class="sig-paren">(</span><em>opts</em>, <em>images</em>, <em>istest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.Network_Trainer.visualize_progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="train_unet.Network_Trainer.write_log">
+<code class="descname">write_log</code><span class="sig-paren">(</span><em>value</em>, <em>log_type='test'</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.Network_Trainer.write_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="train_unet.fill_image">
+<code class="descclassname">train_unet.</code><code class="descname">fill_image</code><span class="sig-paren">(</span><em>input_sino</em>, <em>out_img</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.fill_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="train_unet.main">
+<code class="descclassname">train_unet.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="train_unet.preprocess">
+<code class="descclassname">train_unet.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>input_img</em>, <em>target_img</em><span class="sig-paren">)</span><a class="headerlink" href="#train_unet.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="train_unet.random">
+<code class="descclassname">train_unet.</code><code class="descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#train_unet.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="train.html"
+                        title="previous chapter">Train your network!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="view.html"
+                        title="next chapter">Visualize your results!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/train_file.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="view.html" title="Visualize your results!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Train your network!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="train.html" >Train your network!</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Liang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

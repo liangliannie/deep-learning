@@ -1,0 +1,208 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Unet! &#8212; Badblock 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Train your network!" href="train.html" />
+    <link rel="prev" title="Build your network!" href="quickstart.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Train your network!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Build your network!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="quickstart.html" accesskey="U">Build your network!</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-unet">
+<span id="unet"></span><h1>Unet!<a class="headerlink" href="#module-unet" title="Permalink to this headline">¶</a></h1>
+<p>Created on Tue Mar 20 21:17:05 2018</p>
+<p>&#64;author: bill
+&#64;updated: Liang</p>
+<dl class="class">
+<dt id="unet.Sino_repair_net">
+<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">Sino_repair_net</code><span class="sig-paren">(</span><em>opts</em>, <em>device_ids</em>, <em>load_model=False</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="unet.Sino_repair_net.optimize">
+<code class="descname">optimize</code><span class="sig-paren">(</span><em>output</em>, <em>target_img</em>, <em>input_img</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.optimize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="unet.Sino_repair_net.save_network">
+<code class="descname">save_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.save_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="unet.Sino_repair_net.set_optimizer">
+<code class="descname">set_optimizer</code><span class="sig-paren">(</span><em>optimizer</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.set_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="unet.Sino_repair_net.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="unet.Sino_repair_net.train_batch">
+<code class="descname">train_batch</code><span class="sig-paren">(</span><em>input_img</em>, <em>target_img</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.train_batch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="unet.UNet">
+<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="unet.UNet.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em>, <em>test=False</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="unet.UNet_down_block">
+<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet_down_block</code><span class="sig-paren">(</span><em>input_channel</em>, <em>output_channel</em>, <em>down_sample</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_down_block" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="unet.UNet_down_block.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_down_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="unet.UNet_up_block">
+<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet_up_block</code><span class="sig-paren">(</span><em>prev_channel</em>, <em>input_channel</em>, <em>output_channel</em>, <em>ID</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_up_block" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="unet.UNet_up_block.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>prev_feature_map</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_up_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="previous chapter">Build your network!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="train.html"
+                        title="next chapter">Train your network!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/net_file.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Train your network!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Build your network!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="quickstart.html" >Build your network!</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Liang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>
