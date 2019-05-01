@@ -1,6 +1,7 @@
 # deep-learning
 
 This is a work to show how to build a U-Net deep learning network from scatch for fixing medical sinograms with badblocks from PET systems
+And I will keep working on this until I will finish writing!!!
 
 Requirements:
 -----------------------------------------------------------------
