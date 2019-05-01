@@ -62,7 +62,7 @@
 <em class="property">class </em><code class="descclassname">unet.</code><code class="descname">Sino_repair_net</code><span class="sig-paren">(</span><em>opts</em>, <em>device_ids</em>, <em>load_model=False</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="unet.Sino_repair_net.optimize">
-<code class="descname">optimize</code><span class="sig-paren">(</span><em>output</em>, <em>target_img</em>, <em>input_img</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.optimize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">optimize</code><span class="sig-paren">(</span><em>output</em>, <em>target_img</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.optimize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -77,70 +77,13 @@
 
 <dl class="method">
 <dt id="unet.Sino_repair_net.test">
-<code class="descname">test</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">test</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>valid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.test" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="unet.Sino_repair_net.train_batch">
-<code class="descname">train_batch</code><span class="sig-paren">(</span><em>input_img</em>, <em>target_img</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.train_batch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train_batch</code><span class="sig-paren">(</span><em>input_img</em>, <em>target_img</em>, <em>valid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.Sino_repair_net.train_batch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="unet.UNet">
-<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="unet.UNet.forward">
-<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em>, <em>test=False</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="unet.UNet_down_block">
-<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet_down_block</code><span class="sig-paren">(</span><em>input_channel</em>, <em>output_channel</em>, <em>down_sample</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_down_block" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="unet.UNet_down_block.forward">
-<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_down_block.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="unet.UNet_up_block">
-<em class="property">class </em><code class="descclassname">unet.</code><code class="descname">UNet_up_block</code><span class="sig-paren">(</span><em>prev_channel</em>, <em>input_channel</em>, <em>output_channel</em>, <em>ID</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_up_block" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="unet.UNet_up_block.forward">
-<code class="descname">forward</code><span class="sig-paren">(</span><em>prev_feature_map</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#unet.UNet_up_block.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
 
 </dd></dl>
 
