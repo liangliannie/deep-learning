@@ -1,0 +1,208 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Prepare your data! &#8212; Badblock 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Precess and Save your data!" href="tof_file.html" />
+    <link rel="prev" title="Installation!" href="installation.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tof_file.html" title="Precess and Save your data!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="prepare-your-data">
+<h1>Prepare your data!<a class="headerlink" href="#prepare-your-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="process-the-raw-data">
+<h2>Process the raw data<a class="headerlink" href="#process-the-raw-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="read-and-reshape">
+<h3>Read and reshape<a class="headerlink" href="#read-and-reshape" title="Permalink to this headline">¶</a></h3>
+<p>The size and the shape of the data would affect not only the output but also the learning speed of the network,
+and hence pre-process the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common
+in machine learning. Mostly, the methods include but not limited to normalization, reshaping, etc.</p>
+<p>In our case, we have .s file as both the good file and badblock file with both files around 1.4G(with flatten data stored as uint16), which are too large as one input for neural network,
+thus we will reshape the data to more informative matrix based on [TOF, Slice, W, L] as slice of sinograms.</p>
+<p>In simple cases without down/up sampling(we will cover this later), the number of W and L do not matter, but here we need to make W and L as a power of 2 since we will consider the network structure as UNet which will include both downsampling and upsampling.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>An example of reshaping to a power of 2:</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.numpy.org/">Numpy</a> provides the padding function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">),</span> <span class="p">(</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)),</span> <span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In our case, if we have [TOF=34, Slice=815, W=50, L=520], we can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to make it [TOF=34, Slice=815, W=64, L=520], which would be good enough for 3 times downsampling since W and L can be divided by <span class="math notranslate nohighlight">\(2^3\)</span>.</p>
+</div></blockquote>
+<p class="last">Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.</p>
+</div>
+</div>
+<div class="section" id="save-the-data-in-pickle">
+<h3>Save the data in pickle<a class="headerlink" href="#save-the-data-in-pickle" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://docs.python.org/3/library/pickle.html">Pickle</a> module implement binary protocols for serializing and de-serializing a Python object structure. Here we could just dump our matrix into pickle by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The details of the data process can be refered from sino_process_tof.py</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tof_file.html">Precess and Save your data!</a></li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Loading all the data into the GPU is not only time consuming and not efficient.</p>
+</div>
+</div>
+</div>
+<div class="section" id="load-your-data">
+<h2>Load your data<a class="headerlink" href="#load-your-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dataset-class">
+<h3>Dataset Class<a class="headerlink" href="#dataset-class" title="Permalink to this headline">¶</a></h3>
+<p>The abstract class in pytorch <strong>torch.utils.data.Dataset</strong> is the main class to call for loading data, and there are mainly two methods would be called.</p>
+<ul class="simple">
+<li>__len__: which returns the size/length of the dataset</li>
+<li>__getitem__: which returns one sample of the dataset based on the index, such that dataset[i] for index i</li>
+</ul>
+<p>In our case, we define the class <code class="code docutils literal notranslate"><span class="pre">class</span> <span class="pre">Sino_Dataset(dataset)</span></code> inherits from <code class="code docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code></p>
+<p>Here, the length of the dataset is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch_size</span>
+</pre></div>
+</div>
+<p>and the item of the dataset is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+
+     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>the <code class="code docutils literal notranslate"><span class="pre">self.data.shape=[tof*slice,</span> <span class="pre">W,</span> <span class="pre">L]</span></code></p>
+<p>The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datset_file.html">Dataset!</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Prepare your data!</a><ul>
+<li><a class="reference internal" href="#process-the-raw-data">Process the raw data</a><ul>
+<li><a class="reference internal" href="#read-and-reshape">Read and reshape</a></li>
+<li><a class="reference internal" href="#save-the-data-in-pickle">Save the data in pickle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-your-data">Load your data</a><ul>
+<li><a class="reference internal" href="#dataset-class">Dataset Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tof_file.html"
+                        title="next chapter">Precess and Save your data!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/data.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tof_file.html" title="Precess and Save your data!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Liang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

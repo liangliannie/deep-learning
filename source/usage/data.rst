@@ -1,0 +1,101 @@
+.. badblock documentation master file, created by
+   sphinx-quickstart on Thu Mar  7 09:42:25 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Prepare your data!
+====================================
+
+Process the raw data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Read and reshape
+"""""""""""""""""""
+The size and the shape of the data would affect not only the output but also the learning speed of the network,
+and hence pre-process the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common
+in machine learning. Mostly, the methods include but not limited to normalization, reshaping, etc.
+
+In our case, we have .s file as both the good file and badblock file with both files around 1.4G(with flatten data stored as uint16), which are too large as one input for neural network, 
+thus we will reshape the data to more informative matrix based on [TOF, Slice, W, L] as slice of sinograms. 
+
+In simple cases without down/up sampling(we will cover this later), the number of W and L do not matter, but here we need to make W and L as a power of 2 since we will consider the network structure as UNet which will include both downsampling and upsampling.
+
+.. note::
+   An example of reshaping to a power of 2:
+
+	`Numpy <http://www.numpy.org/>`_ provides the padding function::
+
+	    data = np.pad(data, ((x1, y1), (x2, y2), (x3, y3), (x4, y4)), 'wrap') 
+
+	In our case, if we have [TOF=34, Slice=815, W=50, L=520], we can do::
+
+	    data = np.pad(data, ((0, 0), (0, 0), (7, 7), (0, 0)), 'wrap')
+
+	to make it [TOF=34, Slice=815, W=64, L=520], which would be good enough for 3 times downsampling since W and L can be divided by :math:`2^3`.
+
+   Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.
+
+Save the data in pickle
+"""""""""""""""""""""""""""""
+
+`Pickle <https://docs.python.org/3/library/pickle.html>`_ module implement binary protocols for serializing and de-serializing a Python object structure. Here we could just dump our matrix into pickle by using::
+
+    pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+        
+
+The details of the data process can be refered from sino_process_tof.py
+
+.. toctree::
+   :maxdepth: 2
+      
+   /usage/tof_file.rst
+
+
+.. warning::
+   
+   Loading all the data into the GPU is not only time consuming and not efficient.
+
+Load your data 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Dataset Class
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+The abstract class in pytorch **torch.utils.data.Dataset** is the main class to call for loading data, and there are mainly two methods would be called.
+
+* __len__: which returns the size/length of the dataset
+* __getitem__: which returns one sample of the dataset based on the index, such that dataset[i] for index i
+
+In our case, we define the class :code:`class Sino_Dataset(dataset)` inherits from :code:`torch.utils.data.Dataset`
+
+Here, the length of the dataset is::
+
+    def __len__(self):
+
+        return self.epoch_size
+
+and the item of the dataset is::
+
+   def __getitem__(self, idx):
+	
+	return self.data[idx]
+
+the :code:`self.data.shape=[tof*slice, W, L]`
+
+The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.
+
+.. toctree::
+   :maxdepth: 2
+      
+   /usage/datset_file.rst
+
+
+
+
+
+
+
+
+
+
+
