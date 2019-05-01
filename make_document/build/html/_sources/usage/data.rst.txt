@@ -12,14 +12,17 @@ Process the raw data
 
 Read and reshape
 """""""""""""""""""
-The size and the shape of the data would affect not only the output but also the learning speed of the network,
+The size(shape) and the distribution of the data would affect not only the output but also the learning speed of the network,
 and hence pre-process the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common
-in machine learning. Mostly, the methods include but not limited to normalization, reshaping, etc.
+in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. 
+Mostly, the methods include but not limited to normalization, reshaping, etc.
 
-In our case, we have .s file as both the good file and badblock file with both files around 1.4G(with flatten data stored as uint16), which are too large as one input for neural network, 
-thus we will reshape the data to more informative matrix based on [TOF, Slice, W, L] as slice of sinograms. 
+In our case, we have .s file as both the input file and target file with both files around 1.4G(with flatten data stored as uint16), and our goal is to using U-Net to learn
+the data in the input file and to make it close to the data in the target file. In fact, these files are too large as one input for neural network, because I do not want to load all the datas into the memory if we do not have a lot memory. (It is so important! Hence, I will take this three times: We do not want to feed all into the memory!We do not want to feed all into the memory!We do not want to feed all into the memory!).
 
-In simple cases without down/up sampling(we will cover this later), the number of W and L do not matter, but here we need to make W and L as a power of 2 since we will consider the network structure as UNet which will include both downsampling and upsampling.
+To advoid feed all the data into the memory, we do reshape the data to more informative matrix and partition the data into smaller pieces, and then we could let the network learn smaller pieces with the pain that we will lose the relations among the smaller pieces. In my cases, I am working on sinograms and the sinograms have their own informative structure, and then I used [TOF, Slice, W, L] as my shape of the data, where I feed the network based on slices. 
+
+Here, for each slice, the image has shape [50, 520]. For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. But since we are working on UNet (as autoencoder, we need to encoder and then decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).
 
 .. note::
    An example of reshaping to a power of 2:
@@ -43,6 +46,8 @@ Save the data in pickle
 
     pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
         
+.. note::
+   Be careful with you pickle version, since it might not match between python2 and python3.
 
 The details of the data process can be refered from sino_process_tof.py
 
