@@ -9,11 +9,15 @@ Required packages to run this program (tested on Ubuntu 18.04):
 opencv
 
 python-numpy
+
 matplotlib
+
 scipy
+
 pytorch
+
 visdom
 
-Details:
+More Details check the websites below:
 --------------------------------------------------------------------------------------------
    https://liangliannie.github.io/deep-learning/
