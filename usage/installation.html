@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation! &#8212; Badblock 1.0 documentation</title>
+    <title>Installation &#8212; Badblock 1.0 documentation</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -17,8 +17,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Prepare your data!" href="data.html" />
-    <link rel="prev" title="Welcome to badblock’s documentation!" href="../index.html" />
+    <link rel="next" title="Prepare your data" href="data.html" />
+    <link rel="prev" title="Deep learning tutorial by building U-Net in Pytorch" href="../index.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -37,10 +37,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="data.html" title="Prepare your data!"
+          <a href="data.html" title="Prepare your data"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Welcome to badblock’s documentation!"
+          <a href="../index.html" title="Deep learning tutorial by building U-Net in Pytorch"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -52,32 +52,51 @@
           <div class="body" role="main">
             
   <div class="section" id="installation">
-<h1>Installation!<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<p>Python is a programming language that lets you work quickly
+and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.</p>
 <div class="section" id="install-python">
 <h2>Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="install-python-from-python">
-<h3>Install Python from <em>Python</em><a class="headerlink" href="#install-python-from-python" title="Permalink to this headline">¶</a></h3>
-<p>The latest Python can be downloaded and installed from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a> , a version above 3.6 is recommended.</p>
+<div class="section" id="direct-python-from-python">
+<h3>Direct Python from <em>Python</em><a class="headerlink" href="#direct-python-from-python" title="Permalink to this headline">¶</a></h3>
+<p>Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python.
+The latest Python can be downloaded and installed from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a> . I have installed 3.6, please try to install a version above 3.6.</p>
 </div>
-<div class="section" id="install-python-from-conda">
-<h3>Install Python from <em>Conda</em><a class="headerlink" href="#install-python-from-conda" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="indirect-python-from-conda">
+<h3>Indirect Python from <em>Conda</em><a class="headerlink" href="#indirect-python-from-conda" title="Permalink to this headline">¶</a></h3>
+<p>Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies.</p>
 <p>Conda can be found via <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/">https://docs.conda.io/projects/conda/en/latest/user-guide/install/</a>.</p>
-<p>Conda is also recommended since many different versions of python could be changed based on:</p>
+<p>Conda is recommended when multiple version of python will be installed in the system, and the version of python can be changed easily based on:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source activate myenv</span>
+</pre></div>
+</div>
+<p>For example,</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source activate py36</span>
 </pre></div>
 </div>
 <p>with the whole list of pythons with different versions can be shown as:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda env list</span>
 </pre></div>
 </div>
+<p>other useful methods for install certain packages including</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda search scipy</span>
+<span class="go">conda install --name myenv scipy</span>
+<span class="go">conda install scipy=0.15.0</span>
+<span class="go">source deactivate</span>
+<span class="go">conda info --envs</span>
+<span class="go">conda list -n myenv scipy</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="install-pytorch">
 <h2>Install Pytorch<a class="headerlink" href="#install-pytorch" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="before-start-with-pytorch-make-sure-cuda-has-been-installed">
-<h3>Before start with pytorch, make sure CUDA has been installed.<a class="headerlink" href="#before-start-with-pytorch-make-sure-cuda-has-been-installed" title="Permalink to this headline">¶</a></h3>
+<p>Before start with pytorch, make sure CUDA has been installed, where
+CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia.</p>
+<div class="section" id="install-cuda">
+<h3>Install CUDA<a class="headerlink" href="#install-cuda" title="Permalink to this headline">¶</a></h3>
 <p>Install your cuda from <a class="reference external" href="https://developer.nvidia.com/cuda-downloads?target_os=Linux">https://developer.nvidia.com/cuda-downloads?target_os=Linux</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -86,6 +105,7 @@
 </div>
 <div class="section" id="id1">
 <h3>Install pytorch<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Pytorch is an open source deep learning platform that provides a seamless path from research prototyping to production deployment.</p>
 <p>pytorch can be found via <a class="reference external" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a>.</p>
 </div>
 </div>
@@ -97,15 +117,59 @@
 <li>$ pip install numpy</li>
 <li>$ pip install matplotlib</li>
 <li>$ pip install Pillow</li>
+<li>$ pip install scipy</li>
 </ul>
 <p>Plus, please include ‘pytorch_msssim’ folder if you want to use msssim as a loss, and if there are other package needed, try <strong>pip</strong></p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install packagename</span>
 </pre></div>
 </div>
-<p>NOW, you are all set with all the packages need for the deep learning Unet, and next we will forward to prepare our data.</p>
+<p>NOW, you are all set with all the packages needed for the deep learning Unet, and in the next step we will forward to prepare our data.</p>
+</div>
+<div class="section" id="build-in-docker-optional">
+<h2>Build in Docker(Optional)<a class="headerlink" href="#build-in-docker-optional" title="Permalink to this headline">¶</a></h2>
+<p>Docker is a computer program that performs operating-system-level virtualization. The advantage of Docker is that we can only install the packages we need and then the extra cost of unnecessary components in the operating system can be reduced.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last">If a python environment with pytorch is hard to obtain locally, Docker is always a good choice to make your network run in cloud. Note: a most recent pytorch with NVIDIA can be pulled from <a class="reference external" href="https://docs.nvidia.com/deeplearning/dgx/pytorch-release-notes/running.html">https://docs.nvidia.com/deeplearning/dgx/pytorch-release-notes/running.html</a>.</p>
+</div>
+<p>Docker is simple to use too!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> List Docker images
+<span class="go">     docker image ls</span>
+
+<span class="gp">#</span> List Docker containers <span class="o">(</span>running, all, all in quiet mode<span class="o">)</span>
+<span class="go">     docker container ls</span>
+<span class="go">     docker container ls --all</span>
+<span class="go">     docker container ls -aq</span>
+<span class="go">     docker container stop xxxxxxx</span>
+<span class="gp">#</span> List Docker containers <span class="o">(</span>running, all, all in quiet mode<span class="o">)</span>
+<span class="go">     docker build -t friendlyhello .  # Create image using this directory&#39;s Dockerfile</span>
+<span class="go">     docker run -p 4000:80 friendlyhello  # Run &quot;friendlyname&quot; mapping port 4000 to 80</span>
+<span class="go">     docker run -d -p 4000:80 friendlyhello         # Same thing, but in detached mode</span>
+<span class="go">     docker container ls                                # List all running containers</span>
+<span class="go">     docker container ls -a             # List all containers, even those not running</span>
+<span class="go">     docker container stop &lt;hash&gt;           # Gracefully stop the specified container</span>
+<span class="go">     docker container kill &lt;hash&gt;         # Force shutdown of the specified container</span>
+<span class="go">     docker container rm &lt;hash&gt;        # Remove specified container from this machine</span>
+<span class="go">     docker container rm $(docker container ls -a -q)         # Remove all containers</span>
+<span class="go">     docker image ls -a                             # List all images on this machine</span>
+<span class="go">     docker image rm &lt;image id&gt;            # Remove specified image from this machine</span>
+<span class="go">     docker image rm $(docker image ls -a -q)   # Remove all images from this machine</span>
+<span class="go">     docker login             # Log in this CLI session using your Docker credentials</span>
+<span class="go">     docker tag &lt;image&gt; username/repository:tag  # Tag &lt;image&gt; for upload to registry</span>
+<span class="go">     docker push username/repository:tag            # Upload tagged image to registry</span>
+<span class="go">     docker run username/repository:tag                   # Run image from a registry</span>
+</pre></div>
+</div>
+<p>Using Docker with DGX
+In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock” with every Docker command.</p>
+<ul class="simple">
+<li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock run –rm -ti &lt;image_name&gt; [optional_command]”</li>
+<li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock image ls” alternatively use the script “run-docker.sh” in /usr/local/bin:</li>
+<li>e.g. “run-docker.sh –rm -ti [further_options] &lt;image_name&gt; [optional_command]”</li>
+</ul>
+<p>I was using a line like below in a bash file to let the docker run within DGX by using slum.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch --gres=gpu:1 --mail-user=liang.li.uestc@gmail.com --mail-type=ALL --output=/badblock/li_dataset/log.txt --job-name=trainbd --error=/badblock/li_dataset/error.txt run-nvidia-docker.sh --rm --name train_unet -v /badblock/li_dataset/:/badblock/ -w /badblock/ nvcr.io/nvidia/pytorch:19.01-py3 python /badblock/code/badblock-fillgaps/train_unet.py --training-file=&quot;/badblock/data/DataTOF_Train/&quot; --test-file=&quot;/badblock/data/DataTOF_test/&quot; --mask-file=&quot;/badblock/data/mask.pkl&quot; --output-path=&quot;/badblock/output/&quot;</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -118,28 +182,29 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Installation!</a><ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#install-python">Install Python</a><ul>
-<li><a class="reference internal" href="#install-python-from-python">Install Python from <em>Python</em></a></li>
-<li><a class="reference internal" href="#install-python-from-conda">Install Python from <em>Conda</em></a></li>
+<li><a class="reference internal" href="#direct-python-from-python">Direct Python from <em>Python</em></a></li>
+<li><a class="reference internal" href="#indirect-python-from-conda">Indirect Python from <em>Conda</em></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#install-pytorch">Install Pytorch</a><ul>
-<li><a class="reference internal" href="#before-start-with-pytorch-make-sure-cuda-has-been-installed">Before start with pytorch, make sure CUDA has been installed.</a></li>
+<li><a class="reference internal" href="#install-cuda">Install CUDA</a></li>
 <li><a class="reference internal" href="#id1">Install pytorch</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#other-packages">Other packages</a></li>
+<li><a class="reference internal" href="#build-in-docker-optional">Build in Docker(Optional)</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Welcome to badblock’s documentation!</a></p>
+                        title="previous chapter">Deep learning tutorial by building U-Net in Pytorch</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="data.html"
-                        title="next chapter">Prepare your data!</a></p>
+                        title="next chapter">Prepare your data</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -173,10 +238,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="data.html" title="Prepare your data!"
+          <a href="data.html" title="Prepare your data"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Welcome to badblock’s documentation!"
+          <a href="../index.html" title="Deep learning tutorial by building U-Net in Pytorch"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>

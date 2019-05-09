@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Prepare your data!
+Prepare your data
 ====================================
 
 Process the raw data
@@ -12,7 +12,7 @@ Process the raw data
 
 Read and reshape
 """""""""""""""""""
-The size(shape) and the distribution of the data would affect not only the output but also the learning speed of the network,
+The size(shape) and the distribution of the data would affect both the performance of the output and the learning speed of the network,
 and hence pre-process the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common
 in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. 
 Mostly, the methods include but not limited to normalization, reshaping, etc.

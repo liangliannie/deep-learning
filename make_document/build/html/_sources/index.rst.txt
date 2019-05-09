@@ -3,22 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-This is a Deep learning tutorial for building U-Net by using Pytorch
+Deep learning tutorial by building U-Net in Pytorch
 ===================================================================================================
 
-In fact, I have no ideas about deep learning until I started my internship in Siemens, Knoxville, and I learned 
-a lot from my super nice manager! Great thanks to him(BILL)! Note, I am also a beginner in deep learning!
+Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you 
+how to improve the quality of image(or say image denoising) by using one of the many networks, UNet.
 
-During my internship, we try to use deep learning to do image impainting, and since the performance of our project 
-is still far away from what we want(medical images need very high accuracy) we currently stop working on this. However, I do not want to
-forget what I have learned. I think this is a so great start for me to learn about deep learning and explore different kinds of networks, and
-this makes me feel excited almost every day so I want to share this with you. 
+
+Reasons for this tutorial 
+----------------------------------
+I started my internship in Siemens, Knoxville at the begining of 2019, where I first touched and learned deep learning. 
+Great thanks to super nice manager(BILL) since I do learn a lot from him!! Please note that I am also a beginner in deep learning, and thus point me out if I will be wrong in the following content.
+
+During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting and denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you. 
 
 In fact, a lot of my coworkers are also very interested in building or learning about deep learning while they think
 deep learning is very hard to learn. Hence, I also write this tutorial for people who are in the field of medical imaging
 or other who might want to build their own deep learning networks but they do not know how to start. To be honest, to select the most suitable parameters/models
 is the most time consuming part of deep learning, but to start deep learning is far more simple than you thought!
 
+Goals for this tutorial 
+----------------------------------
 Hence, lets begin with this to open your new world to the deep learning(AI)!
 
    First, we will try to install all the necessary packages for the deep learning, and it will be great if you have a GPU.
@@ -32,10 +37,6 @@ Hence, lets begin with this to open your new world to the deep learning(AI)!
 .. toctree::
    :maxdepth: 2
    :caption: Here all the contents go:
-
-
-
-
 
    usage/installation.rst
    usage/data.rst
