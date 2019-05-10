@@ -53,10 +53,15 @@
             
   <div class="section" id="build-your-network">
 <h1>Build your network!<a class="headerlink" href="#build-your-network" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-unet">
+<h2>What is Unet?<a class="headerlink" href="#what-is-unet" title="Permalink to this headline">¶</a></h2>
 <p>In this part, I will try to elaborate what is UNet and how it works. Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.</p>
 <p>One example of UNet with two times- subsampling is elaborated below.</p>
 <a class="reference internal image-reference" href="../_images/unet.png"><img alt="Unet" class="align-center" src="../_images/unet.png" style="width: 500px;" /></a>
-<p>The example code based on UNet is given below[for more details please forward to the code].</p>
+</div>
+<div class="section" id="how-to-write-unet-in-code">
+<h2>How to write Unet in code?<a class="headerlink" href="#how-to-write-unet-in-code" title="Permalink to this headline">¶</a></h2>
+<p>The example code based on UNet in Pytorch is given below[for more details please forward to the code].</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UNet</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
@@ -122,10 +127,16 @@
         <span class="k">return</span> <span class="n">out</span>
 </pre></div>
 </div>
+<p>Knowing the network, we can input the corrupted sinogram with missing data for one or more bad blocks and then output the fixed sinogram. The contracting path in Unet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here we only give one example of network, UNet. In fact, there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet.</p>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="net_file.html">Unet!</a></li>
 </ul>
+</div>
 </div>
 </div>
 
@@ -135,6 +146,15 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Build your network!</a><ul>
+<li><a class="reference internal" href="#what-is-unet">What is Unet?</a></li>
+<li><a class="reference internal" href="#how-to-write-unet-in-code">How to write Unet in code?</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="datset_file.html"
                         title="previous chapter">Dataset!</a></p>

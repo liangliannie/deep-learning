@@ -6,7 +6,10 @@
 Build your network!
 ====================================
 
+What is Unet?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In this part, I will try to elaborate what is UNet and how it works. Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation. 
+
 
 One example of UNet with two times- subsampling is elaborated below.
 
@@ -15,8 +18,9 @@ One example of UNet with two times- subsampling is elaborated below.
     :align: center
     :alt: Unet
 
-
-The example code based on UNet is given below[for more details please forward to the code].
+How to write Unet in code?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The example code based on UNet in Pytorch is given below[for more details please forward to the code].
 
 
 .. code-block:: python
@@ -86,7 +90,10 @@ The example code based on UNet is given below[for more details please forward to
 		return out
 
 
+Knowing the network, we can input the corrupted sinogram with missing data for one or more bad blocks and then output the fixed sinogram. The contracting path in Unet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.
 
+.. note::
+   Here we only give one example of network, UNet. In fact, there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet.
 .. toctree::
    :maxdepth: 2
       

@@ -53,7 +53,95 @@
             
   <div class="section" id="visualize-your-results">
 <h1>Visualize your results!<a class="headerlink" href="#visualize-your-results" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-visdom">
+<h2>Install Visdom<a class="headerlink" href="#install-visdom" title="Permalink to this headline">¶</a></h2>
+<p>Visdom is a flexible tool for creating, organizing, and sharing visualizations of live, rich data. Supports Torch and Numpy, which can be found <a class="reference external" href="https://github.com/facebookresearch/visdom/">https://github.com/facebookresearch/visdom/</a>.</p>
+</div>
+<div class="section" id="use-visdom">
+<h2>Use Visdom<a class="headerlink" href="#use-visdom" title="Permalink to this headline">¶</a></h2>
+<p>Try to view your output in websites:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">visdom</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># Start the server in terminal;</span>
+<span class="c1"># #  visdom/ python -m visdom.server</span>
+
+<span class="k">class</span> <span class="nc">Visualize_Training</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">=</span> <span class="n">visdom</span><span class="o">.</span><span class="n">Visdom</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">win1</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">win3</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">win2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_images</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_images</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+
+    <span class="k">def</span> <span class="nf">Plot_Progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">window</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">         Plot progress</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1">#TODO: Graph these on the same graph dummy!!!!!</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">window</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">win1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Historical Epoch&#39;</span><span class="p">,</span>
+                                     <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Training Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Training Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">legend</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Training Loss&#39;</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">win1</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">window</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win3</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">win3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Historical Epoch&#39;</span><span class="p">,</span>
+                                     <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Testing Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Testing Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">legend</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Testing Loss&#39;</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">win3</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">window</span> <span class="o">==</span> <span class="s2">&quot;recon&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win2</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">win2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Historical Epoch&#39;</span><span class="p">,</span>
+                                     <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Recon Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Recon Loss&#39;</span><span class="p">,</span>
+                                     <span class="n">legend</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Recon Loss&#39;</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">win2</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+    <span class="k">def</span> <span class="nf">Show_Train_Images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Images&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        images: a list of same size images</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_images</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_images</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">Show_Test_Images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Images&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        images: a list of same size images</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_images</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_images</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 
@@ -63,6 +151,15 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Visualize your results!</a><ul>
+<li><a class="reference internal" href="#install-visdom">Install Visdom</a></li>
+<li><a class="reference internal" href="#use-visdom">Use Visdom</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="train_file.html"
                         title="previous chapter">Train_Unet!</a></p>
