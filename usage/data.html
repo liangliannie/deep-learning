@@ -53,18 +53,30 @@
             
   <div class="section" id="prepare-your-data">
 <h1>Prepare your data<a class="headerlink" href="#prepare-your-data" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="process-the-raw-data">
-<h2>Process the raw data<a class="headerlink" href="#process-the-raw-data" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="read-and-reshape">
-<h3>Read and reshape<a class="headerlink" href="#read-and-reshape" title="Permalink to this headline">¶</a></h3>
-<p>The size(shape) and the distribution of the data would affect both the performance of the output and the learning speed of the network,
-and hence pre-process the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common
-in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data].
-Mostly, the methods include but not limited to normalization, reshaping, etc.</p>
-<p>In our case, we have .s file as both the input file and target file with both files around 1.4G(with flatten data stored as uint16), and our goal is to using U-Net to learn
-the data in the input file and to make it close to the data in the target file. In fact, these files are too large as one input for neural network, because I do not want to load all the datas into the memory if we do not have a lot memory. (It is so important! Hence, I will take this three times: We do not want to feed all into the memory!We do not want to feed all into the memory!We do not want to feed all into the memory!).</p>
-<p>To advoid feed all the data into the memory, we do reshape the data to more informative matrix and partition the data into smaller pieces, and then we could let the network learn smaller pieces with the pain that we will lose the relations among the smaller pieces. In my cases, I am working on sinograms and the sinograms have their own informative structure, and then I used [TOF, Slice, W, L] as my shape of the data, where I feed the network based on slices.</p>
-<p>Here, for each slice, the image has shape [50, 520]. For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. But since we are working on UNet (as autoencoder, we need to encoder and then decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).</p>
+<h2>Read and reshape<a class="headerlink" href="#read-and-reshape" title="Permalink to this headline">¶</a></h2>
+<p>The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. In most the cases, the methods include but not limit to normalization, reshaping, etc.</p>
+<div class="section" id="learn-our-raw-data">
+<h3>Learn our raw data<a class="headerlink" href="#learn-our-raw-data" title="Permalink to this headline">¶</a></h3>
+<p>In the following, I will give two examples about the data we deal with for medical imageing, sinograms and images.</p>
+</div>
+</div>
+<div class="section" id="eg-sinograms">
+<h2>eg. Sinograms<a class="headerlink" href="#eg-sinograms" title="Permalink to this headline">¶</a></h2>
+<p>PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which is basically 2D representation of projection rays versus angle.</p>
+<a class="reference internal image-reference" href="../_images/sinograms.png"><img alt="../_images/sinograms.png" class="align-center" src="../_images/sinograms.png" style="width: 300px;" /></a>
+<p>In our case, we have the sinograms files for badblocks, where the file format is .s with the input sinograms being removed with bad blocks and the target sinograms being equipped with all blocks, and both files are stored around 1.4G(with flatten data stored as uint16).</p>
+<p>Hence, our goal is to use U-Net to project the data from the input files and to make it close to the data in the target file. Actually, the best way to train might be to feed all the sinograms into memory, but these files are too large as one input for neural network. Hence, in the following, we will try to cut/seperate the data into slices where we only need to feed parts of the sinograms.</p>
+</div>
+<div class="section" id="eg-images">
+<h2>eg. Images<a class="headerlink" href="#eg-images" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/images.PNG"><img alt="../_images/images.PNG" class="align-center" src="../_images/images.PNG" style="width: 300px;" /></a>
+<p>To clarify, our goal is to learn the body image (to make the image more clear and help the doctors make good decisions). Thus, another potential solution will be to work on the images directly. Say, we feed the reconstructed image with bad blocks into our neural networks as inputs and our target will be the images without bad blocks.</p>
+<div class="section" id="process-our-raw-data">
+<h3>Process our raw data<a class="headerlink" href="#process-our-raw-data" title="Permalink to this headline">¶</a></h3>
+<p>To advoid loading all data into the memory, we reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In this way, we can let the network learn the smaller pieces but we might lose the information of connections among the smaller pieces.</p>
+<p>In my case, I am working on sinograms and the sinograms have their own informative structure [TOF, Slice, W, L], where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from [TOF, Slice, W, L] into [TOF*Slice, W, L],  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape [50, 520].</p>
+<p>For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. Since we are working on UNet (as autoencoder, we need to encode and decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>An example of reshaping to a power of 2:</p>
@@ -84,7 +96,7 @@ the data in the input file and to make it close to the data in the target file. 
 </div>
 <div class="section" id="save-the-data-in-pickle">
 <h3>Save the data in pickle<a class="headerlink" href="#save-the-data-in-pickle" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="https://docs.python.org/3/library/pickle.html">Pickle</a> module implement binary protocols for serializing and de-serializing a Python object structure. Here we could just dump our matrix into pickle by using:</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/pickle.html">Pickle</a> module implement binary protocols for serializing and de-serializing a Python object structure. Here we can dump our matrix into pickle by using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -100,15 +112,22 @@ the data in the input file and to make it close to the data in the target file. 
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Loading all the data into the GPU is not only time consuming and not efficient.</p>
+<p class="last">Loading all the data into the GPU is both time consuming and inefficient.</p>
 </div>
 </div>
 </div>
 <div class="section" id="load-your-data">
 <h2>Load your data<a class="headerlink" href="#load-your-data" title="Permalink to this headline">¶</a></h2>
+<p>Before we start, let’s see how pytorch works with dataset. Pytorch a Python-based scientific computing package targeted at two sets of audiences:</p>
+<ul class="simple">
+<li>A replacement for NumPy to use the power of GPUs</li>
+<li>a deep learning research platform that provides maximum flexibility and speed</li>
+</ul>
+<p>In fact, pytorch has listed very good tutorial for beginners, so I will omit this part here while you can find easily online.</p>
+<p><a class="reference external" href="https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py/">Links to Pytorch Tutorial</a></p>
 <div class="section" id="dataset-class">
 <h3>Dataset Class<a class="headerlink" href="#dataset-class" title="Permalink to this headline">¶</a></h3>
-<p>The abstract class in pytorch <strong>torch.utils.data.Dataset</strong> is the main class to call for loading data, and there are mainly two methods would be called.</p>
+<p>PyTorch provides many tools to make data loading easy and hopefully, to make your code more readable. For instance, the abstract class in pytorch <strong>torch.utils.data.Dataset</strong> is the main class to call for loading data, and there are mainly two methods would be called.</p>
 <ul class="simple">
 <li>__len__: which returns the size/length of the dataset</li>
 <li>__getitem__: which returns one sample of the dataset based on the index, such that dataset[i] for index i</li>
@@ -146,8 +165,13 @@ the data in the input file and to make it close to the data in the target file. 
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Prepare your data</a><ul>
-<li><a class="reference internal" href="#process-the-raw-data">Process the raw data</a><ul>
-<li><a class="reference internal" href="#read-and-reshape">Read and reshape</a></li>
+<li><a class="reference internal" href="#read-and-reshape">Read and reshape</a><ul>
+<li><a class="reference internal" href="#learn-our-raw-data">Learn our raw data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#eg-sinograms">eg. Sinograms</a></li>
+<li><a class="reference internal" href="#eg-images">eg. Images</a><ul>
+<li><a class="reference internal" href="#process-our-raw-data">Process our raw data</a></li>
 <li><a class="reference internal" href="#save-the-data-in-pickle">Save the data in pickle</a></li>
 </ul>
 </li>

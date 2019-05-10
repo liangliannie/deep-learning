@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
 
-This module is used to create the dataset.
-
-
-Created on Sun Mar 18 23:07:28 2018
-@author: bill
-@updated: Liang
-"""
 import numpy as np
 from torch.utils.data import Dataset
 import random, pickle

@@ -3,10 +3,6 @@
 """
 This module is used to generate intermediate pickles before the training.
 
-
-Created on Thu Jun 14 16:19:07 2018
-@author: bill
-@update: liang
 """
 
 import glob

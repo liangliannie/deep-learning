@@ -1,12 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jan 15 18:45:25 2019
-
-@author: bill
-@updated: Liang
-"""
-# import memory_profiler
+#!/home/liang/anaconda3/envs/py36/bin/python
 import torch
 
 import numpy as np
@@ -17,12 +9,8 @@ from scipy import ndimage
 import scipy.ndimage
 import scipy.misc
 from random import random
-# import sino_repair_utils as sr_utils
+
 from PIL import Image
-# from sklearn.preprocessing import RobustScaler as scale
-# from sklearn.preprocessing import MinMaxScaler as scale
-# from skimage.restoration import (denoise_tv_chambolle, denoise_bilateral,
-#                                          denoise_wavelet)
 from skimage.transform import rescale, resize, downscale_local_mean
 from sklearn.preprocessing import StandardScaler
 

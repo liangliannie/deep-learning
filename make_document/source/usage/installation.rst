@@ -142,7 +142,9 @@ Docker is simple to use too!
 
   
 Using Docker with DGX
-In order to connect to his Docker daemon a user has to commit the parameter "-H unix:///mnt/docker_socks/<user_name>/docker.sock" with every Docker command.
+""""""""""""""""""""""""""""""""""""""
+
+[Special Requirement for DGX user] In order to connect to his Docker daemon a user has to commit the parameter "-H unix:///mnt/docker_socks/<user_name>/docker.sock" with every Docker command.
 
 * e.g. "docker -H unix:///mnt/docker_socks/<user_name>/docker.sock run --rm -ti <image_name> [optional_command]"
 * e.g. "docker -H unix:///mnt/docker_socks/<user_name>/docker.sock image ls" alternatively use the script "run-docker.sh" in /usr/local/bin:

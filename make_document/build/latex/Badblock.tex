@@ -34,7 +34,7 @@
 \usepackage{hypcap}% it must be loaded after hyperref.
 % Set up styles of URL: it should be placed after hyperref.
 \urlstyle{same}
-\addto\captionsenglish{\renewcommand{\contentsname}{Contents:}}
+\addto\captionsenglish{\renewcommand{\contentsname}{Here all the contents go:}}
 
 \addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
 \addto\captionsenglish{\renewcommand{\tablename}{Table}}
@@ -53,7 +53,7 @@
 
 
 \title{Badblock Documentation}
-\date{Mar 07, 2019}
+\date{May 09, 2019}
 \release{1.0}
 \author{Liang Li}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -69,27 +69,71 @@
 \phantomsection\label{\detokenize{index::doc}}
 
 
+Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you
+how to improve the quality of image(or say image denoising) by using one of the many networks, UNet.
 
-\chapter{Installation!}
+
+\chapter{Reasons for this tutorial}
+\label{\detokenize{index:reasons-for-this-tutorial}}
+I started my internship in Siemens, Knoxville at the begining of 2019, where I first touched and learned deep learning.
+Great thanks to super nice manager(BILL) since I do learn a lot from him!! Please note that I am also a beginner in deep learning, and thus point me out if I will be wrong in the following content.
+
+During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting and denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you.
+
+In fact, a lot of my coworkers are also very interested in building or learning about deep learning while they think
+deep learning is very hard to learn. Hence, I also write this tutorial for people who are in the field of medical imaging
+or other who might want to build their own deep learning networks but they do not know how to start. To be honest, to select the most suitable parameters/models
+is the most time consuming part of deep learning, but to start deep learning is far more simple than you thought!
+
+
+\chapter{Goals for this tutorial}
+\label{\detokenize{index:goals-for-this-tutorial}}
+Hence, lets begin with this to open your new world to the deep learning(AI)!
+\begin{quote}
+
+First, we will try to install all the necessary packages for the deep learning, and it will be great if you have a GPU.
+
+And then, we will talk about how to precesss your data (so important)!
+
+Third, a quick start with U-Net will lead you to the heart of deep learning.
+
+Finally, we will train our U-Net and use several visualizations to view our results.
+\end{quote}
+
+
+\section{Installation}
 \label{\detokenize{usage/installation:installation}}\label{\detokenize{usage/installation::doc}}
+Python is a programming language that lets you work quickly
+and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.
 
-\section{Install Python}
+
+\subsection{Install Python}
 \label{\detokenize{usage/installation:install-python}}
 
-\subsection{Install Python from \sphinxstyleemphasis{Python}}
-\label{\detokenize{usage/installation:install-python-from-python}}
-The latest Python can be downloaded and installed from \sphinxurl{https://www.python.org/downloads/} , a version above 3.6 is recommended.
+\subsubsection{Direct Python from \sphinxstyleemphasis{Python}}
+\label{\detokenize{usage/installation:direct-python-from-python}}
+Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python.
+The latest Python can be downloaded and installed from \sphinxurl{https://www.python.org/downloads/} . I have installed 3.6, please try to install a version above 3.6.
 
 
-\subsection{Install Python from \sphinxstyleemphasis{Conda}}
-\label{\detokenize{usage/installation:install-python-from-conda}}
+\subsubsection{Indirect Python from \sphinxstyleemphasis{Conda}}
+\label{\detokenize{usage/installation:indirect-python-from-conda}}
+Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies.
+
 Conda can be found via \sphinxurl{https://docs.conda.io/projects/conda/en/latest/user-guide/install/}.
 
-Conda is also recommended since many different versions of python could be changed based on:
+Conda is recommended when multiple version of python will be installed in the system, and the version of python can be changed easily based on:
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+go}{source activate myenv}
+\end{sphinxVerbatim}
+
+For example,
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{source activate py36}
 \end{sphinxVerbatim}
 
 with the whole list of pythons with different versions can be shown as:
@@ -99,12 +143,27 @@ with the whole list of pythons with different versions can be shown as:
 \PYG{g+go}{conda env list}
 \end{sphinxVerbatim}
 
+other useful methods for install certain packages including
 
-\section{Install Pytorch}
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{conda search scipy}
+\PYG{g+go}{conda install \PYGZhy{}\PYGZhy{}name myenv scipy}
+\PYG{g+go}{conda install scipy=0.15.0}
+\PYG{g+go}{source deactivate}
+\PYG{g+go}{conda info \PYGZhy{}\PYGZhy{}envs}
+\PYG{g+go}{conda list \PYGZhy{}n myenv scipy}
+\end{sphinxVerbatim}
+
+
+\subsection{Install Pytorch}
 \label{\detokenize{usage/installation:install-pytorch}}
+Before start with pytorch, make sure CUDA has been installed, where
+CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia.
 
-\subsection{Before start with pytorch, make sure CUDA has been installed.}
-\label{\detokenize{usage/installation:before-start-with-pytorch-make-sure-cuda-has-been-installed}}
+
+\subsubsection{Install CUDA}
+\label{\detokenize{usage/installation:install-cuda}}
 Install your cuda from \sphinxurl{https://developer.nvidia.com/cuda-downloads?target\_os=Linux}.
 
 \begin{sphinxadmonition}{note}{Note:}
@@ -112,12 +171,14 @@ Check here to update with the latest driver. A good match of driver with the GPU
 \end{sphinxadmonition}
 
 
-\subsection{Install pytorch}
+\subsubsection{Install pytorch}
 \label{\detokenize{usage/installation:id1}}
+Pytorch is an open source deep learning platform that provides a seamless path from research prototyping to production deployment.
+
 pytorch can be found via \sphinxurl{https://pytorch.org/get-started/locally/}.
 
 
-\section{Other packages}
+\subsection{Other packages}
 \label{\detokenize{usage/installation:other-packages}}
 There are a list of other packages that are optional to install, while most could be install by using \sphinxstylestrong{pip}. {[}if you are under conda, make sure you are using the correct \sphinxstylestrong{pip} under the correct version of python{]}
 \begin{itemize}
@@ -133,6 +194,9 @@ There are a list of other packages that are optional to install, while most coul
 \item {} 
 \$ pip install Pillow
 
+\item {} 
+\$ pip install scipy
+
 \end{itemize}
 
 Plus, please include ‘pytorch\_msssim’ folder if you want to use msssim as a loss, and if there are other package needed, try \sphinxstylestrong{pip}
@@ -142,7 +206,12 @@ Plus, please include ‘pytorch\_msssim’ folder if you want to use msssim as a
 \PYG{g+go}{pip install packagename}
 \end{sphinxVerbatim}
 
-NOW, you are all set with all the packages need for the deep learning Unet, and next we will forward to prepare our data.
+NOW, you are all set with all the packages needed for the deep learning Unet, and in the next step we will forward to prepare our data.
+
+
+\subsection{Build in Docker(Optional)}
+\label{\detokenize{usage/installation:build-in-docker-optional}}
+Docker is a computer program that performs operating-system-level virtualization. The advantage of Docker is that we can only install the packages we need and then the extra cost of unnecessary components in the operating system can be reduced.
 
 
 \sphinxstrong{See also:}
@@ -152,21 +221,95 @@ If a python environment with pytorch is hard to obtain locally, Docker is always
 
 
 
+Docker is simple to use too!
 
-\chapter{Prepare your data!}
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{}} List Docker images
+\PYG{g+go}{     docker image ls}
+
+\PYG{g+gp}{\PYGZsh{}} List Docker containers \PYG{o}{(}running, all, all in quiet mode\PYG{o}{)}
+\PYG{g+go}{     docker container ls}
+\PYG{g+go}{     docker container ls \PYGZhy{}\PYGZhy{}all}
+\PYG{g+go}{     docker container ls \PYGZhy{}aq}
+\PYG{g+go}{     docker container stop xxxxxxx}
+\PYG{g+gp}{\PYGZsh{}} List Docker containers \PYG{o}{(}running, all, all in quiet mode\PYG{o}{)}
+\PYG{g+go}{     docker build \PYGZhy{}t friendlyhello .  \PYGZsh{} Create image using this directory\PYGZsq{}s Dockerfile}
+\PYG{g+go}{     docker run \PYGZhy{}p 4000:80 friendlyhello  \PYGZsh{} Run \PYGZdq{}friendlyname\PYGZdq{} mapping port 4000 to 80}
+\PYG{g+go}{     docker run \PYGZhy{}d \PYGZhy{}p 4000:80 friendlyhello         \PYGZsh{} Same thing, but in detached mode}
+\PYG{g+go}{     docker container ls                                \PYGZsh{} List all running containers}
+\PYG{g+go}{     docker container ls \PYGZhy{}a             \PYGZsh{} List all containers, even those not running}
+\PYG{g+go}{     docker container stop \PYGZlt{}hash\PYGZgt{}           \PYGZsh{} Gracefully stop the specified container}
+\PYG{g+go}{     docker container kill \PYGZlt{}hash\PYGZgt{}         \PYGZsh{} Force shutdown of the specified container}
+\PYG{g+go}{     docker container rm \PYGZlt{}hash\PYGZgt{}        \PYGZsh{} Remove specified container from this machine}
+\PYG{g+go}{     docker container rm \PYGZdl{}(docker container ls \PYGZhy{}a \PYGZhy{}q)         \PYGZsh{} Remove all containers}
+\PYG{g+go}{     docker image ls \PYGZhy{}a                             \PYGZsh{} List all images on this machine}
+\PYG{g+go}{     docker image rm \PYGZlt{}image id\PYGZgt{}            \PYGZsh{} Remove specified image from this machine}
+\PYG{g+go}{     docker image rm \PYGZdl{}(docker image ls \PYGZhy{}a \PYGZhy{}q)   \PYGZsh{} Remove all images from this machine}
+\PYG{g+go}{     docker login             \PYGZsh{} Log in this CLI session using your Docker credentials}
+\PYG{g+go}{     docker tag \PYGZlt{}image\PYGZgt{} username/repository:tag  \PYGZsh{} Tag \PYGZlt{}image\PYGZgt{} for upload to registry}
+\PYG{g+go}{     docker push username/repository:tag            \PYGZsh{} Upload tagged image to registry}
+\PYG{g+go}{     docker run username/repository:tag                   \PYGZsh{} Run image from a registry}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Using Docker with DGX}
+\label{\detokenize{usage/installation:using-docker-with-dgx}}
+{[}Special Requirement for DGX user{]} In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock” with every Docker command.
+\begin{itemize}
+\item {} 
+e.g. “docker -H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock run \textendash{}rm -ti \textless{}image\_name\textgreater{} {[}optional\_command{]}”
+
+\item {} 
+e.g. “docker -H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock image ls” alternatively use the script “run-docker.sh” in /usr/local/bin:
+
+\item {} 
+e.g. “run-docker.sh \textendash{}rm -ti {[}further\_options{]} \textless{}image\_name\textgreater{} {[}optional\_command{]}”
+
+\end{itemize}
+
+I was using a line like below in a bash file to let the docker run within DGX by using slum.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{sbatch \PYGZhy{}\PYGZhy{}gres=gpu:1 \PYGZhy{}\PYGZhy{}mail\PYGZhy{}user=liang.li.uestc@gmail.com \PYGZhy{}\PYGZhy{}mail\PYGZhy{}type=ALL \PYGZhy{}\PYGZhy{}output=/badblock/li\PYGZus{}dataset/log.txt \PYGZhy{}\PYGZhy{}job\PYGZhy{}name=trainbd \PYGZhy{}\PYGZhy{}error=/badblock/li\PYGZus{}dataset/error.txt run\PYGZhy{}nvidia\PYGZhy{}docker.sh \PYGZhy{}\PYGZhy{}rm \PYGZhy{}\PYGZhy{}name train\PYGZus{}unet \PYGZhy{}v /badblock/li\PYGZus{}dataset/:/badblock/ \PYGZhy{}w /badblock/ nvcr.io/nvidia/pytorch:19.01\PYGZhy{}py3 python /badblock/code/badblock\PYGZhy{}fillgaps/train\PYGZus{}unet.py \PYGZhy{}\PYGZhy{}training\PYGZhy{}file=\PYGZdq{}/badblock/data/DataTOF\PYGZus{}Train/\PYGZdq{} \PYGZhy{}\PYGZhy{}test\PYGZhy{}file=\PYGZdq{}/badblock/data/DataTOF\PYGZus{}test/\PYGZdq{} \PYGZhy{}\PYGZhy{}mask\PYGZhy{}file=\PYGZdq{}/badblock/data/mask.pkl\PYGZdq{} \PYGZhy{}\PYGZhy{}output\PYGZhy{}path=\PYGZdq{}/badblock/output/\PYGZdq{}}
+\end{sphinxVerbatim}
+
+
+\section{Prepare your data}
 \label{\detokenize{usage/data:prepare-your-data}}\label{\detokenize{usage/data::doc}}
 
-\section{Process the raw data.}
+\subsection{Process the raw data}
 \label{\detokenize{usage/data:process-the-raw-data}}
 
-\subsection{Read and reshape}
+\subsubsection{Read and reshape}
 \label{\detokenize{usage/data:read-and-reshape}}
-The size and the shape of the data would affect not only the output but also the learning speed of the network,
-and hence making the raw data the shape we want and postprocessing it back to the origin shape are usually common
-in machine learning.
+The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning{[}The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data{]}. In most the cases, the methods include but not limited to normalization, reshaping, etc.
 
-In our case, we have .s file as both the good data and badblock data, which are too large for our network,
-thus we need to reshape the data based on {[}TOF, Slice, W, L{]}. In simple cases without down/up sampling(we will cover this later), W and L do not matter, but there we need try to make W and L as a power of 2.
+In the following, I will give two examples about the data we deal with for medical imageing, sinograms and images.
+
+
+\subsubsection{eg. Sinograms}
+\label{\detokenize{usage/data:eg-sinograms}}
+PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which looks like below.
+
+\noindent\sphinxincludegraphics{{sinograms}.png}
+
+In our case, we have .s file as both the input file and target file with both files around 1.4G(with flatten data stored as uint16), and our goal is to using U-Net to learn
+the data in the input file and to make it close to the data in the target file. In fact, these files are too large as one input for neural network, because I do not want to load all the datas into the memory if we do not have a lot memory. (It is so important! Hence, I will take this three times: We do not want to feed all into the memory!We do not want to feed all into the memory!We do not want to feed all into the memory!).
+
+
+\subsubsection{eg. Images}
+\label{\detokenize{usage/data:eg-images}}
+\noindent\sphinxincludegraphics{{usage/images}.png}
+
+To advoid feed all the data into the memory, we do reshape the data to more informative matrix and partition the data into smaller pieces, and then we could let the network learn smaller pieces with the pain that we will lose the relations among the smaller pieces. In my cases, I am working on sinograms and the sinograms have their own informative structure, and then I used {[}TOF, Slice, W, L{]} as my shape of the data, where I feed the network based on slices.
+
+Here, for each slice, the image has shape {[}50, 520{]}. For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. But since we are working on UNet (as autoencoder, we need to encoder and then decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).
+
+\begin{sphinxadmonition}{note}{Note:}
+An example of reshaping to a power of 2:
+\begin{quote}
 
 \sphinxhref{http://www.numpy.org/}{Numpy} provides the padding function:
 
@@ -183,36 +326,42 @@ In our case, if we have {[}TOF=34, Slice=815, W=50, L=520{]}, we can do:
 \end{sphinxVerbatim}
 
 to make it {[}TOF=34, Slice=815, W=64, L=520{]}, which would be good enough for 3 times downsampling since W and L can be divided by \(2^3\).
+\end{quote}
 
-\begin{sphinxadmonition}{note}{Note:}
 Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.
 \end{sphinxadmonition}
 
 
-\subsection{Save the data}
-\label{\detokenize{usage/data:save-the-data}}
-Here is something I want to talk about:
+\subsubsection{Save the data in pickle}
+\label{\detokenize{usage/data:save-the-data-in-pickle}}
+\sphinxhref{https://docs.python.org/3/library/pickle.html}{Pickle} module implement binary protocols for serializing and de-serializing a Python object structure. Here we could just dump our matrix into pickle by using:
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{my\PYGZus{}fn}\PYG{p}{(}\PYG{n}{foo}\PYG{p}{,} \PYG{n}{bar}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{p}{:}
-    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}A really useful function.}
-
-\PYG{l+s+sd}{    Returns None}
-\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{n}{pickle}\PYG{o}{.}\PYG{n}{dump}\PYG{p}{(}\PYG{n}{result}\PYG{p}{,} \PYG{n}{f}\PYG{p}{,} \PYG{n}{pickle}\PYG{o}{.}\PYG{n}{HIGHEST\PYGZus{}PROTOCOL}\PYG{p}{)}
 \end{sphinxVerbatim}
-\phantomsection\label{\detokenize{usage/data:module-sino_process_tof}}\index{sino\_process\_tof (module)@\spxentry{sino\_process\_tof}\spxextra{module}}
-This module is used to generate intermediate pickles before the training
+
+\begin{sphinxadmonition}{note}{Note:}
+Be careful with you pickle version, since it might not match between python2 and python3.
+\end{sphinxadmonition}
+
+The details of the data process can be refered from sino\_process\_tof.py
+
+
+\paragraph{Precess and Save your data!}
+\label{\detokenize{usage/tof_file:module-sino_process_tof}}\label{\detokenize{usage/tof_file:precess-and-save-your-data}}\label{\detokenize{usage/tof_file::doc}}\index{sino\_process\_tof (module)@\spxentry{sino\_process\_tof}\spxextra{module}}
+This module is used to generate intermediate pickles before the training.
+
 Created on Thu Jun 14 16:19:07 2018
 @author: bill
 @update: liang
 \index{Sinogram\_Processor (class in sino\_process\_tof)@\spxentry{Sinogram\_Processor}\spxextra{class in sino\_process\_tof}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.Sinogram_Processor}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{Sinogram\_Processor}}}{\emph{data\_file}, \emph{for\_test=False}, \emph{slices=-1}, \emph{min\_blocks=0}, \emph{max\_blocks=0}}{}~\index{process\_data() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{process\_data()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{Sinogram\_Processor}}}{\emph{data\_file}, \emph{for\_test=False}, \emph{slices=-1}, \emph{min\_blocks=0}, \emph{max\_blocks=0}}{}~\index{process\_data() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{process\_data()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.Sinogram_Processor.process_data}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_data}}}{\emph{file}, \emph{tof}, \emph{slices}, \emph{theta}, \emph{dist}}{}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.process_data}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_data}}}{\emph{file}, \emph{tof}, \emph{slices}, \emph{theta}, \emph{dist}}{}
 This function is used to process the sinogram file
 
 The function will first read the file with the extension .s,
@@ -237,7 +386,7 @@ IOError: An error occurred accessing the file .
 \index{process\_sino\_file() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{process\_sino\_file()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.Sinogram_Processor.process_sino_file}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_sino\_file}}}{}{}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.process_sino_file}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_sino\_file}}}{}{}
 This function is used to process the sinogram file
 
 The function will first read the file with the extension .s.hdr,
@@ -260,7 +409,7 @@ IOError: An error occurred accessing the file .
 \index{remove\_block() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{remove\_block()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.Sinogram_Processor.remove_block}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{remove\_block}}}{\emph{orig\_img}, \emph{block\_num}}{}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.remove_block}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{remove\_block}}}{\emph{orig\_img}, \emph{block\_num}}{}
 This function is omitted.
 
 \end{fulllineitems}
@@ -271,7 +420,7 @@ This function is omitted.
 \index{main() (in module sino\_process\_tof)@\spxentry{main()}\spxextra{in module sino\_process\_tof}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
 The main function to call for processing all the data files.
 
 \end{fulllineitems}
@@ -279,21 +428,97 @@ The main function to call for processing all the data files.
 \index{process\_sinogram() (in module sino\_process\_tof)@\spxentry{process\_sinogram()}\spxextra{in module sino\_process\_tof}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/data:sino_process_tof.process_sinogram}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{process\_sinogram}}}{\emph{file}}{}
+\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.process_sinogram}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{process\_sinogram}}}{\emph{file}}{}
 This function is used to process one patient.
 
 \end{fulllineitems}
 
 
+\begin{sphinxadmonition}{warning}{Warning:}
+Loading all the data into the GPU is not only time consuming and not efficient.
+\end{sphinxadmonition}
 
-\section{Loading all the data into the GPU is not only time consuming and not efficient.}
-\label{\detokenize{usage/data:loading-all-the-data-into-the-gpu-is-not-only-time-consuming-and-not-efficient}}
 
-\subsection{Load}
-\label{\detokenize{usage/data:load}}
+\subsection{Load your data}
+\label{\detokenize{usage/data:load-your-data}}
 
-\chapter{Build your network!}
-\label{\detokenize{usage/quickstart:module-unet}}\label{\detokenize{usage/quickstart:build-your-network}}\label{\detokenize{usage/quickstart::doc}}\index{unet (module)@\spxentry{unet}\spxextra{module}}
+\subsubsection{Dataset Class}
+\label{\detokenize{usage/data:dataset-class}}
+The abstract class in pytorch \sphinxstylestrong{torch.utils.data.Dataset} is the main class to call for loading data, and there are mainly two methods would be called.
+\begin{itemize}
+\item {} 
+\_\_len\_\_: which returns the size/length of the dataset
+
+\item {} 
+\_\_getitem\_\_: which returns one sample of the dataset based on the index, such that dataset{[}i{]} for index i
+
+\end{itemize}
+
+In our case, we define the class \sphinxcode{\sphinxupquote{class Sino\_Dataset(dataset)}} inherits from \sphinxcode{\sphinxupquote{torch.utils.data.Dataset}}
+
+Here, the length of the dataset is:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{\PYGZus{}\PYGZus{}len\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{epoch\PYGZus{}size}
+\end{sphinxVerbatim}
+
+and the item of the dataset is:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{\PYGZus{}\PYGZus{}getitem\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{idx}\PYG{p}{)}\PYG{p}{:}
+
+     \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{data}\PYG{p}{[}\PYG{n}{idx}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+the \sphinxcode{\sphinxupquote{self.data.shape={[}tof*slice, W, L{]}}}
+
+The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.
+
+
+\paragraph{Dataset!}
+\label{\detokenize{usage/datset_file:module-datasets}}\label{\detokenize{usage/datset_file:dataset}}\label{\detokenize{usage/datset_file::doc}}\index{datasets (module)@\spxentry{datasets}\spxextra{module}}
+This module is used to create the dataset.
+
+Created on Sun Mar 18 23:07:28 2018
+@author: bill
+@updated: Liang
+\index{Sino\_Dataset (class in datasets)@\spxentry{Sino\_Dataset}\spxextra{class in datasets}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{datasets.}}\sphinxbfcode{\sphinxupquote{Sino\_Dataset}}}{\emph{datafile}, \emph{epoch\_size}, \emph{testing=False}, \emph{loading\_multiplefiles=False}, \emph{input\_depth=1}, \emph{output\_depth=1}, \emph{is\_test\_in\_train=False}}{}
+Sinogram dataset
+\index{checkfeature() (datasets.Sino\_Dataset method)@\spxentry{checkfeature()}\spxextra{datasets.Sino\_Dataset method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.checkfeature}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{checkfeature}}}{\emph{bad}}{}
+\end{fulllineitems}
+
+\index{loadFile() (datasets.Sino\_Dataset method)@\spxentry{loadFile()}\spxextra{datasets.Sino\_Dataset method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.loadFile}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{loadFile}}}{\emph{data\_file='training\_data.npy'}}{}
+\end{fulllineitems}
+
+\index{setMaxMissing() (datasets.Sino\_Dataset method)@\spxentry{setMaxMissing()}\spxextra{datasets.Sino\_Dataset method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.setMaxMissing}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{setMaxMissing}}}{\emph{max\_missing}}{}
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\section{Build your network!}
+\label{\detokenize{usage/quickstart:build-your-network}}\label{\detokenize{usage/quickstart::doc}}
+
+\subsection{Unet!}
+\label{\detokenize{usage/net_file:module-unet}}\label{\detokenize{usage/net_file:unet}}\label{\detokenize{usage/net_file::doc}}\index{unet (module)@\spxentry{unet}\spxextra{module}}
 Created on Tue Mar 20 21:17:05 2018
 
 @author: bill
@@ -301,103 +526,34 @@ Created on Tue Mar 20 21:17:05 2018
 \index{Sino\_repair\_net (class in unet)@\spxentry{Sino\_repair\_net}\spxextra{class in unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{Sino\_repair\_net}}}{\emph{opts}, \emph{device\_ids}, \emph{load\_model=False}}{}~\index{optimize() (unet.Sino\_repair\_net method)@\spxentry{optimize()}\spxextra{unet.Sino\_repair\_net method}}
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{Sino\_repair\_net}}}{\emph{opts}, \emph{device\_ids}, \emph{load\_model=False}}{}~\index{optimize() (unet.Sino\_repair\_net method)@\spxentry{optimize()}\spxextra{unet.Sino\_repair\_net method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net.optimize}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{optimize}}}{\emph{output}, \emph{target\_img}, \emph{input\_img}}{}
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.optimize}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{optimize}}}{\emph{output}, \emph{target\_img}}{}
 \end{fulllineitems}
 
 \index{save\_network() (unet.Sino\_repair\_net method)@\spxentry{save\_network()}\spxextra{unet.Sino\_repair\_net method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net.save_network}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_network}}}{}{}
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.save_network}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_network}}}{}{}
 \end{fulllineitems}
 
 \index{set\_optimizer() (unet.Sino\_repair\_net method)@\spxentry{set\_optimizer()}\spxextra{unet.Sino\_repair\_net method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net.set_optimizer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{set\_optimizer}}}{\emph{optimizer}}{}
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.set_optimizer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{set\_optimizer}}}{\emph{optimizer}}{}
 \end{fulllineitems}
 
 \index{test() (unet.Sino\_repair\_net method)@\spxentry{test()}\spxextra{unet.Sino\_repair\_net method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{x}, \emph{y}}{}
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{x}, \emph{y}, \emph{valid=None}}{}
 \end{fulllineitems}
 
 \index{train\_batch() (unet.Sino\_repair\_net method)@\spxentry{train\_batch()}\spxextra{unet.Sino\_repair\_net method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.Sino_repair_net.train_batch}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train\_batch}}}{\emph{input\_img}, \emph{target\_img}}{}
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{UNet (class in unet)@\spxentry{UNet}\spxextra{class in unet}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{UNet}}}{\emph{opts}}{}~\index{forward() (unet.UNet method)@\spxentry{forward()}\spxextra{unet.UNet method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet.forward}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{forward}}}{\emph{x}, \emph{test=False}}{}
-Defines the computation performed at every call.
-
-Should be overridden by all subclasses.
-
-\begin{sphinxadmonition}{note}{Note:}
-Although the recipe for forward pass needs to be defined within
-this function, one should call the \sphinxcode{\sphinxupquote{Module}} instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.
-\end{sphinxadmonition}
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{UNet\_down\_block (class in unet)@\spxentry{UNet\_down\_block}\spxextra{class in unet}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet_down_block}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{UNet\_down\_block}}}{\emph{input\_channel}, \emph{output\_channel}, \emph{down\_sample}}{}~\index{forward() (unet.UNet\_down\_block method)@\spxentry{forward()}\spxextra{unet.UNet\_down\_block method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet_down_block.forward}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{forward}}}{\emph{x}}{}
-Defines the computation performed at every call.
-
-Should be overridden by all subclasses.
-
-\begin{sphinxadmonition}{note}{Note:}
-Although the recipe for forward pass needs to be defined within
-this function, one should call the \sphinxcode{\sphinxupquote{Module}} instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.
-\end{sphinxadmonition}
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{UNet\_up\_block (class in unet)@\spxentry{UNet\_up\_block}\spxextra{class in unet}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet_up_block}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{UNet\_up\_block}}}{\emph{prev\_channel}, \emph{input\_channel}, \emph{output\_channel}, \emph{ID}}{}~\index{forward() (unet.UNet\_up\_block method)@\spxentry{forward()}\spxextra{unet.UNet\_up\_block method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/quickstart:unet.UNet_up_block.forward}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{forward}}}{\emph{prev\_feature\_map}, \emph{x}}{}
-Defines the computation performed at every call.
-
-Should be overridden by all subclasses.
-
-\begin{sphinxadmonition}{note}{Note:}
-Although the recipe for forward pass needs to be defined within
-this function, one should call the \sphinxcode{\sphinxupquote{Module}} instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.
-\end{sphinxadmonition}
-
+\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.train_batch}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train\_batch}}}{\emph{input\_img}, \emph{target\_img}, \emph{valid=None}}{}
 \end{fulllineitems}
 
 
@@ -405,8 +561,11 @@ registered hooks while the latter silently ignores them.
 
 
 
-\chapter{Train your network!}
-\label{\detokenize{usage/train:module-train_unet}}\label{\detokenize{usage/train:train-your-network}}\label{\detokenize{usage/train::doc}}\index{train\_unet (module)@\spxentry{train\_unet}\spxextra{module}}
+\section{Train your network!}
+\label{\detokenize{usage/train:train-your-network}}\label{\detokenize{usage/train::doc}}
+
+\subsection{Train\_Unet!}
+\label{\detokenize{usage/train_file:module-train_unet}}\label{\detokenize{usage/train_file:train-unet}}\label{\detokenize{usage/train_file::doc}}\index{train\_unet (module)@\spxentry{train\_unet}\spxextra{module}}
 Created on Thu Jan 15 18:45:25 2019
 
 @author: bill
@@ -414,28 +573,28 @@ Created on Thu Jan 15 18:45:25 2019
 \index{Network\_Trainer (class in train\_unet)@\spxentry{Network\_Trainer}\spxextra{class in train\_unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.Network_Trainer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{Network\_Trainer}}}{\emph{opts}, \emph{device\_ids}}{}~\index{test() (train\_unet.Network\_Trainer method)@\spxentry{test()}\spxextra{train\_unet.Network\_Trainer method}}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{Network\_Trainer}}}{\emph{opts}, \emph{device\_ids}}{}~\index{test() (train\_unet.Network\_Trainer method)@\spxentry{test()}\spxextra{train\_unet.Network\_Trainer method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.Network_Trainer.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{network}, \emph{batch\_size}, \emph{perform\_recon\_loss=False}, \emph{output\_all\_sinos=False}}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{network}, \emph{batch\_size}, \emph{perform\_recon\_loss=False}, \emph{output\_all\_sinos=False}}{}
 \end{fulllineitems}
 
 \index{train() (train\_unet.Network\_Trainer method)@\spxentry{train()}\spxextra{train\_unet.Network\_Trainer method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.Network_Trainer.train}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train}}}{}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.train}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train}}}{}{}
 \end{fulllineitems}
 
 \index{visualize\_progress() (train\_unet.Network\_Trainer method)@\spxentry{visualize\_progress()}\spxextra{train\_unet.Network\_Trainer method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.Network_Trainer.visualize_progress}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{visualize\_progress}}}{\emph{opts}, \emph{images}, \emph{istest=False}}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.visualize_progress}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{visualize\_progress}}}{\emph{opts}, \emph{images}, \emph{istest=False}}{}
 \end{fulllineitems}
 
 \index{write\_log() (train\_unet.Network\_Trainer method)@\spxentry{write\_log()}\spxextra{train\_unet.Network\_Trainer method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.Network_Trainer.write_log}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{write\_log}}}{\emph{value}, \emph{log\_type='test'}}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.write_log}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{write\_log}}}{\emph{value}, \emph{log\_type='test'}}{}
 \end{fulllineitems}
 
 
@@ -444,33 +603,33 @@ Created on Thu Jan 15 18:45:25 2019
 \index{fill\_image() (in module train\_unet)@\spxentry{fill\_image()}\spxextra{in module train\_unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.fill_image}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{fill\_image}}}{\emph{input\_sino}, \emph{out\_img}}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.fill_image}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{fill\_image}}}{\emph{input\_sino}, \emph{out\_img}}{}
 \end{fulllineitems}
 
 \index{main() (in module train\_unet)@\spxentry{main()}\spxextra{in module train\_unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
 \end{fulllineitems}
 
 \index{preprocess() (in module train\_unet)@\spxentry{preprocess()}\spxextra{in module train\_unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.preprocess}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{preprocess}}}{\emph{input\_img}, \emph{target\_img}}{}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.preprocess}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{preprocess}}}{\emph{input\_img}, \emph{target\_img}, \emph{train=False}}{}
 \end{fulllineitems}
 
 \index{random() (in module train\_unet)@\spxentry{random()}\spxextra{in module train\_unet}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train:train_unet.random}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{random}}}{}{{ $\rightarrow$ x in the interval {[}0, 1).}}
+\phantomsection\label{\detokenize{usage/train_file:train_unet.random}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{random}}}{}{{ $\rightarrow$ x in the interval {[}0, 1).}}
 \end{fulllineitems}
 
 
 
-\chapter{Visualize your results!}
+\section{Visualize your results!}
 \label{\detokenize{usage/view:visualize-your-results}}\label{\detokenize{usage/view::doc}}
 
-\chapter{Adjust your parameters!}
+\section{Adjust your parameters!}
 \label{\detokenize{usage/adjust:adjust-your-parameters}}\label{\detokenize{usage/adjust::doc}}
 To start to view the result by using visdom:
 
@@ -504,14 +663,17 @@ To watch the using of GPU by using:
 \renewcommand{\indexname}{Python Module Index}
 \begin{sphinxtheindex}
 \let\bigletter\sphinxstyleindexlettergroup
+\bigletter{d}
+\item\relax\sphinxstyleindexentry{datasets}\sphinxstyleindexpageref{usage/datset_file:\detokenize{module-datasets}}
+\indexspace
 \bigletter{s}
-\item\relax\sphinxstyleindexentry{sino\_process\_tof}\sphinxstyleindexpageref{usage/data:\detokenize{module-sino_process_tof}}
+\item\relax\sphinxstyleindexentry{sino\_process\_tof}\sphinxstyleindexpageref{usage/tof_file:\detokenize{module-sino_process_tof}}
 \indexspace
 \bigletter{t}
-\item\relax\sphinxstyleindexentry{train\_unet}\sphinxstyleindexpageref{usage/train:\detokenize{module-train_unet}}
+\item\relax\sphinxstyleindexentry{train\_unet}\sphinxstyleindexpageref{usage/train_file:\detokenize{module-train_unet}}
 \indexspace
 \bigletter{u}
-\item\relax\sphinxstyleindexentry{unet}\sphinxstyleindexpageref{usage/quickstart:\detokenize{module-unet}}
+\item\relax\sphinxstyleindexentry{unet}\sphinxstyleindexpageref{usage/net_file:\detokenize{module-unet}}
 \end{sphinxtheindex}
 
 \renewcommand{\indexname}{Index}

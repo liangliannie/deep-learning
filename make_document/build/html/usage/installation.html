@@ -160,8 +160,9 @@ CUDA is a parallel computing platform and application programming interface (API
 <span class="go">     docker run username/repository:tag                   # Run image from a registry</span>
 </pre></div>
 </div>
-<p>Using Docker with DGX
-In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock” with every Docker command.</p>
+<div class="section" id="using-docker-with-dgx">
+<h3>Using Docker with DGX<a class="headerlink" href="#using-docker-with-dgx" title="Permalink to this headline">¶</a></h3>
+<p>[Special Requirement for DGX user] In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock” with every Docker command.</p>
 <ul class="simple">
 <li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock run –rm -ti &lt;image_name&gt; [optional_command]”</li>
 <li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock image ls” alternatively use the script “run-docker.sh” in /usr/local/bin:</li>
@@ -170,6 +171,7 @@ In order to connect to his Docker daemon a user has to commit the parameter “-
 <p>I was using a line like below in a bash file to let the docker run within DGX by using slum.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch --gres=gpu:1 --mail-user=liang.li.uestc@gmail.com --mail-type=ALL --output=/badblock/li_dataset/log.txt --job-name=trainbd --error=/badblock/li_dataset/error.txt run-nvidia-docker.sh --rm --name train_unet -v /badblock/li_dataset/:/badblock/ -w /badblock/ nvcr.io/nvidia/pytorch:19.01-py3 python /badblock/code/badblock-fillgaps/train_unet.py --training-file=&quot;/badblock/data/DataTOF_Train/&quot; --test-file=&quot;/badblock/data/DataTOF_test/&quot; --mask-file=&quot;/badblock/data/mask.pkl&quot; --output-path=&quot;/badblock/output/&quot;</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -194,7 +196,10 @@ In order to connect to his Docker daemon a user has to commit the parameter “-
 </ul>
 </li>
 <li><a class="reference internal" href="#other-packages">Other packages</a></li>
-<li><a class="reference internal" href="#build-in-docker-optional">Build in Docker(Optional)</a></li>
+<li><a class="reference internal" href="#build-in-docker-optional">Build in Docker(Optional)</a><ul>
+<li><a class="reference internal" href="#using-docker-with-dgx">Using Docker with DGX</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

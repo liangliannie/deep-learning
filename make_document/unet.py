@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 20 21:17:05 2018
 
-@author: bill
-@updated: Liang
-"""
 
 import torch
 from torch.autograd import Variable

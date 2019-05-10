@@ -4,70 +4,78 @@
 \let\spxentry \sphinxstyleindexentry
 \let\spxextra \sphinxstyleindexextra
 
+  \bigletter C
+  \item \spxentry{checkfeature()}\spxextra{datasets.Sino\_Dataset method}, \hyperpage{11}
+
+  \indexspace
+  \bigletter D
+  \item \spxentry{datasets}\spxextra{module}, \hyperpage{11}
+
+  \indexspace
   \bigletter F
-  \item \spxentry{fill\_image()}\spxextra{in module train\_unet}, \hyperpage{7}
-  \item \spxentry{forward()}\spxextra{unet.UNet method}, \hyperpage{5}
-  \item \spxentry{forward()}\spxextra{unet.UNet\_down\_block method}, \hyperpage{5}
-  \item \spxentry{forward()}\spxextra{unet.UNet\_up\_block method}, \hyperpage{5}
+  \item \spxentry{fill\_image()}\spxextra{in module train\_unet}, \hyperpage{12}
+
+  \indexspace
+  \bigletter L
+  \item \spxentry{loadFile()}\spxextra{datasets.Sino\_Dataset method}, \hyperpage{11}
 
   \indexspace
   \bigletter M
-  \item \spxentry{main()}\spxextra{in module sino\_process\_tof}, \hyperpage{4}
-  \item \spxentry{main()}\spxextra{in module train\_unet}, \hyperpage{7}
+  \item \spxentry{main()}\spxextra{in module sino\_process\_tof}, \hyperpage{10}
+  \item \spxentry{main()}\spxextra{in module train\_unet}, \hyperpage{12}
 
   \indexspace
   \bigletter N
-  \item \spxentry{Network\_Trainer}\spxextra{class in train\_unet}, \hyperpage{7}
+  \item \spxentry{Network\_Trainer}\spxextra{class in train\_unet}, \hyperpage{12}
 
   \indexspace
   \bigletter O
-  \item \spxentry{optimize()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{5}
+  \item \spxentry{optimize()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{12}
 
   \indexspace
   \bigletter P
-  \item \spxentry{preprocess()}\spxextra{in module train\_unet}, \hyperpage{7}
+  \item \spxentry{preprocess()}\spxextra{in module train\_unet}, \hyperpage{12}
   \item \spxentry{process\_data()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}, 
-		\hyperpage{4}
+		\hyperpage{10}
   \item \spxentry{process\_sino\_file()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}, 
-		\hyperpage{4}
-  \item \spxentry{process\_sinogram()}\spxextra{in module sino\_process\_tof}, \hyperpage{4}
+		\hyperpage{10}
+  \item \spxentry{process\_sinogram()}\spxextra{in module sino\_process\_tof}, \hyperpage{11}
 
   \indexspace
   \bigletter R
-  \item \spxentry{random()}\spxextra{in module train\_unet}, \hyperpage{7}
+  \item \spxentry{random()}\spxextra{in module train\_unet}, \hyperpage{12}
   \item \spxentry{remove\_block()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}, 
-		\hyperpage{4}
+		\hyperpage{10}
 
   \indexspace
   \bigletter S
-  \item \spxentry{save\_network()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{5}
-  \item \spxentry{set\_optimizer()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{5}
-  \item \spxentry{sino\_process\_tof}\spxextra{module}, \hyperpage{3}
-  \item \spxentry{Sino\_repair\_net}\spxextra{class in unet}, \hyperpage{5}
-  \item \spxentry{Sinogram\_Processor}\spxextra{class in sino\_process\_tof}, \hyperpage{3}
+  \item \spxentry{save\_network()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{12}
+  \item \spxentry{set\_optimizer()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{12}
+  \item \spxentry{setMaxMissing()}\spxextra{datasets.Sino\_Dataset method}, \hyperpage{11}
+  \item \spxentry{Sino\_Dataset}\spxextra{class in datasets}, \hyperpage{11}
+  \item \spxentry{sino\_process\_tof}\spxextra{module}, \hyperpage{10}
+  \item \spxentry{Sino\_repair\_net}\spxextra{class in unet}, \hyperpage{12}
+  \item \spxentry{Sinogram\_Processor}\spxextra{class in sino\_process\_tof}, \hyperpage{10}
 
   \indexspace
   \bigletter T
-  \item \spxentry{test()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{7}
-  \item \spxentry{test()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{5}
-  \item \spxentry{train()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{7}
-  \item \spxentry{train\_batch()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{5}
-  \item \spxentry{train\_unet}\spxextra{module}, \hyperpage{7}
+  \item \spxentry{test()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{12}
+  \item \spxentry{test()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{12}
+  \item \spxentry{train()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{12}
+  \item \spxentry{train\_batch()}\spxextra{unet.Sino\_repair\_net method}, \hyperpage{12}
+  \item \spxentry{train\_unet}\spxextra{module}, \hyperpage{12}
 
   \indexspace
   \bigletter U
-  \item \spxentry{UNet}\spxextra{class in unet}, \hyperpage{5}
-  \item \spxentry{unet}\spxextra{module}, \hyperpage{5}
-  \item \spxentry{UNet\_down\_block}\spxextra{class in unet}, \hyperpage{5}
-  \item \spxentry{UNet\_up\_block}\spxextra{class in unet}, \hyperpage{5}
+  \item \spxentry{unet}\spxextra{module}, \hyperpage{12}
 
   \indexspace
   \bigletter V
   \item \spxentry{visualize\_progress()}\spxextra{train\_unet.Network\_Trainer method}, 
-		\hyperpage{7}
+		\hyperpage{12}
 
   \indexspace
   \bigletter W
-  \item \spxentry{write\_log()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{7}
+  \item \spxentry{write\_log()}\spxextra{train\_unet.Network\_Trainer method}, \hyperpage{12}
 
 \end{sphinxtheindex}

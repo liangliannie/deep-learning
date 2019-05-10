@@ -6,6 +6,8 @@
 Train your network!
 ====================================
 
+In this part, I will try to elaborate what is UNet and how it works.
+
 
 .. toctree::
    :maxdepth: 2
