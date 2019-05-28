@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation &#8212; Badblock 1.0 documentation</title>
+    <title>Install necessary packages &#8212; Badblock 1.0 documentation</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -51,24 +51,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="install-necessary-packages">
+<h1>Install necessary packages<a class="headerlink" href="#install-necessary-packages" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>Python is a programming language that lets you work quickly
-and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.</p>
+<p>Python is a programming language that lets you work quickly and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.</p>
 <div class="section" id="install-python">
 <h2>Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="direct-python-from-python">
-<h3>Direct Python from <em>Python</em><a class="headerlink" href="#direct-python-from-python" title="Permalink to this headline">¶</a></h3>
-<p>Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python.
-The latest Python can be downloaded and installed from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a> . I have installed 3.6, please try to install a version above 3.6.</p>
+<div class="section" id="direct-install-python-from-python">
+<h3>Direct install Python from <em>Python</em><a class="headerlink" href="#direct-install-python-from-python" title="Permalink to this headline">¶</a></h3>
+<p>Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python. The latest Python can be downloaded and installed from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a> . I have installed 3.6, please try to install a version above 3.6.</p>
 </div>
-<div class="section" id="indirect-python-from-conda">
-<h3>Indirect Python from <em>Conda</em><a class="headerlink" href="#indirect-python-from-conda" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="indirect-install-python-from-conda">
+<h3>Indirect install Python from <em>Conda</em><a class="headerlink" href="#indirect-install-python-from-conda" title="Permalink to this headline">¶</a></h3>
 <p>Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies.</p>
 <p>Conda can be found via <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/">https://docs.conda.io/projects/conda/en/latest/user-guide/install/</a>.</p>
-<p>Conda is recommended when multiple version of python will be installed in the system, and the version of python can be changed easily based on:</p>
+<p>Conda is recommended when multiple versions of python will be installed in the same system, and the version of python can be changed easily by using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">source activate myenv</span>
 </pre></div>
 </div>
@@ -91,20 +89,20 @@ The latest Python can be downloaded and installed from <a class="reference exter
 </div>
 </div>
 </div>
-<div class="section" id="install-pytorch">
-<h2>Install Pytorch<a class="headerlink" href="#install-pytorch" title="Permalink to this headline">¶</a></h2>
-<p>Before start with pytorch, make sure CUDA has been installed, where
+<div class="section" id="install-pytorch-with-cuda">
+<h2>Install Pytorch with CUDA<a class="headerlink" href="#install-pytorch-with-cuda" title="Permalink to this headline">¶</a></h2>
+<p>Before we start with pytorch, please make sure CUDA has been installed, where
 CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia.</p>
-<div class="section" id="install-cuda">
-<h3>Install CUDA<a class="headerlink" href="#install-cuda" title="Permalink to this headline">¶</a></h3>
-<p>Install your cuda from <a class="reference external" href="https://developer.nvidia.com/cuda-downloads?target_os=Linux">https://developer.nvidia.com/cuda-downloads?target_os=Linux</a>.</p>
+<div class="section" id="install-cuda-driver">
+<h3>Install CUDA Driver<a class="headerlink" href="#install-cuda-driver" title="Permalink to this headline">¶</a></h3>
+<p>Download and install your cuda driver from <a class="reference external" href="https://developer.nvidia.com/cuda-downloads?target_os=Linux">https://developer.nvidia.com/cuda-downloads?target_os=Linux</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Check here to update with the latest driver. A good match of driver with the GPU will largerly increase the speed, thus please make sure you have the latest driver with your GPU.</p>
+<p class="last">Please check the same link for updating with the latest driver. A good match of driver with the GPU will largerly increase the speed, so always make sure you have the latest driver with your GPU.</p>
 </div>
 </div>
-<div class="section" id="id1">
-<h3>Install pytorch<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="install-pytorch">
+<h3>Install pytorch<a class="headerlink" href="#install-pytorch" title="Permalink to this headline">¶</a></h3>
 <p>Pytorch is an open source deep learning platform that provides a seamless path from research prototyping to production deployment.</p>
 <p>pytorch can be found via <a class="reference external" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a>.</p>
 </div>
@@ -118,21 +116,23 @@ CUDA is a parallel computing platform and application programming interface (API
 <li>$ pip install matplotlib</li>
 <li>$ pip install Pillow</li>
 <li>$ pip install scipy</li>
+<li>$ pip install Augmentor</li>
 </ul>
-<p>Plus, please include ‘pytorch_msssim’ folder if you want to use msssim as a loss, and if there are other package needed, try <strong>pip</strong></p>
+<p>Plus, if you would consider mssim loss too, please include ‘pytorch_msssim’ folder{we will talk about this later} and if there are other package needed, try <strong>pip</strong></p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install packagename</span>
 </pre></div>
 </div>
 <p>NOW, you are all set with all the packages needed for the deep learning Unet, and in the next step we will forward to prepare our data.</p>
 </div>
 <div class="section" id="build-in-docker-optional">
-<h2>Build in Docker(Optional)<a class="headerlink" href="#build-in-docker-optional" title="Permalink to this headline">¶</a></h2>
+<h2>Build in Docker (Optional)<a class="headerlink" href="#build-in-docker-optional" title="Permalink to this headline">¶</a></h2>
+<p>If GPU or the practical hardware is unavailable, we can also learn the deep learning by utilizing all the cloud services availble, such as AWS. Here, a simple system Docker is covered for the cases where we need to run deep learning in a server.</p>
 <p>Docker is a computer program that performs operating-system-level virtualization. The advantage of Docker is that we can only install the packages we need and then the extra cost of unnecessary components in the operating system can be reduced.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last">If a python environment with pytorch is hard to obtain locally, Docker is always a good choice to make your network run in cloud. Note: a most recent pytorch with NVIDIA can be pulled from <a class="reference external" href="https://docs.nvidia.com/deeplearning/dgx/pytorch-release-notes/running.html">https://docs.nvidia.com/deeplearning/dgx/pytorch-release-notes/running.html</a>.</p>
 </div>
-<p>Docker is simple to use too!</p>
+<p>Docker is simple to use too! The followings are a summary of Docker codes for reference.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> List Docker images
 <span class="go">     docker image ls</span>
 
@@ -160,9 +160,9 @@ CUDA is a parallel computing platform and application programming interface (API
 <span class="go">     docker run username/repository:tag                   # Run image from a registry</span>
 </pre></div>
 </div>
-<div class="section" id="using-docker-with-dgx">
-<h3>Using Docker with DGX<a class="headerlink" href="#using-docker-with-dgx" title="Permalink to this headline">¶</a></h3>
-<p>[Special Requirement for DGX user] In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock” with every Docker command.</p>
+<div class="section" id="using-docker-within-dgx">
+<h3>Using Docker within DGX<a class="headerlink" href="#using-docker-within-dgx" title="Permalink to this headline">¶</a></h3>
+<p><strong>Special Requirement for DGX user:</strong> In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock” with every Docker command.</p>
 <ul class="simple">
 <li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock run –rm -ti &lt;image_name&gt; [optional_command]”</li>
 <li>e.g. “docker -H unix:///mnt/docker_socks/&lt;user_name&gt;/docker.sock image ls” alternatively use the script “run-docker.sh” in /usr/local/bin:</li>
@@ -184,20 +184,20 @@ CUDA is a parallel computing platform and application programming interface (API
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#">Install necessary packages</a><ul>
 <li><a class="reference internal" href="#install-python">Install Python</a><ul>
-<li><a class="reference internal" href="#direct-python-from-python">Direct Python from <em>Python</em></a></li>
-<li><a class="reference internal" href="#indirect-python-from-conda">Indirect Python from <em>Conda</em></a></li>
+<li><a class="reference internal" href="#direct-install-python-from-python">Direct install Python from <em>Python</em></a></li>
+<li><a class="reference internal" href="#indirect-install-python-from-conda">Indirect install Python from <em>Conda</em></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#install-pytorch">Install Pytorch</a><ul>
-<li><a class="reference internal" href="#install-cuda">Install CUDA</a></li>
-<li><a class="reference internal" href="#id1">Install pytorch</a></li>
+<li><a class="reference internal" href="#install-pytorch-with-cuda">Install Pytorch with CUDA</a><ul>
+<li><a class="reference internal" href="#install-cuda-driver">Install CUDA Driver</a></li>
+<li><a class="reference internal" href="#install-pytorch">Install pytorch</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#other-packages">Other packages</a></li>
-<li><a class="reference internal" href="#build-in-docker-optional">Build in Docker(Optional)</a><ul>
-<li><a class="reference internal" href="#using-docker-with-dgx">Using Docker with DGX</a></li>
+<li><a class="reference internal" href="#build-in-docker-optional">Build in Docker (Optional)</a><ul>
+<li><a class="reference internal" href="#using-docker-within-dgx">Using Docker within DGX</a></li>
 </ul>
 </li>
 </ul>

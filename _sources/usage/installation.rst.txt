@@ -3,31 +3,29 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Installation
+Install necessary packages
 ====================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-Python is a programming language that lets you work quickly
-and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.
+Python is a programming language that lets you work quickly and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.
 
 Install Python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Direct Python from *Python* 
+Direct install Python from *Python* 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Python2 will not be supported any more by the community, and hence let's work on Python3 and install the latest python.
-The latest Python can be downloaded and installed from `<https://www.python.org/downloads/>`_ . I have installed 3.6, please try to install a version above 3.6. 
+Python2 will not be supported any more by the community, and hence let's work on Python3 and install the latest python. The latest Python can be downloaded and installed from `<https://www.python.org/downloads/>`_ . I have installed 3.6, please try to install a version above 3.6. 
 
-Indirect Python from *Conda* 
+Indirect install Python from *Conda* 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies. 
 
 Conda can be found via `<https://docs.conda.io/projects/conda/en/latest/user-guide/install/>`_.
 
-Conda is recommended when multiple version of python will be installed in the system, and the version of python can be changed easily based on:
+Conda is recommended when multiple versions of python will be installed in the same system, and the version of python can be changed easily by using:
 
 .. code-block:: console
 
@@ -57,19 +55,19 @@ other useful methods for install certain packages including
    conda info --envs
    conda list -n myenv scipy
 
-Install Pytorch
+Install Pytorch with CUDA
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Before start with pytorch, make sure CUDA has been installed, where
+Before we start with pytorch, please make sure CUDA has been installed, where
 CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia.
 
-Install CUDA
+Install CUDA Driver
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Install your cuda from `<https://developer.nvidia.com/cuda-downloads?target_os=Linux>`_.
+Download and install your cuda driver from `<https://developer.nvidia.com/cuda-downloads?target_os=Linux>`_.
 
 .. note:: 
-   Check here to update with the latest driver. A good match of driver with the GPU will largerly increase the speed, thus please make sure you have the latest driver with your GPU.
+   Please check the same link for updating with the latest driver. A good match of driver with the GPU will largerly increase the speed, so always make sure you have the latest driver with your GPU.
 
 
 Install pytorch 
@@ -89,9 +87,10 @@ There are a list of other packages that are optional to install, while most coul
 * $ pip install matplotlib
 * $ pip install Pillow
 * $ pip install scipy
+* $ pip install Augmentor
 
 
-Plus, please include 'pytorch_msssim' folder if you want to use msssim as a loss, and if there are other package needed, try **pip**
+Plus, if you would consider mssim loss too, please include 'pytorch_msssim' folder{we will talk about this later} and if there are other package needed, try **pip**
 
 .. code-block:: console
    
@@ -100,8 +99,10 @@ Plus, please include 'pytorch_msssim' folder if you want to use msssim as a loss
 
 NOW, you are all set with all the packages needed for the deep learning Unet, and in the next step we will forward to prepare our data.
 
-Build in Docker(Optional)
+Build in Docker (Optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If GPU or the practical hardware is unavailable, we can also learn the deep learning by utilizing all the cloud services availble, such as AWS. Here, a simple system Docker is covered for the cases where we need to run deep learning in a server. 
 
 Docker is a computer program that performs operating-system-level virtualization. The advantage of Docker is that we can only install the packages we need and then the extra cost of unnecessary components in the operating system can be reduced.
 
@@ -109,7 +110,7 @@ Docker is a computer program that performs operating-system-level virtualization
    
    If a python environment with pytorch is hard to obtain locally, Docker is always a good choice to make your network run in cloud. Note: a most recent pytorch with NVIDIA can be pulled from `<https://docs.nvidia.com/deeplearning/dgx/pytorch-release-notes/running.html>`_. 
 
-Docker is simple to use too!
+Docker is simple to use too! The followings are a summary of Docker codes for reference.
 
 .. code-block:: console
 
@@ -141,10 +142,10 @@ Docker is simple to use too!
 
 
   
-Using Docker with DGX
+Using Docker within DGX
 """"""""""""""""""""""""""""""""""""""
 
-[Special Requirement for DGX user] In order to connect to his Docker daemon a user has to commit the parameter "-H unix:///mnt/docker_socks/<user_name>/docker.sock" with every Docker command.
+**Special Requirement for DGX user:** In order to connect to his Docker daemon a user has to commit the parameter "-H unix:///mnt/docker_socks/<user_name>/docker.sock" with every Docker command.
 
 * e.g. "docker -H unix:///mnt/docker_socks/<user_name>/docker.sock run --rm -ti <image_name> [optional_command]"
 * e.g. "docker -H unix:///mnt/docker_socks/<user_name>/docker.sock image ls" alternatively use the script "run-docker.sh" in /usr/local/bin:

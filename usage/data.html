@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Precess and Save your data!" href="tof_file.html" />
-    <link rel="prev" title="Installation" href="installation.html" />
+    <link rel="prev" title="Install necessary packages" href="installation.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -40,7 +40,7 @@
           <a href="tof_file.html" title="Precess and Save your data!"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="Installation"
+          <a href="installation.html" title="Install necessary packages"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -55,28 +55,37 @@
 <h1>Prepare your data<a class="headerlink" href="#prepare-your-data" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="read-and-reshape">
 <h2>Read and reshape<a class="headerlink" href="#read-and-reshape" title="Permalink to this headline">¶</a></h2>
-<p>The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. In most the cases, the methods include but not limit to normalization, reshaping, etc.</p>
-<div class="section" id="learn-our-raw-data">
-<h3>Learn our raw data<a class="headerlink" href="#learn-our-raw-data" title="Permalink to this headline">¶</a></h3>
-<p>In the following, I will give two examples about the data we deal with for medical imageing, sinograms and images.</p>
+<p>The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning [The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. In most the cases, the methods include but not limit to normalization, reshaping, etc.</p>
+<div class="section" id="know-our-raw-data">
+<h3>Know our raw data<a class="headerlink" href="#know-our-raw-data" title="Permalink to this headline">¶</a></h3>
+<p>Before we prepare/process our data, it would be better if we know what data we are going to train/learn. For example, for images, we can view the images by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
 </div>
-</div>
+<p>where plt is short for matplotlib.pylab. In this way, we can have a roughly idea about our dataset/image.</p>
+<p>In the following, I give two examples about the data we deal with for medical imaging, sinograms and images.</p>
 <div class="section" id="eg-sinograms">
-<h2>eg. Sinograms<a class="headerlink" href="#eg-sinograms" title="Permalink to this headline">¶</a></h2>
-<p>PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which is basically 2D representation of projection rays versus angle.</p>
+<h4>eg. Sinograms<a class="headerlink" href="#eg-sinograms" title="Permalink to this headline">¶</a></h4>
+<p>PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which is basically 2D representation of projection rays versus angle. And different from RGB images, the pixels in sinograms stand for the counts of events captured from the scanner, which range from zero to thousands or tens of thousands.</p>
+<p>One sample of sinogram is shown below.</p>
 <a class="reference internal image-reference" href="../_images/sinograms.png"><img alt="../_images/sinograms.png" class="align-center" src="../_images/sinograms.png" style="width: 300px;" /></a>
-<p>In our case, we have the sinograms files for badblocks, where the file format is .s with the input sinograms being removed with bad blocks and the target sinograms being equipped with all blocks, and both files are stored around 1.4G(with flatten data stored as uint16).</p>
-<p>Hence, our goal is to use U-Net to project the data from the input files and to make it close to the data in the target file. Actually, the best way to train might be to feed all the sinograms into memory, but these files are too large as one input for neural network. Hence, in the following, we will try to cut/seperate the data into slices where we only need to feed parts of the sinograms.</p>
+<p>If our goal is to fix the noise in sinograms of one patient, say, we have the sinograms with the format as .s with the input sinograms with noise and the target sinograms without noise. Then, we can use U-Net to project the data from the input files and to make it close to the data in the target file (ground true).</p>
+<p>Actualy, the practical sinogram file of one patient can be very big, around several GBs, and hence the best way to train is not to feed all the sinograms into memory but to seperate the single sinograms of one patient into small parts, which would be more beneficial to reduce the cost of both memory and learning speed.</p>
 </div>
 <div class="section" id="eg-images">
-<h2>eg. Images<a class="headerlink" href="#eg-images" title="Permalink to this headline">¶</a></h2>
+<h4>eg. Images<a class="headerlink" href="#eg-images" title="Permalink to this headline">¶</a></h4>
 <a class="reference internal image-reference" href="../_images/images.PNG"><img alt="../_images/images.PNG" class="align-center" src="../_images/images.PNG" style="width: 300px;" /></a>
-<p>To clarify, our goal is to learn the body image (to make the image more clear and help the doctors make good decisions). Thus, another potential solution will be to work on the images directly. Say, we feed the reconstructed image with bad blocks into our neural networks as inputs and our target will be the images without bad blocks.</p>
+<p>To clarify, our final goal can be to fix the noise in body image of one patient (to make the image more clear and help the doctors make good decisions). Thus, rather than working on singrams, another potential solution will be to work on the body images directly. For instance, we feed the reconstructed image with noise into our neural networks as inputs and our target will be the images without noise.</p>
+<p>Note, the above noise can also be interperated as impainting.</p>
+</div>
+</div>
 <div class="section" id="process-our-raw-data">
 <h3>Process our raw data<a class="headerlink" href="#process-our-raw-data" title="Permalink to this headline">¶</a></h3>
-<p>To advoid loading all data into the memory, we reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In this way, we can let the network learn the smaller pieces but we might lose the information of connections among the smaller pieces.</p>
-<p>In my case, I am working on sinograms and the sinograms have their own informative structure [TOF, Slice, W, L], where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from [TOF, Slice, W, L] into [TOF*Slice, W, L],  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape [50, 520].</p>
+<p>After getting an idea about our dataset, now we can preceed in processing the raw dataset.</p>
+<p>As stated, to advoid loading all data into the memory, we would better reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In a large scale, the memory consumption will be reduced and the learning speed will be accelerated. However, we might also lose the relations/connections among the smaller pieces.</p>
+<p>For an example, I am working on sinograms and the sinograms have their own informative structure [TOF, Slice, W, L], where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from [TOF, Slice, W, L] into [TOF*Slice, W, L],  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape [W, L].</p>
 <p>For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. Since we are working on UNet (as autoencoder, we need to encode and decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).</p>
+<p>In this case, if W and L is close to certain number which is a power of 2, and then we can match W and L to the numbers by using padding in numpy.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>An example of reshaping to a power of 2:</p>
@@ -85,24 +94,36 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">),</span> <span class="p">(</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)),</span> <span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In our case, if we have [TOF=34, Slice=815, W=50, L=520], we can do:</p>
+<p>For example, if we have [TOF=1, Slice=1, W=50, L=256], we can do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>to make it [TOF=34, Slice=815, W=64, L=520], which would be good enough for 3 times downsampling since W and L can be divided by <span class="math notranslate nohighlight">\(2^3\)</span>.</p>
+<p>to make it [TOF=1, Slice=1, W=64, L=256], which would be good enough for 3 times downsampling since W and L can be divided by <span class="math notranslate nohighlight">\(2^3\)</span>.</p>
 </div></blockquote>
 <p class="last">Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.</p>
 </div>
 </div>
 <div class="section" id="save-the-data-in-pickle">
 <h3>Save the data in pickle<a class="headerlink" href="#save-the-data-in-pickle" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="https://docs.python.org/3/library/pickle.html">Pickle</a> module implement binary protocols for serializing and de-serializing a Python object structure. Here we can dump our matrix into pickle by using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+<p>In order to make dataset read more efficiently by python, we save the reshaped dataset into pickle as the intermedium files for the datasets. <a class="reference external" href="https://docs.python.org/3/library/pickle.html">Pickle</a> module implement binary protocols for serializing and de-serializing a Python object structure.</p>
+<p>e.g. we can dump our reshaped matrix directly into pickle by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Be careful with you pickle version, since it might not match between python2 and python3.</p>
+</div>
+<p>One example about how to process the dataset is summarized as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">slices</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">dist</span><span class="p">):</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint16&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">tof</span><span class="p">,</span> <span class="n">slices</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>  <span class="c1"># Reshape to the file layout</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
 </div>
 <p>The details of the data process can be refered from sino_process_tof.py</p>
 <div class="toctree-wrapper compound">
@@ -112,7 +133,7 @@
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Loading all the data into the GPU is both time consuming and inefficient.</p>
+<p class="last">Loading all the data into the GPU is both time consuming and inefficient and hene balancing the between the size before training.</p>
 </div>
 </div>
 </div>
@@ -147,6 +168,20 @@
 </div>
 <p>the <code class="code docutils literal notranslate"><span class="pre">self.data.shape=[tof*slice,</span> <span class="pre">W,</span> <span class="pre">L]</span></code></p>
 <p>The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.</p>
+<p>augomentor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[[</span><span class="n">image</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">corrupt_sino</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">orig_sino</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">Augmentor</span><span class="o">.</span><span class="n">DataPipeline</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+                <span class="c1"># p.rotate(1, max_left_rotation=5, max_right_rotation=5)</span>
+                <span class="c1"># p.flip_top_bottom(0.5)</span>
+                <span class="c1"># p.zoom_random(1, percentage_area=0.5)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">max_left_rotation</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_right_rotation</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">zoom</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_factor</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">max_factor</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+                <span class="n">augmented_images</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">corrupt_sino</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">augmented_images</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+                <span class="n">orig_sino</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">augmented_images</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Find the details here <a class="reference external" href="https://github.com/mdbloice/Augmentor">https://github.com/mdbloice/Augmentor</a></p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="datset_file.html">Dataset!</a></li>
@@ -166,11 +201,11 @@
   <ul>
 <li><a class="reference internal" href="#">Prepare your data</a><ul>
 <li><a class="reference internal" href="#read-and-reshape">Read and reshape</a><ul>
-<li><a class="reference internal" href="#learn-our-raw-data">Learn our raw data</a></li>
+<li><a class="reference internal" href="#know-our-raw-data">Know our raw data</a><ul>
+<li><a class="reference internal" href="#eg-sinograms">eg. Sinograms</a></li>
+<li><a class="reference internal" href="#eg-images">eg. Images</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#eg-sinograms">eg. Sinograms</a></li>
-<li><a class="reference internal" href="#eg-images">eg. Images</a><ul>
 <li><a class="reference internal" href="#process-our-raw-data">Process our raw data</a></li>
 <li><a class="reference internal" href="#save-the-data-in-pickle">Save the data in pickle</a></li>
 </ul>
@@ -185,7 +220,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="installation.html"
-                        title="previous chapter">Installation</a></p>
+                        title="previous chapter">Install necessary packages</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tof_file.html"
                         title="next chapter">Precess and Save your data!</a></p>
@@ -225,7 +260,7 @@
           <a href="tof_file.html" title="Precess and Save your data!"
              >next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="Installation"
+          <a href="installation.html" title="Install necessary packages"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>

@@ -17,7 +17,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="usage/installation.html" />
+    <link rel="next" title="Install necessary packages" href="usage/installation.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -36,7 +36,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="usage/installation.html" title="Installation"
+          <a href="usage/installation.html" title="Install necessary packages"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -49,41 +49,37 @@
             
   <div class="section" id="deep-learning-tutorial-by-building-u-net-in-pytorch">
 <h1>Deep learning tutorial by building U-Net in Pytorch<a class="headerlink" href="#deep-learning-tutorial-by-building-u-net-in-pytorch" title="Permalink to this headline">¶</a></h1>
-<p>Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you
-how to improve the quality of image(or say image denoising) by using one of the many networks, UNet.</p>
+<p>Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you how to improve the quality of image(or say image denoising/impainting) by using one of the many networks, UNet.</p>
 <div class="section" id="reasons-for-this-tutorial">
 <h2>Reasons for this tutorial<a class="headerlink" href="#reasons-for-this-tutorial" title="Permalink to this headline">¶</a></h2>
 <p>I started my internship in Siemens, Knoxville at the begining of 2019, where I first touched and learned deep learning.
-Great thanks to super nice manager(BILL) since I do learn a lot from him!! Please note that I am also a beginner in deep learning, and thus point me out if I will be wrong in the following content.</p>
-<p>During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting and denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you.</p>
-<p>In fact, a lot of my coworkers are also very interested in building or learning about deep learning while they think
-deep learning is very hard to learn. Hence, I also write this tutorial for people who are in the field of medical imaging
-or other who might want to build their own deep learning networks but they do not know how to start. To be honest, to select the most suitable parameters/models
-is the most time consuming part of deep learning, but to start deep learning is far more simple than you thought!</p>
+Great thanks to super nice manager(BILL) since I learn a lot from him!</p>
+<p>During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting or denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you.</p>
+<p>In fact, my coworkers are also very interested in building or learning neural networks while their think that deep learning is very hard stops them. And thus, I also mean to write this tutorial for people who are in the field of medical imaging who might want to build their own deep learning networks but they do not know how/where to start.</p>
+<p>To be honest, in either deep learning or machine learning, the optimal choices for the most suitable parameters/models are always hard to make and it is also consuming most of the time, but initiating and building deep learning network and making it work is far more simple than you thought!</p>
+<p>Last but not least, I am still a beginner and learner in deep learning/matchine learning, and please point/teach me out if I will be wrong in the following content.</p>
 </div>
-<div class="section" id="goals-for-this-tutorial">
-<h2>Goals for this tutorial<a class="headerlink" href="#goals-for-this-tutorial" title="Permalink to this headline">¶</a></h2>
-<p>Hence, lets begin with this to open your new world to the deep learning(AI)!</p>
+<div class="section" id="pipeline-for-this-tutorial">
+<h2>Pipeline for this tutorial<a class="headerlink" href="#pipeline-for-this-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>Here, let’s begin with the following content to open your new world to the deep learning(AI)!</p>
 <blockquote>
-<div><p>First, we will try to install all the necessary packages for the deep learning, and it will be great if you have a GPU.</p>
-<p>And then, we will talk about how to precesss your data (so important)!</p>
-<p>Third, a quick start with U-Net will lead you to the heart of deep learning.</p>
-<p>Finally, we will train our U-Net and use several visualizations to view our results.</p>
+<div><p>First, we will install all the necessary packages/softwares for the deep learning(it will be great if you have a GPU), and in this tutorial we will utilize Pytorch.</p>
+<p>Next, we will talk about how to precesss your data (so important), such as shaping and normalization! And I will always try to add a method named augumator to further enlarge our datasets in case that the training data is very small.</p>
+<p>Third, we will go over neural network(U-Net), which will let you learn the core of deep learning. In this part, I will briefly introduce the idea and the structure of U-Net.</p>
+<p>Finally, we will train our U-Net with our training datasets and use visualization tool to view our results.</p>
 </div></blockquote>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Here all the contents go:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="usage/installation.html">Installation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="usage/installation.html">Install necessary packages</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage/installation.html#install-python">Install Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/installation.html#install-pytorch">Install Pytorch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage/installation.html#install-pytorch-with-cuda">Install Pytorch with CUDA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage/installation.html#other-packages">Other packages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/installation.html#build-in-docker-optional">Build in Docker(Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage/installation.html#build-in-docker-optional">Build in Docker (Optional)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage/data.html">Prepare your data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage/data.html#read-and-reshape">Read and reshape</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/data.html#eg-sinograms">eg. Sinograms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/data.html#eg-images">eg. Images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage/data.html#load-your-data">Load your data</a></li>
 </ul>
 </li>
@@ -129,7 +125,7 @@ is the most time consuming part of deep learning, but to start deep learning is 
   <ul>
 <li><a class="reference internal" href="#">Deep learning tutorial by building U-Net in Pytorch</a><ul>
 <li><a class="reference internal" href="#reasons-for-this-tutorial">Reasons for this tutorial</a></li>
-<li><a class="reference internal" href="#goals-for-this-tutorial">Goals for this tutorial</a></li>
+<li><a class="reference internal" href="#pipeline-for-this-tutorial">Pipeline for this tutorial</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
@@ -137,7 +133,7 @@ is the most time consuming part of deep learning, but to start deep learning is 
 
   <h4>Next topic</h4>
   <p class="topless"><a href="usage/installation.html"
-                        title="next chapter">Installation</a></p>
+                        title="next chapter">Install necessary packages</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -171,7 +167,7 @@ is the most time consuming part of deep learning, but to start deep learning is 
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="usage/installation.html" title="Installation"
+          <a href="usage/installation.html" title="Install necessary packages"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>

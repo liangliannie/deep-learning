@@ -8,47 +8,60 @@ Prepare your data
 
 Read and reshape
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning[The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. In most the cases, the methods include but not limit to normalization, reshaping, etc. 
+The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning [The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data]. In most the cases, the methods include but not limit to normalization, reshaping, etc. 
 
-Learn our raw data
+Know our raw data
 """"""""""""""""""""""""""""""""""""""
 
+Before we prepare/process our data, it would be better if we know what data we are going to train/learn. For example, for images, we can view the images by using::
 
-In the following, I will give two examples about the data we deal with for medical imageing, sinograms and images.
+	plt.imshow(image)
 
+where plt is short for matplotlib.pylab. In this way, we can have a roughly idea about our dataset/image.
+
+In the following, I give two examples about the data we deal with for medical imaging, sinograms and images.
 
 eg. Sinograms
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**********************
 
-PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which is basically 2D representation of projection rays versus angle.
+
+PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which is basically 2D representation of projection rays versus angle. And different from RGB images, the pixels in sinograms stand for the counts of events captured from the scanner, which range from zero to thousands or tens of thousands.
+
+One sample of sinogram is shown below.
 
 .. image:: sinograms.png
    :width: 300px
    :align: center
 
-In our case, we have the sinograms files for badblocks, where the file format is .s with the input sinograms being removed with bad blocks and the target sinograms being equipped with all blocks, and both files are stored around 1.4G(with flatten data stored as uint16).
+If our goal is to fix the noise in sinograms of one patient, say, we have the sinograms with the format as .s with the input sinograms with noise and the target sinograms without noise. Then, we can use U-Net to project the data from the input files and to make it close to the data in the target file (ground true).
 
-Hence, our goal is to use U-Net to project the data from the input files and to make it close to the data in the target file. Actually, the best way to train might be to feed all the sinograms into memory, but these files are too large as one input for neural network. Hence, in the following, we will try to cut/seperate the data into slices where we only need to feed parts of the sinograms.
+Actualy, the practical sinogram file of one patient can be very big, around several GBs, and hence the best way to train is not to feed all the sinograms into memory but to seperate the single sinograms of one patient into small parts, which would be more beneficial to reduce the cost of both memory and learning speed.
 
 
 eg. Images 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**********************
+
 .. image:: images.PNG
    :width: 300px
    :align: center
 
-To clarify, our goal is to learn the body image (to make the image more clear and help the doctors make good decisions). Thus, another potential solution will be to work on the images directly. Say, we feed the reconstructed image with bad blocks into our neural networks as inputs and our target will be the images without bad blocks.
+To clarify, our final goal can be to fix the noise in body image of one patient (to make the image more clear and help the doctors make good decisions). Thus, rather than working on singrams, another potential solution will be to work on the body images directly. For instance, we feed the reconstructed image with noise into our neural networks as inputs and our target will be the images without noise.
 
+Note, the above noise can also be interperated as impainting.
 
 Process our raw data
 """"""""""""""""""""""""""""""""""""""
+After getting an idea about our dataset, now we can preceed in processing the raw dataset.
 
-To advoid loading all data into the memory, we reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In this way, we can let the network learn the smaller pieces but we might lose the information of connections among the smaller pieces. 
+As stated, to advoid loading all data into the memory, we would better reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In a large scale, the memory consumption will be reduced and the learning speed will be accelerated. However, we might also lose the relations/connections among the smaller pieces. 
 
 
-In my case, I am working on sinograms and the sinograms have their own informative structure [TOF, Slice, W, L], where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from [TOF, Slice, W, L] into [TOF*Slice, W, L],  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape [50, 520]. 
+For an example, I am working on sinograms and the sinograms have their own informative structure [TOF, Slice, W, L], where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from [TOF, Slice, W, L] into [TOF*Slice, W, L],  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape [W, L]. 
 
 For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. Since we are working on UNet (as autoencoder, we need to encode and decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).
+
+In this case, if W and L is close to certain number which is a power of 2, and then we can match W and L to the numbers by using padding in numpy.
+
 
 .. note::
    An example of reshaping to a power of 2:
@@ -57,23 +70,36 @@ For most cases in machine learning without down/up sampling in the images, the n
 
 	    data = np.pad(data, ((x1, y1), (x2, y2), (x3, y3), (x4, y4)), 'wrap') 
 
-	In our case, if we have [TOF=34, Slice=815, W=50, L=520], we can do::
+	For example, if we have [TOF=1, Slice=1, W=50, L=256], we can do::
 
 	    data = np.pad(data, ((0, 0), (0, 0), (7, 7), (0, 0)), 'wrap')
 
-	to make it [TOF=34, Slice=815, W=64, L=520], which would be good enough for 3 times downsampling since W and L can be divided by :math:`2^3`.
+	to make it [TOF=1, Slice=1, W=64, L=256], which would be good enough for 3 times downsampling since W and L can be divided by :math:`2^3`.
 
    Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.
 
 Save the data in pickle
 """""""""""""""""""""""""""""
+In order to make dataset read more efficiently by python, we save the reshaped dataset into pickle as the intermedium files for the datasets. `Pickle <https://docs.python.org/3/library/pickle.html>`_ module implement binary protocols for serializing and de-serializing a Python object structure. 
 
-`Pickle <https://docs.python.org/3/library/pickle.html>`_ module implement binary protocols for serializing and de-serializing a Python object structure. Here we can dump our matrix into pickle by using::
+e.g. we can dump our reshaped matrix directly into pickle by using::
 
-    pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
         
 .. note::
    Be careful with you pickle version, since it might not match between python2 and python3.
+
+
+One example about how to process the dataset is summarized as::
+
+    def process_data(self, file, tof, slices, theta, dist):
+
+        data = np.fromfile(file, dtype='uint16')
+        data = data.reshape((tof, slices, theta, dist))  # Reshape to the file layout
+
+        data = np.pad(data, ((0, 0), (7, 7), (0, 0)), 'wrap')
+
+        return data
 
 The details of the data process can be refered from sino_process_tof.py
 
@@ -85,7 +111,7 @@ The details of the data process can be refered from sino_process_tof.py
 
 .. warning::
    
-   Loading all the data into the GPU is both time consuming and inefficient.
+   Loading all the data into the GPU is both time consuming and inefficient and hene balancing the between the size before training.
 
 Load your data 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -124,6 +150,22 @@ and the item of the dataset is::
 the :code:`self.data.shape=[tof*slice, W, L]`
 
 The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.
+
+augomentor::
+
+	images = [[image for image in corrupt_sino] + [orig_sino[0]]]
+		        p = Augmentor.DataPipeline(images)
+		        # p.rotate(1, max_left_rotation=5, max_right_rotation=5)
+		        # p.flip_top_bottom(0.5)
+		        # p.zoom_random(1, percentage_area=0.5)
+		        p.rotate(probability=0.7, max_left_rotation=10, max_right_rotation=10)
+		        p.zoom(probability=0.5, min_factor=1.1, max_factor=1.5)
+		        augmented_images = p.sample(1)
+		        corrupt_sino = np.stack([augmented_images[0][i] for i in range(5)])
+		        orig_sino = np.stack([augmented_images[0][i] for i in range(5, 6)])
+
+Find the details here `<https://github.com/mdbloice/Augmentor>`_
+
 
 .. toctree::
    :maxdepth: 2
