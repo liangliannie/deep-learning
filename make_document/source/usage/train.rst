@@ -64,7 +64,4 @@ Try to restart your optimizer::
                 next_reset += self.opts.warm_reset_length + warm_reset_increment
                 warm_reset_increment += self.opts.warm_reset_increment
 
-.. toctree::
-   :maxdepth: 2
-      
-   /usage/train_file.rst
+

@@ -17,8 +17,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Unet!" href="net_file.html" />
-    <link rel="prev" title="Dataset!" href="datset_file.html" />
+    <link rel="next" title="Train your network" href="train.html" />
+    <link rel="prev" title="Prepare your data" href="data.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -34,13 +34,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="net_file.html" title="Unet!"
+          <a href="train.html" title="Train your network"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="datset_file.html" title="Dataset!"
+          <a href="data.html" title="Prepare your data"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -55,9 +52,23 @@
 <h1>Build your network!<a class="headerlink" href="#build-your-network" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="what-is-unet">
 <h2>What is Unet?<a class="headerlink" href="#what-is-unet" title="Permalink to this headline">¶</a></h2>
-<p>In this part, I will try to elaborate what is UNet and how it works. Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.</p>
+<p>In this part, I will try to elaborate what is UNet and how it works.</p>
+<div class="section" id="autoencoder">
+<h3>Autoencoder<a class="headerlink" href="#autoencoder" title="Permalink to this headline">¶</a></h3>
+<p>As stated in <a class="reference external" href="https://en.wikipedia.org/wiki/Autoencoder">Wiki</a>, autoencoder is a network which learns to compress data from the input layer into a short code and then uncompress that code into something that closely matches the origin data. The schematic structure of an autoencoder with 3 fully connected hidden layer is shown below.</p>
+<a class="reference internal image-reference" href="../_images/Autoencoder_structure.png"><img alt="autoencoder from Wiki" class="align-center" src="../_images/Autoencoder_structure.png" style="width: 300px;" /></a>
+</div>
+<div class="section" id="resnet">
+<h3>ResNet<a class="headerlink" href="#resnet" title="Permalink to this headline">¶</a></h3>
+<p>A residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers.</p>
+<a class="reference internal image-reference" href="../_images/800px-ResNets.svg.png"><img alt="ResNet from Wiki" class="align-center" src="../_images/800px-ResNets.svg.png" style="width: 150px;" /></a>
+</div>
+<div class="section" id="unet">
+<h3>UNet<a class="headerlink" href="#unet" title="Permalink to this headline">¶</a></h3>
+<p>Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.</p>
 <p>One example of UNet with two times- subsampling is elaborated below.</p>
 <a class="reference internal image-reference" href="../_images/unet.png"><img alt="Unet" class="align-center" src="../_images/unet.png" style="width: 500px;" /></a>
+</div>
 </div>
 <div class="section" id="how-to-write-unet-in-code">
 <h2>How to write Unet in code?<a class="headerlink" href="#how-to-write-unet-in-code" title="Permalink to this headline">¶</a></h2>
@@ -132,11 +143,6 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Here we only give one example of network, UNet. In fact, there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet.</p>
 </div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="net_file.html">Unet!</a></li>
-</ul>
-</div>
 </div>
 </div>
 
@@ -149,18 +155,23 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Build your network!</a><ul>
-<li><a class="reference internal" href="#what-is-unet">What is Unet?</a></li>
+<li><a class="reference internal" href="#what-is-unet">What is Unet?</a><ul>
+<li><a class="reference internal" href="#autoencoder">Autoencoder</a></li>
+<li><a class="reference internal" href="#resnet">ResNet</a></li>
+<li><a class="reference internal" href="#unet">UNet</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#how-to-write-unet-in-code">How to write Unet in code?</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="datset_file.html"
-                        title="previous chapter">Dataset!</a></p>
+  <p class="topless"><a href="data.html"
+                        title="previous chapter">Prepare your data</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="net_file.html"
-                        title="next chapter">Unet!</a></p>
+  <p class="topless"><a href="train.html"
+                        title="next chapter">Train your network</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -191,13 +202,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="net_file.html" title="Unet!"
+          <a href="train.html" title="Train your network"
              >next</a> |</li>
         <li class="right" >
-          <a href="datset_file.html" title="Dataset!"
+          <a href="data.html" title="Prepare your data"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>

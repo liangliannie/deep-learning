@@ -8,7 +8,34 @@ Build your network!
 
 What is Unet?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In this part, I will try to elaborate what is UNet and how it works. Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation. 
+In this part, I will try to elaborate what is UNet and how it works.
+
+Autoencoder
+"""""""""""""""""""""""""""""""""""""
+As stated in `Wiki <https://en.wikipedia.org/wiki/Autoencoder>`_, autoencoder is a network which learns to compress data from the input layer into a short code and then uncompress that code into something that closely matches the origin data. The schematic structure of an autoencoder with 3 fully connected hidden layer is shown below.
+
+.. image:: Autoencoder_structure.png
+    :width: 300px
+    :align: center
+    :alt: autoencoder from Wiki
+
+
+
+ResNet
+"""""""""""""""""""""""""""""""""""""
+A residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers. 
+
+
+.. image:: 800px-ResNets.svg.png
+    :width: 150px
+    :align: center
+    :alt: ResNet from Wiki
+
+
+
+UNet
+"""""""""""""""""""""""""""""""""""""
+Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation. 
 
 
 One example of UNet with two times- subsampling is elaborated below.
@@ -94,10 +121,7 @@ Knowing the network, we can input the corrupted sinogram with missing data for o
 
 .. note::
    Here we only give one example of network, UNet. In fact, there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet.
-.. toctree::
-   :maxdepth: 2
-      
-   /usage/net_file.rst
+
    
 
 
