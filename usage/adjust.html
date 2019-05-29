@@ -46,12 +46,62 @@
             
   <div class="section" id="adjust-your-parameters">
 <h1>Adjust your parameters!<a class="headerlink" href="#adjust-your-parameters" title="Permalink to this headline">¶</a></h1>
-<p>To watch the using of GPU by using:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">watch -n 1 nvidia-smi</span>
+<p>In this part, I will try to explain about the problems I have confronted with and the parameters I have tuned when I try to train the neural network and also the methods I have found to view or fixed the problems. There must be a lot of other problems I can not cover here, and in this case google it first and see if other people have solved it.</p>
+<div class="section" id="about-memory-and-time-consumption">
+<h2>About memory and time consumption<a class="headerlink" href="#about-memory-and-time-consumption" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<p>Let’s begin to view the usage[memory consumption] of GPU first, which can be easily done by calling the following code in terminal.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nvidia-smi</span>
+<span class="go">watch -n 1 nvidia-smi</span>
 </pre></div>
 </div>
-<div class="section" id="from-data">
-<h2>From data<a class="headerlink" href="#from-data" title="Permalink to this headline">¶</a></h2>
+<p>Where nvidia-smi will show the results one time, while watch -n 1 nvidia-smi stands for the case where the terminal will update the results every 1 second, and the results are shown below.</p>
+<a class="reference internal image-reference" href="../_images/memory.png"><img alt="Unet" class="align-center" src="../_images/memory.png" style="width: 500px;" /></a>
+<p>Here, we can see that in</p>
+<p>To check the time and memory consumption of program by using:</p>
+</div>
+<div class="section" id="time-and-memory">
+<h3>Time and memory<a class="headerlink" href="#time-and-memory" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">memory_profiler</span> <span class="kn">import</span> <span class="n">profile</span>
+
+<span class="nd">@profile</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">basic_mean</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+   <span class="n">nbrs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">N</span><span class="p">))</span>
+   <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nbrs</span><span class="p">)</span>
+   <span class="n">mean</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nbrs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nbrs</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">mean</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">basic_mean</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After running python profile.py, the log will be generated and shown in the terminal.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Line #    Mem usage    Increment   Line Contents</span>
+<span class="go">=================================================</span>
+<span class="go">  2     36.7 MiB     36.7 MiB   @profile()</span>
+<span class="go">  3                             def basic_mean(N=5):</span>
+<span class="go">  4     40.5 MiB      3.7 MiB       nbrs = list(range(0, 10 ** N))</span>
+<span class="go">  5     40.5 MiB      0.0 MiB       total = sum(nbrs)</span>
+<span class="go">  6     40.5 MiB      0.0 MiB       mean = sum(nbrs) / len(nbrs)</span>
+<span class="go">  7     40.5 MiB      0.0 MiB       return mean</span>
+</pre></div>
+</div>
+<p>fajgi</p>
+<a class="reference internal image-reference" href="../_images/MemoryManagement.png"><img alt="Unet" class="align-center" src="../_images/MemoryManagement.png" style="width: 700px;" /></a>
+</div>
+</div>
+<div class="section" id="parameters-in-data">
+<h2>Parameters in data<a class="headerlink" href="#parameters-in-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="shape-of-data">
+<h3>Shape of data<a class="headerlink" href="#shape-of-data" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="normalization-of-data">
+<h3>Normalization of data<a class="headerlink" href="#normalization-of-data" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="parameters-in-optimizer">
+<h2>Parameters in optimizer<a class="headerlink" href="#parameters-in-optimizer" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="inital-learning-rate">
 <h3>Inital Learning Rate<a class="headerlink" href="#inital-learning-rate" title="Permalink to this headline">¶</a></h3>
 </div>
@@ -59,11 +109,8 @@
 <h3>Decay Learning Rate<a class="headerlink" href="#decay-learning-rate" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="from-optimizer">
-<h2>From optimizer<a class="headerlink" href="#from-optimizer" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="from-network">
-<h2>From network<a class="headerlink" href="#from-network" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parameters-in-network">
+<h2>Parameters in network<a class="headerlink" href="#parameters-in-network" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="kernel-size">
 <h3>Kernel Size<a class="headerlink" href="#kernel-size" title="Permalink to this headline">¶</a></h3>
 </div>
@@ -82,13 +129,22 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Adjust your parameters!</a><ul>
-<li><a class="reference internal" href="#from-data">From data</a><ul>
+<li><a class="reference internal" href="#about-memory-and-time-consumption">About memory and time consumption</a><ul>
+<li><a class="reference internal" href="#memory">Memory</a></li>
+<li><a class="reference internal" href="#time-and-memory">Time and memory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameters-in-data">Parameters in data</a><ul>
+<li><a class="reference internal" href="#shape-of-data">Shape of data</a></li>
+<li><a class="reference internal" href="#normalization-of-data">Normalization of data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameters-in-optimizer">Parameters in optimizer</a><ul>
 <li><a class="reference internal" href="#inital-learning-rate">Inital Learning Rate</a></li>
 <li><a class="reference internal" href="#decay-learning-rate">Decay Learning Rate</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#from-optimizer">From optimizer</a></li>
-<li><a class="reference internal" href="#from-network">From network</a><ul>
+<li><a class="reference internal" href="#parameters-in-network">Parameters in network</a><ul>
 <li><a class="reference internal" href="#kernel-size">Kernel Size</a></li>
 <li><a class="reference internal" href="#stridng-size">Stridng Size</a></li>
 </ul>
