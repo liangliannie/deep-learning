@@ -6,9 +6,9 @@
 Build your network!
 ====================================
 
-What is Unet?
+What is UNet?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In this part, I will try to elaborate what is UNet and how it works.
+In this part, I will try to elaborate what is UNet and how it works. Before UNet, I will begin with two other neural networks, autoencoder and ResNet, which have similar network structure to parts of UNet. In fact, these two helped me a lot to understand UNet, and hence I hope it will help you too. You can also skip these to go directly to UNet below if you know them already.
 
 Autoencoder
 """""""""""""""""""""""""""""""""""""
@@ -19,11 +19,18 @@ As stated in `Wiki <https://en.wikipedia.org/wiki/Autoencoder>`_, autoencoder is
     :align: center
     :alt: autoencoder from Wiki
 
+In other words, the autoencoder is trying to learn an approximation to the identity function, so as to output :math:`\hat{x}` is similar to input :math:`x`, such that
+
+.. math::
+   
+   \hat{x} \approx x
+
+From one point, the autoencoder often ends up learning a low-dimension representation very similar to PCAs when the number of hidden units in the middle of autoencoder is small. The autoencoder is useful for tasks such as object recognition and other vision tasks.
 
 
 ResNet
 """""""""""""""""""""""""""""""""""""
-A residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers. 
+The residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers. And the reason for the skipping or short-cuts is to avoid the problem of vanishing gradients by reusing the values from previous layers. The structure of ResNet is shown below.
 
 
 .. image:: 800px-ResNets.svg.png
@@ -31,11 +38,17 @@ A residual neural network (ResNet) is an artificial neural network (ANN) of a ki
     :align: center
     :alt: ResNet from Wiki
 
-
+From my view, the ResNet also keep the previous learned features and in this way, it is good to work with tasks such as image denoising/impainting. Moreover, the simulations turn out that the short-cuts layers are functional to refine the image if they are added at the end of the network. For example, I have tried to add five convoluted res layer at the end and it did improve the quality of the image little. 
 
 UNet
 """""""""""""""""""""""""""""""""""""
-Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation. 
+Finally, we will go into UNet. Facts: U-Net was created by Olaf Ronneberger, Philipp Fischer, Thomas Brox in 2015 at the paper “UNet: Convolutional Networks for Biomedical Image Segmentation”. And until May 2019, it has been cited almost 6000, which shows little about how fast the development of deep learning. 
+
+
+The network(UNet) consists of a contracting path and an symmetric expansive path, which gives it the u-shaped architecture. The contracting path is a typical convolutional network that consists of repeated application of convolutions, each followed by a rectified linear unit (ReLU) and a max pooling operation. During the contraction, the spatial information is reduced while feature information is increased. The expansive pathway combines the feature and spatial information through a sequence of up-convolutions and concatenations with high-resolution features from the contracting path.
+
+
+From my view, the spatial information inherts the idea from the autoencoder while the difference is that it transfer the information into the feature spaces. While the concatenations of feature and spatial information is somehow inherts from ResNet while the difference is that it is not just short-cuts.
 
 
 One example of UNet with two times- subsampling is elaborated below.
@@ -45,10 +58,23 @@ One example of UNet with two times- subsampling is elaborated below.
     :align: center
     :alt: Unet
 
-How to write Unet in code?
+
+In our case, if we are doing image denoising/impainting. The UNet will encode the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further combine spatial and feature information between the encoding and decoding sides of the network. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation. 
+
+
+How to write UNet in code?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The example code based on UNet in Pytorch is given below[for more details please forward to the code].
 
+Structure of UNet
+"""""""""""""""""""""""""""""""""""""
+
+In the following code, the structure of UNet is given based on 3 downsamplings and 3 upsamplings, where 3 downsamplings are included in the Encoder network and 3 upsampling are included in the Decoder network. Five fully convoluted layers are added as the bottom layer of the network and two fully convoluted layers are added to the end of the network to further refine the output[improve the quality of the image].
+
+
+.. note::
+   
+   Here 
 
 .. code-block:: python
 
@@ -116,7 +142,8 @@ The example code based on UNet in Pytorch is given below[for more details please
 		out = self.softplus(out)
 		return out
 
-
+Details of Code
+"""""""""""""""""""""""""""""""""""""
 Knowing the network, we can input the corrupted sinogram with missing data for one or more bad blocks and then output the fixed sinogram. The contracting path in Unet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.
 
 .. note::

@@ -51,28 +51,43 @@
   <div class="section" id="build-your-network">
 <h1>Build your network!<a class="headerlink" href="#build-your-network" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="what-is-unet">
-<h2>What is Unet?<a class="headerlink" href="#what-is-unet" title="Permalink to this headline">¶</a></h2>
-<p>In this part, I will try to elaborate what is UNet and how it works.</p>
+<h2>What is UNet?<a class="headerlink" href="#what-is-unet" title="Permalink to this headline">¶</a></h2>
+<p>In this part, I will try to elaborate what is UNet and how it works. Before UNet, I will begin with two other neural networks, autoencoder and ResNet, which have similar network structure to parts of UNet. In fact, these two helped me a lot to understand UNet, and hence I hope it will help you too. You can also skip these to go directly to UNet below if you know them already.</p>
 <div class="section" id="autoencoder">
 <h3>Autoencoder<a class="headerlink" href="#autoencoder" title="Permalink to this headline">¶</a></h3>
 <p>As stated in <a class="reference external" href="https://en.wikipedia.org/wiki/Autoencoder">Wiki</a>, autoencoder is a network which learns to compress data from the input layer into a short code and then uncompress that code into something that closely matches the origin data. The schematic structure of an autoencoder with 3 fully connected hidden layer is shown below.</p>
 <a class="reference internal image-reference" href="../_images/Autoencoder_structure.png"><img alt="autoencoder from Wiki" class="align-center" src="../_images/Autoencoder_structure.png" style="width: 300px;" /></a>
+<p>In other words, the autoencoder is trying to learn an approximation to the identity function, so as to output <span class="math notranslate nohighlight">\(\hat{x}\)</span> is similar to input <span class="math notranslate nohighlight">\(x\)</span>, such that</p>
+<div class="math notranslate nohighlight">
+\[\hat{x} \approx x\]</div>
+<p>From one point, the autoencoder often ends up learning a low-dimension representation very similar to PCAs when the number of hidden units in the middle of autoencoder is small. The autoencoder is useful for tasks such as object recognition and other vision tasks.</p>
 </div>
 <div class="section" id="resnet">
 <h3>ResNet<a class="headerlink" href="#resnet" title="Permalink to this headline">¶</a></h3>
-<p>A residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers.</p>
+<p>The residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers. And the reason for the skipping or short-cuts is to avoid the problem of vanishing gradients by reusing the values from previous layers. The structure of ResNet is shown below.</p>
 <a class="reference internal image-reference" href="../_images/800px-ResNets.svg.png"><img alt="ResNet from Wiki" class="align-center" src="../_images/800px-ResNets.svg.png" style="width: 150px;" /></a>
+<p>From my view, the ResNet also keep the previous learned features and in this way, it is good to work with tasks such as image denoising/impainting. Moreover, the simulations turn out that the short-cuts layers are functional to refine the image if they are added at the end of the network. For example, I have tried to add five convoluted res layer at the end and it did improve the quality of the image little.</p>
 </div>
 <div class="section" id="unet">
 <h3>UNet<a class="headerlink" href="#unet" title="Permalink to this headline">¶</a></h3>
-<p>Inherting the idea from the autoencoder in deep learning, UNet also encodes the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further adds direct connections between the encoding and decoding sides of the networks. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.</p>
+<p>Finally, we will go into UNet. Facts: U-Net was created by Olaf Ronneberger, Philipp Fischer, Thomas Brox in 2015 at the paper “UNet: Convolutional Networks for Biomedical Image Segmentation”. And until May 2019, it has been cited almost 6000, which shows little about how fast the development of deep learning.</p>
+<p>The network(UNet) consists of a contracting path and an symmetric expansive path, which gives it the u-shaped architecture. The contracting path is a typical convolutional network that consists of repeated application of convolutions, each followed by a rectified linear unit (ReLU) and a max pooling operation. During the contraction, the spatial information is reduced while feature information is increased. The expansive pathway combines the feature and spatial information through a sequence of up-convolutions and concatenations with high-resolution features from the contracting path.</p>
+<p>From my view, the spatial information inherts the idea from the autoencoder while the difference is that it transfer the information into the feature spaces. While the concatenations of feature and spatial information is somehow inherts from ResNet while the difference is that it is not just short-cuts.</p>
 <p>One example of UNet with two times- subsampling is elaborated below.</p>
 <a class="reference internal image-reference" href="../_images/unet.png"><img alt="Unet" class="align-center" src="../_images/unet.png" style="width: 500px;" /></a>
+<p>In our case, if we are doing image denoising/impainting. The UNet will encode the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further combine spatial and feature information between the encoding and decoding sides of the network. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.</p>
 </div>
 </div>
 <div class="section" id="how-to-write-unet-in-code">
-<h2>How to write Unet in code?<a class="headerlink" href="#how-to-write-unet-in-code" title="Permalink to this headline">¶</a></h2>
+<h2>How to write UNet in code?<a class="headerlink" href="#how-to-write-unet-in-code" title="Permalink to this headline">¶</a></h2>
 <p>The example code based on UNet in Pytorch is given below[for more details please forward to the code].</p>
+<div class="section" id="structure-of-unet">
+<h3>Structure of UNet<a class="headerlink" href="#structure-of-unet" title="Permalink to this headline">¶</a></h3>
+<p>In the following code, the structure of UNet is given based on 3 downsamplings and 3 upsamplings, where 3 downsamplings are included in the Encoder network and 3 upsampling are included in the Decoder network. Five fully convoluted layers are added as the bottom layer of the network and two fully convoluted layers are added to the end of the network to further refine the output[improve the quality of the image].</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UNet</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
@@ -138,10 +153,14 @@
         <span class="k">return</span> <span class="n">out</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="details-of-code">
+<h3>Details of Code<a class="headerlink" href="#details-of-code" title="Permalink to this headline">¶</a></h3>
 <p>Knowing the network, we can input the corrupted sinogram with missing data for one or more bad blocks and then output the fixed sinogram. The contracting path in Unet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Here we only give one example of network, UNet. In fact, there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet.</p>
+</div>
 </div>
 </div>
 </div>
@@ -155,13 +174,17 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Build your network!</a><ul>
-<li><a class="reference internal" href="#what-is-unet">What is Unet?</a><ul>
+<li><a class="reference internal" href="#what-is-unet">What is UNet?</a><ul>
 <li><a class="reference internal" href="#autoencoder">Autoencoder</a></li>
 <li><a class="reference internal" href="#resnet">ResNet</a></li>
 <li><a class="reference internal" href="#unet">UNet</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#how-to-write-unet-in-code">How to write Unet in code?</a></li>
+<li><a class="reference internal" href="#how-to-write-unet-in-code">How to write UNet in code?</a><ul>
+<li><a class="reference internal" href="#structure-of-unet">Structure of UNet</a></li>
+<li><a class="reference internal" href="#details-of-code">Details of Code</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
