@@ -396,6 +396,8 @@ The upblock and downblock are defined as following:
 
 Knowing the network, we can input the corrupted image, train the network, and output the cleaned image. Also note that the contracting path in UNet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.
 
+Added May 29 2019: I also find a interesting summary of UNet here `<http://www.deeplearning.net/tutorial/unet.html>`_ . 
+
 
 .. note::
    Plus, we just give the example of UNet while there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet. Just google it, and you will find something worthy to try.

@@ -50,19 +50,66 @@
             
   <div class="section" id="train-your-network">
 <h1>Train your network<a class="headerlink" href="#train-your-network" title="Permalink to this headline">¶</a></h1>
-<p>In this part, I will try to elaborate what is UNet and how it works.</p>
+<p>In this part, we will focus on how to train our UNet. We will first cover several common loss functions and then go with how to train. Finally, we also give a method to further improve the training speed.</p>
 <div class="section" id="loss-functions">
 <h2>Loss functions<a class="headerlink" href="#loss-functions" title="Permalink to this headline">¶</a></h2>
-<p>Try several different loss functions to obtain the best results, here we have used:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">L1Loss</span><span class="p">()</span>
-<span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
-<span class="n">MSSSIM</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">size_average</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p>The loss function is the function to map an event or values of one or more to prepresent the cost associated with the event. And if we view the deep learning as an optimization problem, our goal will be to minimize the loss function.</p>
+<p>To be simple, the loss function is a method to evaluate how well our neural network is and we use backward proprogation to change the weights in the network to further improve our neural network or say to minimize our cost/loss.</p>
+<p>Here, I will enumerate several common used loss functions based on Pytorch.</p>
+<div class="section" id="l1loss">
+<h3>L1Loss<a class="headerlink" href="#l1loss" title="Permalink to this headline">¶</a></h3>
+<p>L1Loss creates a criterion that measures the mean absolute error (MAE) between each element in the input x and target y.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">L1Loss</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Or try a combination of them.</p>
+<div class="math notranslate nohighlight">
+\[l(x,y) = L = \{l_1, ..., l_N\}^T, l_n = |x_n-y_n|\]</div>
+<p>where N is the batch size.</p>
 </div>
-<div class="section" id="train">
-<h2>Train?<a class="headerlink" href="#train" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mseloss">
+<h3>MSELoss<a class="headerlink" href="#mseloss" title="Permalink to this headline">¶</a></h3>
+<p>MSELoss creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input x and target y.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="math notranslate nohighlight">
+\[l(x,y) = L = \{l_1, ..., l_N\}^T, l_n = (x_n-y_n)^2\]</div>
+</div>
+<div class="section" id="mssim">
+<h3>MSSIM<a class="headerlink" href="#mssim" title="Permalink to this headline">¶</a></h3>
+<p>MSSIM is the structural similarity(SSIM) index, which predicts the perceived quality of digital television and cinematic pictures, as well as other kinds of digital images and videos. To be simple, SSIM is used for measuring the similarity between two images, while it ranges in [0,1]. SSIM is designed to improve the traditional methods, while it works well while being combined with traditional methods, such as L1, L2, in deep learning.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">MSSSIM</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">size_average</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="combinations">
+<h3>Combinations<a class="headerlink" href="#combinations" title="Permalink to this headline">¶</a></h3>
+<p>Try a combination of different loss functions.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">Loss</span> <span class="o">=</span> <span class="n">L1Loss</span> <span class="o">+</span> <span class="n">MSSSIM</span>
+<span class="n">Loss</span> <span class="o">=</span> <span class="n">L1Loss</span> <span class="o">+</span> <span class="n">MSELoss</span> <span class="o">+</span> <span class="n">MSSSIM</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here, only three loss functions are listed, and there are still a lot available there online. Google it! You can even define you own loss function based on your task. Network is flexible, and so with the loss functions. DIY!</p>
+</div>
+</div>
+</div>
+<div class="section" id="train-train-train">
+<h2>Train, Train, Train<a class="headerlink" href="#train-train-train" title="Permalink to this headline">¶</a></h2>
+<p>We start with the optimizer and then the structure of training.</p>
+<div class="section" id="optimizer">
+<h3>Optimizer<a class="headerlink" href="#optimizer" title="Permalink to this headline">¶</a></h3>
+<p>The optimizer is the package implementing optimization algorithms. Most commonly used methods are already supported in Pytorch, and we can easily construct an optimizer object in pytorch by using one line of code. Two examples of optimizers are listed below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">([</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the parameters of the optimizer can be set, such as the learning rate, weight decay and so on when initiating the optimizer.</p>
+<p>From my view, the optimizer takes job of the backward propagation and optimizes the neural network based on certain optimization algorithm. The details of pytorch optim can be found <a class="reference external" href="https://pytorch.org/docs/stable/optim.html">https://pytorch.org/docs/stable/optim.html</a> . To be simple, the optimizer change the weights in neural network to make it the optimal weights for mapping the input to target.</p>
+</div>
+<div class="section" id="backward-propagation">
+<h3>Backward Propagation<a class="headerlink" href="#backward-propagation" title="Permalink to this headline">¶</a></h3>
 <p>Training has been made really simple in Pytorch:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>  <span class="c1"># loop over the dataset multiple times</span>
 
@@ -91,8 +138,9 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="hot-start">
-<h2>Hot Start?<a class="headerlink" href="#hot-start" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="hot-start-optional">
+<h2>Hot Start?(Optional)<a class="headerlink" href="#hot-start-optional" title="Permalink to this headline">¶</a></h2>
 <p>Try to restart your optimizer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">next_reset</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resetting Optimizer</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -117,9 +165,19 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Train your network</a><ul>
-<li><a class="reference internal" href="#loss-functions">Loss functions</a></li>
-<li><a class="reference internal" href="#train">Train?</a></li>
-<li><a class="reference internal" href="#hot-start">Hot Start?</a></li>
+<li><a class="reference internal" href="#loss-functions">Loss functions</a><ul>
+<li><a class="reference internal" href="#l1loss">L1Loss</a></li>
+<li><a class="reference internal" href="#mseloss">MSELoss</a></li>
+<li><a class="reference internal" href="#mssim">MSSIM</a></li>
+<li><a class="reference internal" href="#combinations">Combinations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#train-train-train">Train, Train, Train</a><ul>
+<li><a class="reference internal" href="#optimizer">Optimizer</a></li>
+<li><a class="reference internal" href="#backward-propagation">Backward Propagation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hot-start-optional">Hot Start?(Optional)</a></li>
 </ul>
 </li>
 </ul>
