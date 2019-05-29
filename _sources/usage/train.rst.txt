@@ -95,7 +95,9 @@ From my view, the optimizer takes job of the backward propagation and optimizes 
 Backward Propagation
 """""""""""""""""""""""""
 
-Training has been made really simple in Pytorch::
+Training has been made really simple in Pytorch. As the example given in Pytorch, we only need to loop over the data iterator and feed the inputs into the neural network and optimize. The training is done!
+
+.. code-block:: python
 
 	for epoch in range(2):  # loop over the dataset multiple times
 
@@ -122,9 +124,23 @@ Training has been made really simple in Pytorch::
 
 	print('Finished Training')
 
+.. note::
 
-Hot Start?(Optional)
+	We can train our neural network in GPU just simply transfering the tensors and the neural network onto the GPU. 
+
+	.. code-block:: python
+
+	   network.cuda()
+
+	This would do all the work! That's amazing, right?
+
+Warm Restart?(Optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The restart techniques are common in gradient-free optimizaion to deal with multimodal functions. This warm restarts borrows the idea from `SGDR: Stochastic Gradient Descent with Warm Restarts <https://arxiv.org/abs/1608.03983>`_.
+
+The idea of the warm restart is to simulate a new warm-started run/restart of the optimizer once for every certain epochs. 
+
 Try to restart your optimizer::
 
             if epoch % next_reset == 0:
@@ -137,4 +153,13 @@ Try to restart your optimizer::
                 next_reset += self.opts.warm_reset_length + warm_reset_increment
                 warm_reset_increment += self.opts.warm_reset_increment
 
+Specially, from the paper, we can do the warm restarts that are not performed from scratch but emulated by decaying the learning rate.
 
+.. math::
+	
+   lr = lr_{min} + \frac{1}{2} (lr_{max} - lr_{min}) (1 + cos(\frac{T_{cur}}{T_i}\pi))
+
+where :math:`lr_{min}` and :math:`lr_{max}` are the ranges for the learning rate, and :math:`T_{cur}` accounts for how many epochs have been performed since the last restart, and :math:`T_{i}` is the index of epochs.
+
+.. note::
+   DIY warm starts.

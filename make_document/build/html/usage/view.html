@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Adjust your parameters!" href="adjust.html" />
-    <link rel="prev" title="Train_Unet!" href="train_file.html" />
+    <link rel="prev" title="Train your network" href="train.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -34,13 +34,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="adjust.html" title="Adjust your parameters!"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="train_file.html" title="Train_Unet!"
+          <a href="train.html" title="Train your network"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -53,13 +50,63 @@
             
   <div class="section" id="visualize-your-results">
 <h1>Visualize your results!<a class="headerlink" href="#visualize-your-results" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-visdom">
-<h2>Install Visdom<a class="headerlink" href="#install-visdom" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-visdom-and-open-server">
+<h2>Install Visdom and Open server<a class="headerlink" href="#install-visdom-and-open-server" title="Permalink to this headline">¶</a></h2>
 <p>Visdom is a flexible tool for creating, organizing, and sharing visualizations of live, rich data. Supports Torch and Numpy, which can be found <a class="reference external" href="https://github.com/facebookresearch/visdom/">https://github.com/facebookresearch/visdom/</a>.</p>
+<p>From my view, visdom is similar to the TensorBoard from Tensorflow while it is still under developing I hope it will be much more strong in the future.</p>
+<div class="section" id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<p>Visdom can be easily installed by using pip.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">visdom</span>
+</pre></div>
 </div>
-<div class="section" id="use-visdom">
-<h2>Use Visdom<a class="headerlink" href="#use-visdom" title="Permalink to this headline">¶</a></h2>
-<p>Try to view your output in websites:</p>
+<p>There are also other methods to install visdom which I am not familiar!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Torch client</span>
+<span class="c1"># (STABLE VERSION, NOT ALL CURRENT FEATURES ARE SUPPORTED)</span>
+<span class="n">luarocks</span> <span class="n">install</span> <span class="n">visdom</span>
+<span class="c1"># Install visdom from source</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<span class="c1"># If the above runs into issues, you can try the below</span>
+<span class="n">easy_install</span> <span class="o">.</span>
+
+<span class="c1"># Install Torch client from source (from th directory)</span>
+<span class="n">luarocks</span> <span class="n">make</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="open-server">
+<h3>Open server<a class="headerlink" href="#open-server" title="Permalink to this headline">¶</a></h3>
+<p>After install visdom, you can start server from command line by running</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">visdom</span><span class="o">.</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>Then, the visdom can be accessed by going to <a class="reference external" href="http://localhost:8097">http://localhost:8097</a> in your browser, or your own host address if specified.</p>
+</div>
+</div>
+<div class="section" id="project-your-output-to-visdom">
+<h2>Project your output to Visdom<a class="headerlink" href="#project-your-output-to-visdom" title="Permalink to this headline">¶</a></h2>
+<p>Now you have installed visdom, and next we will work on project our output to the server and then we can view them.</p>
+<div class="section" id="step-by-step">
+<h3>Step by step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h3>
+<p>First, we need to initate our visdom object by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span> <span class="o">=</span> <span class="n">visdom</span><span class="o">.</span><span class="n">Visdom</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Second, we need to open one window project our output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">window</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Last, we need update our window with the output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># project line</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">Y</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+<span class="c1"># project images</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-summary-of-code">
+<h3>A summary of code<a class="headerlink" href="#a-summary-of-code" title="Permalink to this headline">¶</a></h3>
+<p>In the following code, I have generated three windows for loss of ‘test’, ‘train’, ‘recon’ and two windows for ‘train_image’, ‘test_image’:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">visdom</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1"># Start the server in terminal;</span>
@@ -140,7 +187,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_images</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="toctree-wrapper compound">
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Try to generate your own visdom server!</p>
+</div>
 </div>
 </div>
 </div>
@@ -154,15 +204,23 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Visualize your results!</a><ul>
-<li><a class="reference internal" href="#install-visdom">Install Visdom</a></li>
-<li><a class="reference internal" href="#use-visdom">Use Visdom</a></li>
+<li><a class="reference internal" href="#install-visdom-and-open-server">Install Visdom and Open server</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#open-server">Open server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-your-output-to-visdom">Project your output to Visdom</a><ul>
+<li><a class="reference internal" href="#step-by-step">Step by step</a></li>
+<li><a class="reference internal" href="#a-summary-of-code">A summary of code</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="train_file.html"
-                        title="previous chapter">Train_Unet!</a></p>
+  <p class="topless"><a href="train.html"
+                        title="previous chapter">Train your network</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="adjust.html"
                         title="next chapter">Adjust your parameters!</a></p>
@@ -196,13 +254,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="adjust.html" title="Adjust your parameters!"
              >next</a> |</li>
         <li class="right" >
-          <a href="train_file.html" title="Train_Unet!"
+          <a href="train.html" title="Train your network"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Badblock 1.0 documentation</a> &#187;</li> 
       </ul>

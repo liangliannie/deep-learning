@@ -6,21 +6,42 @@
 Adjust your parameters!
 ====================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-To start to view the result by using visdom:
-
-.. code-block:: console
-
-  python -m visdom.server 
-
 To watch the using of GPU by using:
 
 .. code-block:: console
 
    watch -n 1 nvidia-smi 
+
+
+
+From data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Inital Learning Rate 
+"""""""""""""""""""""""""
+
+Decay Learning Rate 
+"""""""""""""""""""""""""
+
+
+From optimizer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+From network
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Kernel Size
+"""""""""""""""""""""""""
+
+Stridng Size
+"""""""""""""""""""""""""
+
+
+
+
+
 
 
   

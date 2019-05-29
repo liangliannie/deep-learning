@@ -7,13 +7,75 @@ Visualize your results!
 ====================================
 
 
-Install Visdom
-^^^^^^^^^^^^^^^^^
+Install Visdom and Open server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Visdom is a flexible tool for creating, organizing, and sharing visualizations of live, rich data. Supports Torch and Numpy, which can be found `<https://github.com/facebookresearch/visdom/>`_.
 
-Use Visdom
-^^^^^^^^^^^^^^^^^
-Try to view your output in websites::
+From my view, visdom is similar to the TensorBoard from Tensorflow while it is still under developing I hope it will be much more strong in the future. 
+
+Install 
+"""""""""""""""""""""""""
+Visdom can be easily installed by using pip.
+
+.. code-block:: python
+
+   	pip install visdom
+
+There are also other methods to install visdom which I am not familiar!
+
+.. code-block:: python
+
+   # Install Torch client
+   # (STABLE VERSION, NOT ALL CURRENT FEATURES ARE SUPPORTED)
+   luarocks install visdom
+   # Install visdom from source
+   pip install -e .
+   # If the above runs into issues, you can try the below
+   easy_install .
+
+   # Install Torch client from source (from th directory)
+   luarocks make
+
+Open server 
+"""""""""""""""""""""""""
+After install visdom, you can start server from command line by running
+
+.. code-block:: python
+
+   python -m visdom.server
+
+Then, the visdom can be accessed by going to `http://localhost:8097 <http://localhost:8097>`_ in your browser, or your own host address if specified.
+
+
+Project your output to Visdom
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now you have installed visdom, and next we will work on project our output to the server and then we can view them.
+
+
+Step by step 
+"""""""""""""""""""""""""
+
+First, we need to initate our visdom object by::
+
+   vis = visdom.Visdom()
+
+Second, we need to open one window project our output::
+    
+   window = None
+
+Last, we need update our window with the output::
+
+   # project line
+   window = vis.line(X=np.arange(len(data)), Y=data, win=window, update='replace')
+   # project images
+   window = images(images, padding=5, win=window, nrow=2)
+
+
+A summary of code 
+"""""""""""""""""""""""""
+
+In the following code, I have generated three windows for loss of 'test', 'train', 'recon' and two windows for 'train_image', 'test_image'::
 
 	import visdom
 	import numpy as np
@@ -95,9 +157,9 @@ Try to view your output in websites::
 		    self.vis.images(images, padding=5, win=self.test_images, nrow=2, opts=dict(title=text))
 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. note::
+   
+   Try to generate your own visdom server!
 
 
 

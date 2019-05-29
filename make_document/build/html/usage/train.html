@@ -110,8 +110,8 @@
 </div>
 <div class="section" id="backward-propagation">
 <h3>Backward Propagation<a class="headerlink" href="#backward-propagation" title="Permalink to this headline">¶</a></h3>
-<p>Training has been made really simple in Pytorch:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>  <span class="c1"># loop over the dataset multiple times</span>
+<p>Training has been made really simple in Pytorch. As the example given in Pytorch, we only need to loop over the data iterator and feed the inputs into the neural network and optimize. The training is done!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>  <span class="c1"># loop over the dataset multiple times</span>
 
     <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainloader</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
@@ -130,17 +130,27 @@
         <span class="c1"># print statistics</span>
         <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2000</span> <span class="o">==</span> <span class="mi">1999</span><span class="p">:</span>    <span class="c1"># print every 2000 mini-batches</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">, </span><span class="si">%5d</span><span class="s1">] loss: </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">, </span><span class="si">%5d</span><span class="s1">] loss: </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span>
                   <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">running_loss</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">))</span>
             <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished Training&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Finished Training&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>We can train our neural network in GPU just simply transfering the tensors and the neural network onto the GPU.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="last">This would do all the work! That’s amazing, right?</p>
 </div>
 </div>
-<div class="section" id="hot-start-optional">
-<h2>Hot Start?(Optional)<a class="headerlink" href="#hot-start-optional" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="warm-restart-optional">
+<h2>Warm Restart?(Optional)<a class="headerlink" href="#warm-restart-optional" title="Permalink to this headline">¶</a></h2>
+<p>The restart techniques are common in gradient-free optimizaion to deal with multimodal functions. This warm restarts borrows the idea from <a class="reference external" href="https://arxiv.org/abs/1608.03983">SGDR: Stochastic Gradient Descent with Warm Restarts</a>.</p>
+<p>The idea of the warm restart is to simulate a new warm-started run/restart of the optimizer once for every certain epochs.</p>
 <p>Try to restart your optimizer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">next_reset</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resetting Optimizer</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -152,6 +162,14 @@
     <span class="n">next_reset</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">warm_reset_length</span> <span class="o">+</span> <span class="n">warm_reset_increment</span>
     <span class="n">warm_reset_increment</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">warm_reset_increment</span>
 </pre></div>
+</div>
+<p>Specially, from the paper, we can do the warm restarts that are not performed from scratch but emulated by decaying the learning rate.</p>
+<div class="math notranslate nohighlight">
+\[lr = lr_{min} + \frac{1}{2} (lr_{max} - lr_{min}) (1 + cos(\frac{T_{cur}}{T_i}\pi))\]</div>
+<p>where <span class="math notranslate nohighlight">\(lr_{min}\)</span> and <span class="math notranslate nohighlight">\(lr_{max}\)</span> are the ranges for the learning rate, and <span class="math notranslate nohighlight">\(T_{cur}\)</span> accounts for how many epochs have been performed since the last restart, and <span class="math notranslate nohighlight">\(T_{i}\)</span> is the index of epochs.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">DIY warm starts.</p>
 </div>
 </div>
 </div>
@@ -177,7 +195,7 @@
 <li><a class="reference internal" href="#backward-propagation">Backward Propagation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#hot-start-optional">Hot Start?(Optional)</a></li>
+<li><a class="reference internal" href="#warm-restart-optional">Warm Restart?(Optional)</a></li>
 </ul>
 </li>
 </ul>
