@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.7)  30 MAY 2019 10:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.7)  30 MAY 2019 11:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1176,34 +1176,33 @@ LaTeX Font Info:    Try loading font information for TS1+pcr on input line 240.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 ) [7]
-<sinograms.png, id=121, 462.528pt x 346.896pt>
+<sinograms.png, id=121, 422.32782pt x 316.18124pt>
 File: sinograms.png Graphic file (type png)
 <use sinograms.png>
 Package pdftex.def Info: sinograms.png  used on input line 307.
-(pdftex.def)             Requested size: 225.84229pt x 169.38239pt.
+(pdftex.def)             Requested size: 225.84229pt x 169.08533pt.
  [8]
-<images.PNG, id=131, 160.6pt x 149.55875pt>
+<images.PNG, id=130, 850.67813pt x 670.00313pt>
 File: images.PNG Graphic file (type png)
 <use images.PNG>
 Package pdftex.def Info: images.PNG  used on input line 316.
-(pdftex.def)             Requested size: 225.84229pt x 210.32103pt.
- [9 <./sinograms.png> <./images.PNG>] [10]
+(pdftex.def)             Requested size: 225.84229pt x 177.86691pt.
+ [9 <./sinograms.png (PNG copy)> <./images.PNG>] [10]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <9> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 404.
  [11] [12]
-<Autoencoder_structure.png, id=171, 679.53876pt x 507.8975pt>
+<Autoencoder_structure.png, id=168, 679.53876pt x 507.8975pt>
 File: Autoencoder_structure.png Graphic file (type png)
 <use Autoencoder_structure.png>
 Package pdftex.def Info: Autoencoder_structure.png  used on input line 512.
 (pdftex.def)             Requested size: 225.84229pt x 168.79242pt.
  [13 <./Autoencoder_structure.png>]
-<800px-ResNets.svg.png, id=180, 803.0pt x 1133.23375pt>
+<800px-ResNets.svg.png, id=178, 803.0pt x 1133.23375pt>
 File: 800px-ResNets.svg.png Graphic file (type png)
 <use 800px-ResNets.svg.png>
 Package pdftex.def Info: 800px-ResNets.svg.png  used on input line 557.
 (pdftex.def)             Requested size: 112.92114pt x 159.3606pt.
-
-[14 <./800px-ResNets.svg.png>]
+ [14 <./800px-ResNets.svg.png>]
 Underfull \vbox (badness 10000) detected at line 692
  []
 
@@ -1212,7 +1211,7 @@ Overfull \vbox (2.68169pt too high) detected at line 692
  []
 
 [15] [16]
-<unet.png, id=196, 621.82312pt x 368.87813pt>
+<unet.png, id=194, 621.82312pt x 368.87813pt>
 File: unet.png Graphic file (type png)
 <use unet.png>
 Package pdftex.def Info: unet.png  used on input line 707.
@@ -1225,13 +1224,13 @@ Overfull \vbox (1.18259pt too high) detected at line 1207
  []
 
 [25] [26]
-<memory.png, id=264, 797.98125pt x 541.02126pt>
+<memory.png, id=262, 797.98125pt x 541.02126pt>
 File: memory.png Graphic file (type png)
 <use memory.png>
 Package pdftex.def Info: memory.png  used on input line 1234.
 (pdftex.def)             Requested size: 376.40381pt x 255.19637pt.
  [27 <./memory.png>]
-<MemoryManagement.png, id=273, 1160.335pt x 432.817pt>
+<MemoryManagement.png, id=271, 1160.335pt x 432.817pt>
 File: MemoryManagement.png Graphic file (type png)
 <use MemoryManagement.png>
 Package pdftex.def Info: MemoryManagement.png  used on input line 1291.
@@ -1266,7 +1265,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1394.
 Here is how much of TeX's memory you used:
  13820 strings out of 494847
  192481 string characters out of 6179081
- 457531 words of memory out of 5000000
+ 457539 words of memory out of 5000000
  16721 multiletter control sequences out of 15000+600000
  53631 words of font info for 75 fonts, out of 8000000 for 9000
  60 hyphenation exceptions out of 8191
@@ -1285,9 +1284,9 @@ exlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf
 type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
 imes/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Badblock.pdf (35 pages, 519043 bytes).
+Output written on Badblock.pdf (35 pages, 1171043 bytes).
 PDF statistics:
- 382 PDF objects out of 1000 (max. 8388607)
+ 380 PDF objects out of 1000 (max. 8388607)
  309 compressed objects within 4 object streams
  100 named destinations out of 1000 (max. 500000)
  128 words of extra memory for PDF output out of 10000 (max. 10000000)
