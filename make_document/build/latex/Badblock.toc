@@ -1,32 +1,65 @@
 \babel@toc {english}{}
 \contentsline {chapter}{\numberline {1}Reasons for this tutorial}{3}{chapter.1}
-\contentsline {chapter}{\numberline {2}Goals for this tutorial}{5}{chapter.2}
-\contentsline {section}{\numberline {2.1}Installation}{5}{section.2.1}
+\contentsline {chapter}{\numberline {2}Pipeline for this tutorial}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Install necessary packages}{5}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Install Python}{5}{subsection.2.1.1}
-\contentsline {subsubsection}{Direct Python from \sphinxstyleemphasis {Python}}{5}{subsubsection*.3}
-\contentsline {subsubsection}{Indirect Python from \sphinxstyleemphasis {Conda}}{5}{subsubsection*.4}
-\contentsline {subsection}{\numberline {2.1.2}Install Pytorch}{6}{subsection.2.1.2}
-\contentsline {subsubsection}{Install CUDA}{6}{subsubsection*.5}
+\contentsline {subsubsection}{Direct install Python from \sphinxstyleemphasis {Python}}{5}{subsubsection*.3}
+\contentsline {subsubsection}{Indirect install Python from \sphinxstyleemphasis {Conda}}{5}{subsubsection*.4}
+\contentsline {subsection}{\numberline {2.1.2}Install Pytorch with CUDA}{6}{subsection.2.1.2}
+\contentsline {subsubsection}{Install CUDA Driver}{6}{subsubsection*.5}
 \contentsline {subsubsection}{Install pytorch}{6}{subsubsection*.6}
 \contentsline {subsection}{\numberline {2.1.3}Other packages}{6}{subsection.2.1.3}
-\contentsline {subsection}{\numberline {2.1.4}Build in Docker(Optional)}{7}{subsection.2.1.4}
-\contentsline {subsubsection}{Using Docker with DGX}{7}{subsubsection*.7}
+\contentsline {subsection}{\numberline {2.1.4}Build in Docker (Optional)}{7}{subsection.2.1.4}
+\contentsline {subsubsection}{Using Docker within DGX}{7}{subsubsection*.7}
 \contentsline {section}{\numberline {2.2}Prepare your data}{8}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Process the raw data}{8}{subsection.2.2.1}
-\contentsline {subsubsection}{Read and reshape}{8}{subsubsection*.8}
-\contentsline {subsubsection}{eg. Sinograms}{8}{subsubsection*.9}
-\contentsline {subsubsection}{eg. Images}{9}{subsubsection*.10}
-\contentsline {subsubsection}{Save the data in pickle}{10}{subsubsection*.11}
-\contentsline {paragraph}{Precess and Save your data!}{10}{paragraph*.12}
-\contentsline {subsection}{\numberline {2.2.2}Load your data}{11}{subsection.2.2.2}
-\contentsline {subsubsection}{Dataset Class}{11}{subsubsection*.19}
-\contentsline {paragraph}{Dataset!}{11}{paragraph*.20}
+\contentsline {subsection}{\numberline {2.2.1}Know our raw data}{8}{subsection.2.2.1}
+\contentsline {subsubsection}{eg. Sinograms}{8}{subsubsection*.8}
+\contentsline {subsubsection}{eg. Images}{9}{subsubsection*.9}
+\contentsline {subsection}{\numberline {2.2.2}Process our raw data}{9}{subsection.2.2.2}
+\contentsline {subsubsection}{Partition}{10}{subsubsection*.10}
+\contentsline {subsubsection}{Padding}{10}{subsubsection*.11}
+\contentsline {subsubsection}{Normalization}{10}{subsubsection*.12}
+\contentsline {subsection}{\numberline {2.2.3}Save the data in pickle}{11}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Load your data in batch}{11}{subsection.2.2.4}
+\contentsline {subsubsection}{Load from dataset class in Pytorch}{11}{subsubsection*.13}
+\contentsline {subsubsection}{Augument the data randomly while loading}{12}{subsubsection*.14}
 \contentsline {section}{\numberline {2.3}Build your network!}{12}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Unet!}{12}{subsection.2.3.1}
-\contentsline {section}{\numberline {2.4}Train your network!}{12}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Train\_Unet!}{12}{subsection.2.4.1}
-\contentsline {section}{\numberline {2.5}Visualize your results!}{12}{section.2.5}
-\contentsline {section}{\numberline {2.6}Adjust your parameters!}{12}{section.2.6}
-\contentsline {chapter}{\numberline {3}Indices and tables}{15}{chapter.3}
-\contentsline {chapter}{Python Module Index}{17}{section*.40}
-\contentsline {chapter}{Index}{19}{section*.41}
+\contentsline {subsection}{\numberline {2.3.1}What is UNet?}{12}{subsection.2.3.1}
+\contentsline {subsubsection}{Autoencoder}{12}{subsubsection*.15}
+\contentsline {subsubsection}{ResNet}{14}{subsubsection*.16}
+\contentsline {subsubsection}{UNet}{16}{subsubsection*.17}
+\contentsline {subsection}{\numberline {2.3.2}How to write UNet in code?}{17}{subsection.2.3.2}
+\contentsline {subsubsection}{Structure of UNet}{17}{subsubsection*.18}
+\contentsline {subsubsection}{Details of Code}{19}{subsubsection*.19}
+\contentsline {section}{\numberline {2.4}Train your network}{21}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Loss functions}{21}{subsection.2.4.1}
+\contentsline {subsubsection}{L1Loss}{21}{subsubsection*.20}
+\contentsline {subsubsection}{MSELoss}{21}{subsubsection*.21}
+\contentsline {subsubsection}{MSSIM}{21}{subsubsection*.22}
+\contentsline {subsubsection}{Combinations}{21}{subsubsection*.23}
+\contentsline {subsection}{\numberline {2.4.2}Train, Train, Train}{22}{subsection.2.4.2}
+\contentsline {subsubsection}{Optimizer}{22}{subsubsection*.24}
+\contentsline {subsubsection}{Backward Propagation}{22}{subsubsection*.25}
+\contentsline {subsection}{\numberline {2.4.3}Warm Restart?(Optional)}{23}{subsection.2.4.3}
+\contentsline {section}{\numberline {2.5}Visualize your results!}{23}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Install Visdom and Open server}{23}{subsection.2.5.1}
+\contentsline {subsubsection}{Install}{24}{subsubsection*.26}
+\contentsline {subsubsection}{Open server}{24}{subsubsection*.27}
+\contentsline {subsection}{\numberline {2.5.2}Project your output to Visdom}{24}{subsection.2.5.2}
+\contentsline {subsubsection}{Step by step}{24}{subsubsection*.28}
+\contentsline {subsubsection}{A summary of code}{25}{subsubsection*.29}
+\contentsline {section}{\numberline {2.6}Adjust your parameters!}{26}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}About memory and time consumption}{26}{subsection.2.6.1}
+\contentsline {subsubsection}{Memory}{26}{subsubsection*.30}
+\contentsline {subsubsection}{Time and memory}{27}{subsubsection*.31}
+\contentsline {subsection}{\numberline {2.6.2}Parameters in data}{28}{subsection.2.6.2}
+\contentsline {subsubsection}{Shape of data}{29}{subsubsection*.32}
+\contentsline {subsubsection}{Distribution of data}{29}{subsubsection*.33}
+\contentsline {subsection}{\numberline {2.6.3}Parameters in optimizer}{29}{subsection.2.6.3}
+\contentsline {subsubsection}{Inital Learning Rate}{29}{subsubsection*.34}
+\contentsline {subsubsection}{Learning Decay Rate}{30}{subsubsection*.35}
+\contentsline {subsection}{\numberline {2.6.4}Parameters in neural network}{30}{subsection.2.6.4}
+\contentsline {subsubsection}{Kernel Size}{30}{subsubsection*.36}
+\contentsline {subsubsection}{Other Parameters}{30}{subsubsection*.37}
+\contentsline {subsection}{\numberline {2.6.5}Try other neural networks}{30}{subsection.2.6.5}
+\contentsline {chapter}{\numberline {3}Indices and tables}{31}{chapter.3}

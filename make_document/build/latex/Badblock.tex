@@ -53,7 +53,7 @@
 
 
 \title{Badblock Documentation}
-\date{May 09, 2019}
+\date{May 30, 2019}
 \release{1.0}
 \author{Liang Li}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -69,60 +69,58 @@
 \phantomsection\label{\detokenize{index::doc}}
 
 
-Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you
-how to improve the quality of image(or say image denoising) by using one of the many networks, UNet.
+Deep learning has been fast developed in recent years, which triggers lots of researches in medical image analysis. In this tutorial, I will show you how to improve the quality of image(or say image denoising/impainting) by using one of the many networks, UNet.
 
 
 \chapter{Reasons for this tutorial}
 \label{\detokenize{index:reasons-for-this-tutorial}}
 I started my internship in Siemens, Knoxville at the begining of 2019, where I first touched and learned deep learning.
-Great thanks to super nice manager(BILL) since I do learn a lot from him!! Please note that I am also a beginner in deep learning, and thus point me out if I will be wrong in the following content.
+Great thanks to super nice manager(BILL) since I learn a lot from him!
 
-During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting and denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you.
+During my internship, I try to use deep learning(UNet, FrameletNet, GAN) to do image impainting or denoising, while I think this is so great a chance for me to learn about deep learning and explore different kinds of networks, and this makes me feel excited almost every day so I want to share this with you.
 
-In fact, a lot of my coworkers are also very interested in building or learning about deep learning while they think
-deep learning is very hard to learn. Hence, I also write this tutorial for people who are in the field of medical imaging
-or other who might want to build their own deep learning networks but they do not know how to start. To be honest, to select the most suitable parameters/models
-is the most time consuming part of deep learning, but to start deep learning is far more simple than you thought!
+In fact, my coworkers are also very interested in building or learning neural networks while their think that deep learning is very hard stops them. And thus, I also mean to write this tutorial for people who are in the field of medical imaging who might want to build their own deep learning networks but they do not know how/where to start.
+
+To be honest, in either deep learning or machine learning, the optimal choices for the most suitable parameters/models are always hard to make and it is also consuming most of the time, but initiating and building deep learning network and making it work is far more simple than you thought!
+
+Last but not least, I am still a beginner and learner in deep learning/matchine learning, and please point/teach me out if I will be wrong in the following content.
 
 
-\chapter{Goals for this tutorial}
-\label{\detokenize{index:goals-for-this-tutorial}}
-Hence, lets begin with this to open your new world to the deep learning(AI)!
+\chapter{Pipeline for this tutorial}
+\label{\detokenize{index:pipeline-for-this-tutorial}}
+Here, let’s begin with the following content to open your new world to the deep learning(AI)!
 \begin{quote}
 
-First, we will try to install all the necessary packages for the deep learning, and it will be great if you have a GPU.
+First, we will install all the necessary packages/softwares for the deep learning(it will be great if you have a GPU), and in this tutorial we will utilize Pytorch.
 
-And then, we will talk about how to precesss your data (so important)!
+Next, we will talk about how to precesss your data (so important), such as shaping and normalization! And I will always try to add a method named augumator to further enlarge our datasets in case that the training data is very small.
 
-Third, a quick start with U-Net will lead you to the heart of deep learning.
+Third, we will go over neural network(U-Net), which will let you learn the core of deep learning. In this part, I will briefly introduce the idea and the structure of U-Net.
 
-Finally, we will train our U-Net and use several visualizations to view our results.
+Finally, we will train our U-Net with our training datasets and use visualization tool to view our results.
 \end{quote}
 
 
-\section{Installation}
-\label{\detokenize{usage/installation:installation}}\label{\detokenize{usage/installation::doc}}
-Python is a programming language that lets you work quickly
-and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.
+\section{Install necessary packages}
+\label{\detokenize{usage/installation:install-necessary-packages}}\label{\detokenize{usage/installation::doc}}
+Python is a programming language that lets you work quickly and integrate systems more effectively. From my point, python is simple to use and learn. The reason why we use python is that currently most deep learning frameworks have already been implemented based on python and plenties of open source packages that are available in the field of data science can be utilitized for our data analysis, such as scipy, scikit-learn, pandas. Pythonic makes life easier.
 
 
 \subsection{Install Python}
 \label{\detokenize{usage/installation:install-python}}
 
-\subsubsection{Direct Python from \sphinxstyleemphasis{Python}}
-\label{\detokenize{usage/installation:direct-python-from-python}}
-Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python.
-The latest Python can be downloaded and installed from \sphinxurl{https://www.python.org/downloads/} . I have installed 3.6, please try to install a version above 3.6.
+\subsubsection{Direct install Python from \sphinxstyleemphasis{Python}}
+\label{\detokenize{usage/installation:direct-install-python-from-python}}
+Python2 will not be supported any more by the community, and hence let’s work on Python3 and install the latest python. The latest Python can be downloaded and installed from \sphinxurl{https://www.python.org/downloads/} . I have installed 3.6, please try to install a version above 3.6.
 
 
-\subsubsection{Indirect Python from \sphinxstyleemphasis{Conda}}
-\label{\detokenize{usage/installation:indirect-python-from-conda}}
+\subsubsection{Indirect install Python from \sphinxstyleemphasis{Conda}}
+\label{\detokenize{usage/installation:indirect-install-python-from-conda}}
 Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies.
 
 Conda can be found via \sphinxurl{https://docs.conda.io/projects/conda/en/latest/user-guide/install/}.
 
-Conda is recommended when multiple version of python will be installed in the system, and the version of python can be changed easily based on:
+Conda is recommended when multiple versions of python will be installed in the same system, and the version of python can be changed easily by using:
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -156,23 +154,23 @@ other useful methods for install certain packages including
 \end{sphinxVerbatim}
 
 
-\subsection{Install Pytorch}
-\label{\detokenize{usage/installation:install-pytorch}}
-Before start with pytorch, make sure CUDA has been installed, where
+\subsection{Install Pytorch with CUDA}
+\label{\detokenize{usage/installation:install-pytorch-with-cuda}}
+Before we start with pytorch, please make sure CUDA has been installed, where
 CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia.
 
 
-\subsubsection{Install CUDA}
-\label{\detokenize{usage/installation:install-cuda}}
-Install your cuda from \sphinxurl{https://developer.nvidia.com/cuda-downloads?target\_os=Linux}.
+\subsubsection{Install CUDA Driver}
+\label{\detokenize{usage/installation:install-cuda-driver}}
+Download and install your cuda driver from \sphinxurl{https://developer.nvidia.com/cuda-downloads?target\_os=Linux}.
 
 \begin{sphinxadmonition}{note}{Note:}
-Check here to update with the latest driver. A good match of driver with the GPU will largerly increase the speed, thus please make sure you have the latest driver with your GPU.
+Please check the same link for updating with the latest driver. A good match of driver with the GPU will largerly increase the speed, so always make sure you have the latest driver with your GPU.
 \end{sphinxadmonition}
 
 
 \subsubsection{Install pytorch}
-\label{\detokenize{usage/installation:id1}}
+\label{\detokenize{usage/installation:install-pytorch}}
 Pytorch is an open source deep learning platform that provides a seamless path from research prototyping to production deployment.
 
 pytorch can be found via \sphinxurl{https://pytorch.org/get-started/locally/}.
@@ -197,9 +195,12 @@ There are a list of other packages that are optional to install, while most coul
 \item {} 
 \$ pip install scipy
 
+\item {} 
+\$ pip install Augmentor
+
 \end{itemize}
 
-Plus, please include ‘pytorch\_msssim’ folder if you want to use msssim as a loss, and if there are other package needed, try \sphinxstylestrong{pip}
+Plus, if you would consider mssim loss too, please include ‘pytorch\_msssim’ folder\{we will talk about this later\} and if there are other package needed, try \sphinxstylestrong{pip}
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -209,8 +210,10 @@ Plus, please include ‘pytorch\_msssim’ folder if you want to use msssim as a
 NOW, you are all set with all the packages needed for the deep learning Unet, and in the next step we will forward to prepare our data.
 
 
-\subsection{Build in Docker(Optional)}
+\subsection{Build in Docker (Optional)}
 \label{\detokenize{usage/installation:build-in-docker-optional}}
+If GPU or the practical hardware is unavailable, we can also learn the deep learning by utilizing all the cloud services availble, such as AWS. Here, a simple system Docker is covered for the cases where we need to run deep learning in a server.
+
 Docker is a computer program that performs operating-system-level virtualization. The advantage of Docker is that we can only install the packages we need and then the extra cost of unnecessary components in the operating system can be reduced.
 
 
@@ -221,7 +224,7 @@ If a python environment with pytorch is hard to obtain locally, Docker is always
 
 
 
-Docker is simple to use too!
+Docker is simple to use too! The followings are a summary of Docker codes for reference.
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -253,9 +256,9 @@ Docker is simple to use too!
 \end{sphinxVerbatim}
 
 
-\subsubsection{Using Docker with DGX}
-\label{\detokenize{usage/installation:using-docker-with-dgx}}
-{[}Special Requirement for DGX user{]} In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock” with every Docker command.
+\subsubsection{Using Docker within DGX}
+\label{\detokenize{usage/installation:using-docker-within-dgx}}
+\sphinxstylestrong{Special Requirement for DGX user:} In order to connect to his Docker daemon a user has to commit the parameter “-H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock” with every Docker command.
 \begin{itemize}
 \item {} 
 e.g. “docker -H unix:///mnt/docker\_socks/\textless{}user\_name\textgreater{}/docker.sock run \textendash{}rm -ti \textless{}image\_name\textgreater{} {[}optional\_command{]}”
@@ -278,34 +281,62 @@ I was using a line like below in a bash file to let the docker run within DGX by
 
 \section{Prepare your data}
 \label{\detokenize{usage/data:prepare-your-data}}\label{\detokenize{usage/data::doc}}
+The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning {[}The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data{]}. In most the cases, the methods include but not limit to normalization, reshaping, etc.
 
-\subsection{Process the raw data}
-\label{\detokenize{usage/data:process-the-raw-data}}
 
-\subsubsection{Read and reshape}
-\label{\detokenize{usage/data:read-and-reshape}}
-The size(shape) and the distribution of the data would affect both the performance and the learning speed of the network, and hence reshaping or preprocessing the raw data to the shape/distribution we want and post-processing it back to the origin format are usually common in machine learning{[}The reasons behind this are a lot, say we want the learning converge similar to all directions in our training data{]}. In most the cases, the methods include but not limited to normalization, reshaping, etc.
+\subsection{Know our raw data}
+\label{\detokenize{usage/data:know-our-raw-data}}
+Before we prepare/process our data, it would be better if we know what data we are going to train/learn. For example, for images, we can view the images by using:
 
-In the following, I will give two examples about the data we deal with for medical imageing, sinograms and images.
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{image}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+where plt is short for matplotlib.pylab. In this way, we can have a roughly idea about our dataset/image.
+
+In the following, I give two examples about the data we deal with for medical imaging, sinograms and images.
 
 
 \subsubsection{eg. Sinograms}
 \label{\detokenize{usage/data:eg-sinograms}}
-PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinograms, which looks like below.
+PET-CT and PET-MR scanners store the raw data in proprietary formats which can be processed only by the software provided by the scanner manufacturer, where one of the raw data is sinogram, which is basically 2D representation of projection rays versus angle. And different from RGB images, the pixels in sinograms stand for the counts of events captured from the scanner, which range from zero to thousands or tens of thousands.
 
-\noindent\sphinxincludegraphics{{sinograms}.png}
+One sample of sinogram is shown below.
 
-In our case, we have .s file as both the input file and target file with both files around 1.4G(with flatten data stored as uint16), and our goal is to using U-Net to learn
-the data in the input file and to make it close to the data in the target file. In fact, these files are too large as one input for neural network, because I do not want to load all the datas into the memory if we do not have a lot memory. (It is so important! Hence, I will take this three times: We do not want to feed all into the memory!We do not want to feed all into the memory!We do not want to feed all into the memory!).
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=300\sphinxpxdimen]{{sinograms}.png}\hspace*{\fill}}
+
+If our goal is to fix the noise in sinograms of one patient, say, we have the sinograms with the format as .s with the input sinograms with noise and the target sinograms without noise. Then, we can use U-Net to project the data from the input files and to make it close to the data in the target file (ground true).
+
+Actually, the practical sinogram file of one patient can be very big, around several GBs, and hence the best way to train is not to feed all the sinograms into memory but to seperate the single sinograms of one patient into small parts, which would be more beneficial to reduce the cost of both memory and learning speed.
 
 
 \subsubsection{eg. Images}
 \label{\detokenize{usage/data:eg-images}}
-\noindent\sphinxincludegraphics{{usage/images}.png}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=300\sphinxpxdimen]{{images}.PNG}\hspace*{\fill}}
 
-To advoid feed all the data into the memory, we do reshape the data to more informative matrix and partition the data into smaller pieces, and then we could let the network learn smaller pieces with the pain that we will lose the relations among the smaller pieces. In my cases, I am working on sinograms and the sinograms have their own informative structure, and then I used {[}TOF, Slice, W, L{]} as my shape of the data, where I feed the network based on slices.
+To clarify, our final goal can be to fix the noise in body image of one patient (to make the image more clear and help the doctors make good decisions). Thus, rather than working on singrams, another direct solution will be to work on the body images directly. For instance, we feed the reconstructed image with noise into our neural networks as inputs and our target will be the images without noise.
 
-Here, for each slice, the image has shape {[}50, 520{]}. For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. But since we are working on UNet (as autoencoder, we need to encoder and then decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).
+Note, the above noise can also be interperated as impainting.
+
+
+\subsection{Process our raw data}
+\label{\detokenize{usage/data:process-our-raw-data}}
+After getting an idea about our dataset, now we can proceed in processing the raw dataset.
+
+
+\subsubsection{Partition}
+\label{\detokenize{usage/data:partition}}
+As stated, to advoid loading all data into the memory, we would better reshape our dataset into more informative matrix and partition the dataset into smaller pieces. In a large scale, the memory consumption will be reduced and the learning speed will be accelerated. However, we might also lose the relations/connections among the smaller pieces.
+
+For an example, I am working on sinograms and the sinograms have their own informative structure {[}TOF, Slice, W, L{]}, where TOF stands Time of Flight, Slice stands the slices of the sinogram, W, L stand for the rays versus angle. After reshaping the dataset from {[}TOF, Slice, W, L{]} into {[}TOF*Slice, W, L{]},  I feed the network with the sinogram based on slice. For example, for each slice, the sinogram has the shape {[}W, L{]}. In this way, we could definitely reduce the cost of memory, but we also lose the correlative information among slices.
+
+
+\subsubsection{Padding}
+\label{\detokenize{usage/data:padding}}
+For most cases in machine learning without down/up sampling in the images, the number of W and L does not matter. Since we are working on UNet (as autoencoder, we need to encode and decode the data) we would better make W and L as a power of 2 (since we will consider the network structure as UNet which will include both downsampling and upsampling).
+
+In this case, if W and L is close to certain number which is a power of 2, and then we can match W and L to the numbers by using padding in numpy.
 
 \begin{sphinxadmonition}{note}{Note:}
 An example of reshaping to a power of 2:
@@ -318,133 +349,97 @@ An example of reshaping to a power of 2:
 \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pad}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{p}{(}\PYG{p}{(}\PYG{n}{x1}\PYG{p}{,} \PYG{n}{y1}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x2}\PYG{p}{,} \PYG{n}{y2}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x3}\PYG{p}{,} \PYG{n}{y3}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x4}\PYG{p}{,} \PYG{n}{y4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{wrap}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-In our case, if we have {[}TOF=34, Slice=815, W=50, L=520{]}, we can do:
+For example, if we have {[}TOF=1, Slice=1, W=50, L=256{]}, we can do:
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pad}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{wrap}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-to make it {[}TOF=34, Slice=815, W=64, L=520{]}, which would be good enough for 3 times downsampling since W and L can be divided by \(2^3\).
+to make it {[}TOF=1, Slice=1, W=64, L=256{]}, which would be good enough for 3 times downsampling since W and L can be divided by \(2^3\).
 \end{quote}
-
-Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try.
 \end{sphinxadmonition}
 
 
-\subsubsection{Save the data in pickle}
-\label{\detokenize{usage/data:save-the-data-in-pickle}}
-\sphinxhref{https://docs.python.org/3/library/pickle.html}{Pickle} module implement binary protocols for serializing and de-serializing a Python object structure. Here we could just dump our matrix into pickle by using:
+\subsubsection{Normalization}
+\label{\detokenize{usage/data:normalization}}
+Normalization is usualy called to change the values of numeric columns in the dataset to a common scale, without distorting differences in the ranges of values. And there are plenties of methods which can be utilized and explored. Here I proposed the most easy one by mapping the dataset to {[}0,1{]}.
+
+The code can be easily in Python as:
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{pickle}\PYG{o}{.}\PYG{n}{dump}\PYG{p}{(}\PYG{n}{result}\PYG{p}{,} \PYG{n}{f}\PYG{p}{,} \PYG{n}{pickle}\PYG{o}{.}\PYG{n}{HIGHEST\PYGZus{}PROTOCOL}\PYG{p}{)}
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{data} \PYG{o}{/} \PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mf}{1e\PYGZhy{}8}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+The small value 1e-8 is necessary, especially when the values of the images are integer. In this way, we can map the value to float while between 0 and 1.
+\begin{quote}
+
+Here I only list one way to change the shape, and actually there might be tons of other methods which are good to try for the data processing.
+\end{quote}
+
+
+\subsection{Save the data in pickle}
+\label{\detokenize{usage/data:save-the-data-in-pickle}}
+In order to make dataset read more efficiently by python, we save the reshaped dataset into pickle as the intermedium files for the datasets. \sphinxhref{https://docs.python.org/3/library/pickle.html}{Pickle} module implement binary protocols for serializing and de-serializing a Python object structure.
+
+e.g. we can dump our reshaped matrix directly into pickle by using:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{pickle}\PYG{o}{.}\PYG{n}{dump}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{n}{f}\PYG{p}{,} \PYG{n}{pickle}\PYG{o}{.}\PYG{n}{HIGHEST\PYGZus{}PROTOCOL}\PYG{p}{)}
 \end{sphinxVerbatim}
 
 \begin{sphinxadmonition}{note}{Note:}
 Be careful with you pickle version, since it might not match between python2 and python3.
 \end{sphinxadmonition}
 
+One example about how to process the dataset is summarized as:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{process\PYGZus{}data}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{tof}\PYG{p}{,} \PYG{n}{slices}\PYG{p}{,} \PYG{n}{theta}\PYG{p}{,} \PYG{n}{dist}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{fromfile}\PYG{p}{(}\PYG{n}{file}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{uint16}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{p}{(}\PYG{n}{tof}\PYG{p}{,} \PYG{n}{slices}\PYG{p}{,} \PYG{n}{theta}\PYG{p}{,} \PYG{n}{dist}\PYG{p}{)}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} Reshape to the file layout}
+
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pad}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{wrap}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{data}
+
+\PYG{n}{result} \PYG{o}{=} \PYG{n}{process\PYGZus{}data}\PYG{p}{(}\PYG{n}{file}\PYG{p}{,} \PYG{n}{tof}\PYG{p}{,} \PYG{n}{slices}\PYG{p}{,} \PYG{n}{theta}\PYG{p}{,} \PYG{n}{dist}\PYG{p}{)}
+
+\PYG{k}{with} \PYG{n+nb}{open}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{savefile.pkl}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{wb}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{f}\PYG{p}{:}
+    \PYG{n}{pickle}\PYG{o}{.}\PYG{n}{dump}\PYG{p}{(}\PYG{n}{result}\PYG{p}{,} \PYG{n}{f}\PYG{p}{,} \PYG{n}{pickle}\PYG{o}{.}\PYG{n}{HIGHEST\PYGZus{}PROTOCOL}\PYG{p}{)}
+\end{sphinxVerbatim}
+
 The details of the data process can be refered from sino\_process\_tof.py
 
-
-\paragraph{Precess and Save your data!}
-\label{\detokenize{usage/tof_file:module-sino_process_tof}}\label{\detokenize{usage/tof_file:precess-and-save-your-data}}\label{\detokenize{usage/tof_file::doc}}\index{sino\_process\_tof (module)@\spxentry{sino\_process\_tof}\spxextra{module}}
-This module is used to generate intermediate pickles before the training.
-
-Created on Thu Jun 14 16:19:07 2018
-@author: bill
-@update: liang
-\index{Sinogram\_Processor (class in sino\_process\_tof)@\spxentry{Sinogram\_Processor}\spxextra{class in sino\_process\_tof}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{Sinogram\_Processor}}}{\emph{data\_file}, \emph{for\_test=False}, \emph{slices=-1}, \emph{min\_blocks=0}, \emph{max\_blocks=0}}{}~\index{process\_data() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{process\_data()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.process_data}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_data}}}{\emph{file}, \emph{tof}, \emph{slices}, \emph{theta}, \emph{dist}}{}
-This function is used to process the sinogram file
-
-The function will first read the file with the extension .s,
-and find its corresponding good and badblock file, output a stack
-with both good and bad sinograms: Note, here we padding the axis
-to make it more suitable for the network to train, e.g. we make axis
-3 from 50 to 64 by padding wrapped pixels from up and down
-\begin{description}
-\item[{Args:}] \leavevmode
-file
-
-\item[{Returns:}] \leavevmode
-output\_sino
-
-\item[{Raises:}] \leavevmode
-IOError: An error occurred accessing the file .
-
-\end{description}
-
-\end{fulllineitems}
-
-\index{process\_sino\_file() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{process\_sino\_file()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.process_sino_file}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{process\_sino\_file}}}{}{}
-This function is used to process the sinogram file
-
-The function will first read the file with the extension .s.hdr,
-and find its corresponding good and badblock file, output a stack
-with both good and bad sinograms
-\begin{description}
-\item[{Args:}] \leavevmode
-self.file
-
-\item[{Returns:}] \leavevmode
-output\_sino\_xy
-
-\item[{Raises:}] \leavevmode
-IOError: An error occurred accessing the file .
-
-\end{description}
-
-\end{fulllineitems}
-
-\index{remove\_block() (sino\_process\_tof.Sinogram\_Processor method)@\spxentry{remove\_block()}\spxextra{sino\_process\_tof.Sinogram\_Processor method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.Sinogram_Processor.remove_block}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{remove\_block}}}{\emph{orig\_img}, \emph{block\_num}}{}
-This function is omitted.
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{main() (in module sino\_process\_tof)@\spxentry{main()}\spxextra{in module sino\_process\_tof}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
-The main function to call for processing all the data files.
-
-\end{fulllineitems}
-
-\index{process\_sinogram() (in module sino\_process\_tof)@\spxentry{process\_sinogram()}\spxextra{in module sino\_process\_tof}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/tof_file:sino_process_tof.process_sinogram}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{sino\_process\_tof.}}\sphinxbfcode{\sphinxupquote{process\_sinogram}}}{\emph{file}}{}
-This function is used to process one patient.
-
-\end{fulllineitems}
-
-
 \begin{sphinxadmonition}{warning}{Warning:}
-Loading all the data into the GPU is not only time consuming and not efficient.
+Loading all the data into the GPU is both time consuming and inefficient and hene balancing the between the size before training.
 \end{sphinxadmonition}
 
 
-\subsection{Load your data}
-\label{\detokenize{usage/data:load-your-data}}
+\subsection{Load your data in batch}
+\label{\detokenize{usage/data:load-your-data-in-batch}}
 
-\subsubsection{Dataset Class}
-\label{\detokenize{usage/data:dataset-class}}
-The abstract class in pytorch \sphinxstylestrong{torch.utils.data.Dataset} is the main class to call for loading data, and there are mainly two methods would be called.
+\subsubsection{Load from dataset class in Pytorch}
+\label{\detokenize{usage/data:load-from-dataset-class-in-pytorch}}
+Before we start, let’s see how pytorch works with dataset. Pytorch a Python-based scientific computing package targeted at two sets of audiences:
+\begin{itemize}
+\item {} 
+A replacement for NumPy to use the power of GPUs
+
+\item {} 
+a deep learning research platform that provides maximum flexibility and speed
+
+\end{itemize}
+
+In fact, pytorch has listed very good tutorial for beginners, so I will omit this part here while you can find easily online.
+
+\sphinxhref{https://pytorch.org/tutorials/beginner/blitz/tensor\_tutorial.html\#sphx-glr-beginner-blitz-tensor-tutorial-py/}{Links to Pytorch Tutorial}
+
+PyTorch provides many tools to make data loading easy and hopefully, to make your code more readable. For instance, the abstract class in pytorch \sphinxstylestrong{torch.utils.data.Dataset} is the main class to call for loading data, and mainly two methods would be called.
 \begin{itemize}
 \item {} 
 \_\_len\_\_: which returns the size/length of the dataset
@@ -454,7 +449,7 @@ The abstract class in pytorch \sphinxstylestrong{torch.utils.data.Dataset} is th
 
 \end{itemize}
 
-In our case, we define the class \sphinxcode{\sphinxupquote{class Sino\_Dataset(dataset)}} inherits from \sphinxcode{\sphinxupquote{torch.utils.data.Dataset}}
+In our case, we can define the class \sphinxcode{\sphinxupquote{class Sino\_Dataset(dataset)}} inherits from \sphinxcode{\sphinxupquote{torch.utils.data.Dataset}}
 
 Here, the length of the dataset is:
 
@@ -479,171 +474,904 @@ the \sphinxcode{\sphinxupquote{self.data.shape={[}tof*slice, W, L{]}}}
 The details of getting item also include shuffling and file updating, which can be viewed as different methods to improve the randomness of the data set.
 
 
-\paragraph{Dataset!}
-\label{\detokenize{usage/datset_file:module-datasets}}\label{\detokenize{usage/datset_file:dataset}}\label{\detokenize{usage/datset_file::doc}}\index{datasets (module)@\spxentry{datasets}\spxextra{module}}
-This module is used to create the dataset.
+\subsubsection{Augument the data randomly while loading}
+\label{\detokenize{usage/data:augument-the-data-randomly-while-loading}}
+I have been told that the data is very expensive, so if we do not have enough data for training, what should we do?
 
-Created on Sun Mar 18 23:07:28 2018
-@author: bill
-@updated: Liang
-\index{Sino\_Dataset (class in datasets)@\spxentry{Sino\_Dataset}\spxextra{class in datasets}}
+For images, we can do image augmentation to expand the datsets. There are lot of ways to do the augmentation, such as flipping, zooming and so on. I have found one package from github \sphinxurl{https://github.com/mdbloice/Augmentor} , which can be utilized easily as:
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{datasets.}}\sphinxbfcode{\sphinxupquote{Sino\_Dataset}}}{\emph{datafile}, \emph{epoch\_size}, \emph{testing=False}, \emph{loading\_multiplefiles=False}, \emph{input\_depth=1}, \emph{output\_depth=1}, \emph{is\_test\_in\_train=False}}{}
-Sinogram dataset
-\index{checkfeature() (datasets.Sino\_Dataset method)@\spxentry{checkfeature()}\spxextra{datasets.Sino\_Dataset method}}
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{images} \PYG{o}{=} \PYG{p}{[}\PYG{p}{[}\PYG{n}{image} \PYG{k}{for} \PYG{n}{image} \PYG{o+ow}{in} \PYG{n}{corrupt\PYGZus{}sino}\PYG{p}{]} \PYG{o}{+} \PYG{p}{[}\PYG{n}{orig\PYGZus{}sino}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{]}\PYG{p}{]}
+                \PYG{n}{p} \PYG{o}{=} \PYG{n}{Augmentor}\PYG{o}{.}\PYG{n}{DataPipeline}\PYG{p}{(}\PYG{n}{images}\PYG{p}{)}
+                \PYG{c+c1}{\PYGZsh{} p.rotate(1, max\PYGZus{}left\PYGZus{}rotation=5, max\PYGZus{}right\PYGZus{}rotation=5)}
+                \PYG{c+c1}{\PYGZsh{} p.flip\PYGZus{}top\PYGZus{}bottom(0.5)}
+                \PYG{c+c1}{\PYGZsh{} p.zoom\PYGZus{}random(1, percentage\PYGZus{}area=0.5)}
+                \PYG{n}{p}\PYG{o}{.}\PYG{n}{rotate}\PYG{p}{(}\PYG{n}{probability}\PYG{o}{=}\PYG{l+m+mf}{0.7}\PYG{p}{,} \PYG{n}{max\PYGZus{}left\PYGZus{}rotation}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{max\PYGZus{}right\PYGZus{}rotation}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+                \PYG{n}{p}\PYG{o}{.}\PYG{n}{zoom}\PYG{p}{(}\PYG{n}{probability}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{min\PYGZus{}factor}\PYG{o}{=}\PYG{l+m+mf}{1.1}\PYG{p}{,} \PYG{n}{max\PYGZus{}factor}\PYG{o}{=}\PYG{l+m+mf}{1.5}\PYG{p}{)}
+                \PYG{n}{augmented\PYGZus{}images} \PYG{o}{=} \PYG{n}{p}\PYG{o}{.}\PYG{n}{sample}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+                \PYG{n}{corrupt\PYGZus{}sino} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{stack}\PYG{p}{(}\PYG{p}{[}\PYG{n}{augmented\PYGZus{}images}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+                \PYG{n}{orig\PYGZus{}sino} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{stack}\PYG{p}{(}\PYG{p}{[}\PYG{n}{augmented\PYGZus{}images}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+\end{sphinxVerbatim}
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.checkfeature}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{checkfeature}}}{\emph{bad}}{}
-\end{fulllineitems}
-
-\index{loadFile() (datasets.Sino\_Dataset method)@\spxentry{loadFile()}\spxextra{datasets.Sino\_Dataset method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.loadFile}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{loadFile}}}{\emph{data\_file='training\_data.npy'}}{}
-\end{fulllineitems}
-
-\index{setMaxMissing() (datasets.Sino\_Dataset method)@\spxentry{setMaxMissing()}\spxextra{datasets.Sino\_Dataset method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/datset_file:datasets.Sino_Dataset.setMaxMissing}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{setMaxMissing}}}{\emph{max\_missing}}{}
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
+In this way, the images have been augumented. Other methods are also welcome!
 
 
 \section{Build your network!}
 \label{\detokenize{usage/quickstart:build-your-network}}\label{\detokenize{usage/quickstart::doc}}
 
-\subsection{Unet!}
-\label{\detokenize{usage/net_file:module-unet}}\label{\detokenize{usage/net_file:unet}}\label{\detokenize{usage/net_file::doc}}\index{unet (module)@\spxentry{unet}\spxextra{module}}
-Created on Tue Mar 20 21:17:05 2018
-
-@author: bill
-@updated: Liang
-\index{Sino\_repair\_net (class in unet)@\spxentry{Sino\_repair\_net}\spxextra{class in unet}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{unet.}}\sphinxbfcode{\sphinxupquote{Sino\_repair\_net}}}{\emph{opts}, \emph{device\_ids}, \emph{load\_model=False}}{}~\index{optimize() (unet.Sino\_repair\_net method)@\spxentry{optimize()}\spxextra{unet.Sino\_repair\_net method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.optimize}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{optimize}}}{\emph{output}, \emph{target\_img}}{}
-\end{fulllineitems}
-
-\index{save\_network() (unet.Sino\_repair\_net method)@\spxentry{save\_network()}\spxextra{unet.Sino\_repair\_net method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.save_network}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_network}}}{}{}
-\end{fulllineitems}
-
-\index{set\_optimizer() (unet.Sino\_repair\_net method)@\spxentry{set\_optimizer()}\spxextra{unet.Sino\_repair\_net method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.set_optimizer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{set\_optimizer}}}{\emph{optimizer}}{}
-\end{fulllineitems}
-
-\index{test() (unet.Sino\_repair\_net method)@\spxentry{test()}\spxextra{unet.Sino\_repair\_net method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{x}, \emph{y}, \emph{valid=None}}{}
-\end{fulllineitems}
-
-\index{train\_batch() (unet.Sino\_repair\_net method)@\spxentry{train\_batch()}\spxextra{unet.Sino\_repair\_net method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/net_file:unet.Sino_repair_net.train_batch}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train\_batch}}}{\emph{input\_img}, \emph{target\_img}, \emph{valid=None}}{}
-\end{fulllineitems}
+\subsection{What is UNet?}
+\label{\detokenize{usage/quickstart:what-is-unet}}
+In this part, I will try to elaborate what is UNet and how it works. Before UNet, I will begin with two other neural networks, autoencoder and ResNet, which have similar network structure to parts of UNet. In fact, these two helped me a lot to understand UNet, and hence I hope it will help you too. You can also skip these to go directly to UNet below if you know them already.
 
 
-\end{fulllineitems}
+\subsubsection{Autoencoder}
+\label{\detokenize{usage/quickstart:autoencoder}}
+As stated in \sphinxhref{https://en.wikipedia.org/wiki/Autoencoder}{Wiki}, autoencoder is a network which learns to compress data from the input layer into a short code and then uncompress that code into something that closely matches the origin data. The schematic structure of an autoencoder with 3 fully connected hidden layer is shown below.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=300\sphinxpxdimen]{{Autoencoder_structure}.png}\hspace*{\fill}}
+
+In other words, the autoencoder is trying to learn an approximation to the identity function, so as to output \(\hat{x}\) is similar to input \(x\), such that
+\begin{equation*}
+\begin{split}\hat{x} \approx x\end{split}
+\end{equation*}
+From one point, the autoencoder often ends up learning a low-dimension representation very similar to PCAs when the number of hidden units in the middle of autoencoder is small. The autoencoder is useful for tasks such as object recognition and other vision tasks.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{AutoEncoder}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{AutoEncoder}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{encoder} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{12}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{,}   \PYG{c+c1}{\PYGZsh{} compress to 3 features which can be visualized in plt}
+        \PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{decoder} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{12}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sigmoid}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}       \PYG{c+c1}{\PYGZsh{} compress to a range (0, 1)}
+        \PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{encoded} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{encoder}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{decoded} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{decoder}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{encoded}\PYG{p}{,} \PYG{n}{decoded}
+\end{sphinxVerbatim}
 
 
+\subsubsection{ResNet}
+\label{\detokenize{usage/quickstart:resnet}}
+The residual neural network (ResNet) is an artificial neural network (ANN) of a kind that builds on constructs known from pyramidal cells in the cerebral cortex. Residual neural networks do this by utilizing skip connections, or short-cuts to jump over some layers. And the reason for the skipping or short-cuts is to avoid the problem of vanishing gradients by reusing the values from previous layers. The structure of ResNet is shown below.
 
-\section{Train your network!}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=150\sphinxpxdimen]{{800px-ResNets.svg}.png}\hspace*{\fill}}
+
+From my view, the ResNet also keep the previous learned features and in this way, it is good to work with tasks such as image denoising/impainting. Moreover, the simulations turn out that the short-cuts layers are functional to refine the image if they are added at the end of the network. For example, I have tried to add five convoluted res layer at the end and it did improve the quality of the image little.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{BasicBlock}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{expansion} \PYG{o}{=} \PYG{l+m+mi}{1}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{downsample}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{BasicBlock}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1} \PYG{o}{=} \PYG{n}{conv3x3}\PYG{p}{(}\PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{stride}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{inplace}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2} \PYG{o}{=} \PYG{n}{conv3x3}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample} \PYG{o}{=} \PYG{n}{downsample}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{stride} \PYG{o}{=} \PYG{n}{stride}
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{residual} \PYG{o}{=} \PYG{n}{x}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{n+nb+bp}{None}\PYG{p}{:}
+            \PYG{n}{residual} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{+}\PYG{o}{=} \PYG{n}{residual}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n}{out}
+
+
+\PYG{k}{class} \PYG{n+nc}{Bottleneck}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{expansion} \PYG{o}{=} \PYG{l+m+mi}{4}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{downsample}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{Bottleneck}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{n}{stride}\PYG{p}{,}
+                               \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{planes}\PYG{p}{,} \PYG{n}{planes} \PYG{o}{*} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes} \PYG{o}{*} \PYG{l+m+mi}{4}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{inplace}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample} \PYG{o}{=} \PYG{n}{downsample}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{stride} \PYG{o}{=} \PYG{n}{stride}
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{residual} \PYG{o}{=} \PYG{n}{x}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample} \PYG{o+ow}{is} \PYG{o+ow}{not} \PYG{n+nb+bp}{None}\PYG{p}{:}
+            \PYG{n}{residual} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{downsample}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{+}\PYG{o}{=} \PYG{n}{residual}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n}{out}
+
+
+\PYG{k}{class} \PYG{n+nc}{ResNet}\PYG{p}{(}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{block}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{,} \PYG{n}{num\PYGZus{}classes}\PYG{o}{=}\PYG{l+m+mi}{1000}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes} \PYG{o}{=} \PYG{l+m+mi}{64}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{ResNet}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,}
+                               \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{inplace}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{maxpool} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{MaxPool2d}\PYG{p}{(}\PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}make\PYGZus{}layer}\PYG{p}{(}\PYG{n}{block}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer2} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}make\PYGZus{}layer}\PYG{p}{(}\PYG{n}{block}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer3} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}make\PYGZus{}layer}\PYG{p}{(}\PYG{n}{block}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer4} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{\PYGZus{}make\PYGZus{}layer}\PYG{p}{(}\PYG{n}{block}\PYG{p}{,} \PYG{l+m+mi}{512}\PYG{p}{,} \PYG{n}{layers}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{avgpool} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{AvgPool2d}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Linear}\PYG{p}{(}\PYG{l+m+mi}{512} \PYG{o}{*} \PYG{n}{block}\PYG{o}{.}\PYG{n}{expansion}\PYG{p}{,} \PYG{n}{num\PYGZus{}classes}\PYG{p}{)}
+
+        \PYG{k}{for} \PYG{n}{m} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{modules}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n+nb}{isinstance}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{)}\PYG{p}{:}
+                \PYG{n}{n} \PYG{o}{=} \PYG{n}{m}\PYG{o}{.}\PYG{n}{kernel\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{m}\PYG{o}{.}\PYG{n}{kernel\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{*} \PYG{n}{m}\PYG{o}{.}\PYG{n}{out\PYGZus{}channels}
+                \PYG{n}{m}\PYG{o}{.}\PYG{n}{weight}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{normal\PYGZus{}}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{math}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mf}{2.} \PYG{o}{/} \PYG{n}{n}\PYG{p}{)}\PYG{p}{)}
+            \PYG{k}{elif} \PYG{n+nb}{isinstance}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{)}\PYG{p}{:}
+                \PYG{n}{m}\PYG{o}{.}\PYG{n}{weight}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{fill\PYGZus{}}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+                \PYG{n}{m}\PYG{o}{.}\PYG{n}{bias}\PYG{o}{.}\PYG{n}{data}\PYG{o}{.}\PYG{n}{zero\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}make\PYGZus{}layer}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{block}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{blocks}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{downsample} \PYG{o}{=} \PYG{n+nb+bp}{None}
+        \PYG{k}{if} \PYG{n}{stride} \PYG{o}{!=} \PYG{l+m+mi}{1} \PYG{o+ow}{or} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes} \PYG{o}{!=} \PYG{n}{planes} \PYG{o}{*} \PYG{n}{block}\PYG{o}{.}\PYG{n}{expansion}\PYG{p}{:}
+            \PYG{n}{downsample} \PYG{o}{=} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}
+                \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes} \PYG{o}{*} \PYG{n}{block}\PYG{o}{.}\PYG{n}{expansion}\PYG{p}{,}
+                          \PYG{n}{kernel\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{n}{stride}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{p}{,}
+                \PYG{n}{nn}\PYG{o}{.}\PYG{n}{BatchNorm2d}\PYG{p}{(}\PYG{n}{planes} \PYG{o}{*} \PYG{n}{block}\PYG{o}{.}\PYG{n}{expansion}\PYG{p}{)}\PYG{p}{,}
+            \PYG{p}{)}
+
+        \PYG{n}{layers} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+        \PYG{n}{layers}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{block}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{,} \PYG{n}{stride}\PYG{p}{,} \PYG{n}{downsample}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes} \PYG{o}{=} \PYG{n}{planes} \PYG{o}{*} \PYG{n}{block}\PYG{o}{.}\PYG{n}{expansion}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{blocks}\PYG{p}{)}\PYG{p}{:}
+            \PYG{n}{layers}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{block}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{inplanes}\PYG{p}{,} \PYG{n}{planes}\PYG{p}{)}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n}{nn}\PYG{o}{.}\PYG{n}{Sequential}\PYG{p}{(}\PYG{o}{*}\PYG{n}{layers}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{maxpool}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer2}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer3}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{layer4}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{avgpool}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{x}\PYG{o}{.}\PYG{n}{view}\PYG{p}{(}\PYG{n}{x}\PYG{o}{.}\PYG{n}{size}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{fc}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+
+        \PYG{k}{return} \PYG{n}{x}
+\end{sphinxVerbatim}
+
+The above code is from Pytorch Vision \sphinxurl{https://pytorch.org/docs/0.4.0/\_modules/torchvision/models/resnet.html} .
+
+
+\subsubsection{UNet}
+\label{\detokenize{usage/quickstart:unet}}
+Finally, we will go into UNet. Facts: U-Net was created by Olaf Ronneberger, Philipp Fischer, Thomas Brox in 2015 at the paper “UNet: Convolutional Networks for Biomedical Image Segmentation”. And until May 2019, it has been cited almost 6000, which shows little about how fast the development of deep learning.
+
+The network(UNet) consists of a contracting path and an symmetric expansive path, which gives it the u-shaped architecture. The contracting path is a typical convolutional network that consists of repeated application of convolutions, each followed by a rectified linear unit (ReLU) and a max pooling operation. During the contraction, the spatial information is reduced while feature information is increased. The expansive pathway combines the feature and spatial information through a sequence of up-convolutions and concatenations with high-resolution features from the contracting path.
+
+From my view, the spatial information inherts the idea from the autoencoder while the difference is that it transfer the information into the feature spaces. While the concatenations of feature and spatial information is somehow inherts from ResNet while the difference is that it is not just short-cuts since it combines the spatial and feature information.
+
+One example of UNet with two times- subsampling is elaborated below.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=500\sphinxpxdimen]{{unet}.png}\hspace*{\fill}}
+
+In our case, if we are doing image denoising/impainting. The UNet will encode the corrupted image into a lower dimensional space consisting of the essential features and decodes the essential features to the uncorrupted version, while UNet further combines spatial and feature information between the encoding and decoding sides of the network. These direct connections propagate feature representation to the decoder at each level and provide a shortcut for backpropagation.
+
+
+\subsection{How to write UNet in code?}
+\label{\detokenize{usage/quickstart:how-to-write-unet-in-code}}
+The example code based on UNet in Pytorch is given below{[}for more details please refer to the code or the paper of UNet{]}.
+
+
+\subsubsection{Structure of UNet}
+\label{\detokenize{usage/quickstart:structure-of-unet}}
+In the following code, the structure of UNet is given based on 3 downsamplings and 3 upsamplings, where 3 downsamplings are included in the Encoder network and 3 upsampling are included in the Decoder network. Five fully convoluted layers are added as the bottom layer of the network and two fully convoluted layers are added to the end of the network to further refine the output{[}improve the quality of the image{]}.
+
+\begin{sphinxadmonition}{note}{Note:}
+The number of up/down samplings can be selected as the parameters while tuning the network. It is worthy to try and explore.
+\end{sphinxadmonition}
+
+And the dimentions of output also depend on the size of kernels/padding/dilation/input, and hence please be sure about the output based on different inputs.
+\begin{quote}
+
+In general, the dimensions of the output can be calculated as following, if we use \sphinxcode{\sphinxupquote{torch.nn.Conv2d}}.
+\begin{equation*}
+\begin{split}d_{out} = \frac{d_{in} + 2*pad - dilation *(kernelsize -1) - 1}{stride} +1\end{split}
+\end{equation*}
+where \(d_{out}\) is the dimension of output and \(d_{in}\) is the dimension of input.
+
+And when it goes to the concatenation, we use \sphinxcode{\sphinxupquote{torch.nn.ConvTranspose2d}}
+\begin{equation*}
+\begin{split}d_{out} = (d_{in}-1)*stide - 2*pad + dilation *(kernelsize -1) + outpad +1\end{split}
+\end{equation*}\end{quote}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{UNet}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{opts}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{UNet}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{opts} \PYG{o}{=} \PYG{n}{opts}
+        \PYG{n}{input\PYGZus{}channel\PYGZus{}number} \PYG{o}{=} \PYG{l+m+mi}{5}
+        \PYG{n}{output\PYGZus{}channel\PYGZus{}number} \PYG{o}{=} \PYG{l+m+mi}{1}
+        \PYG{n}{kernel\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{3}
+
+        \PYG{c+c1}{\PYGZsh{} Encoder network}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block1} \PYG{o}{=} \PYG{n}{UNet\PYGZus{}down\PYGZus{}block}\PYG{p}{(}\PYG{n}{input\PYGZus{}channel\PYGZus{}number}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{,} \PYG{n+nb+bp}{False}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} 64*520}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block2} \PYG{o}{=} \PYG{n}{UNet\PYGZus{}down\PYGZus{}block}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{,} \PYG{n+nb+bp}{True}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} 64*520}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block3} \PYG{o}{=} \PYG{n}{UNet\PYGZus{}down\PYGZus{}block}\PYG{p}{(}\PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n+nb+bp}{True}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} 64*260}
+
+
+        \PYG{c+c1}{\PYGZsh{} bottom convolution}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*260}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*260}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv3} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}, dilation=4 \PYGZsh{} 64*260}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*260}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn4} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv5} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*260}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn5} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{256}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} Decoder network}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}block2} \PYG{o}{=} \PYG{n}{UNet\PYGZus{}up\PYGZus{}block}\PYG{p}{(}\PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{256}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*520}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}block3} \PYG{o}{=} \PYG{n}{UNet\PYGZus{}up\PYGZus{}block}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{128}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*520}
+
+        \PYG{c+c1}{\PYGZsh{} \PYGZsh{} Final output}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}conv1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*520}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}bn} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}conv2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel\PYGZus{}number}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{c+c1}{\PYGZsh{} 64*520}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}bn2} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel\PYGZus{}number}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} 64*520}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{softplus} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Softplus}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{relu} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{ReLU}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tanhshrink} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanhshrink}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{tanh} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Tanh}\PYG{p}{(}\PYG{p}{)}
+
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{,} \PYG{n}{test}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{n}{x2} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block2}\PYG{p}{(}\PYG{n}{x1}\PYG{p}{)}
+        \PYG{n}{x3} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}block3}\PYG{p}{(}\PYG{n}{x2}\PYG{p}{)}
+
+        \PYG{n}{x4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv1}\PYG{p}{(}\PYG{n}{x3}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv2}\PYG{p}{(}\PYG{n}{x4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv3}\PYG{p}{(}\PYG{n}{x4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn4}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv4}\PYG{p}{(}\PYG{n}{x4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x4} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn5}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{mid\PYGZus{}conv5}\PYG{p}{(}\PYG{n}{x4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}block2}\PYG{p}{(}\PYG{n}{x2}\PYG{p}{,} \PYG{n}{x4}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}block3}\PYG{p}{(}\PYG{n}{x1}\PYG{p}{,} \PYG{n}{out}\PYG{p}{)}
+
+        \PYG{n}{out} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}conv1}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}conv2}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{n}{out} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{softplus}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+        \PYG{k}{return} \PYG{n}{out}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Details of Code}
+\label{\detokenize{usage/quickstart:details-of-code}}
+The upblock and downblock are defined as following:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{UNet\PYGZus{}down\PYGZus{}block}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{down\PYGZus{}sample}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{UNet\PYGZus{}down\PYGZus{}block}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{kernel\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{3}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}sampling} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}sample} \PYG{o}{=} \PYG{n}{down\PYGZus{}sample}
+
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}sample}\PYG{p}{:}
+            \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{down\PYGZus{}sampling}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} print(\PYGZsq{}down\PYGZsq{},x.shape)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} print(x.shape)}
+        \PYG{k}{return} \PYG{n}{x}
+
+\PYG{k}{class} \PYG{n+nc}{UNet\PYGZus{}up\PYGZus{}block}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Module}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{prev\PYGZus{}channel}\PYG{p}{,} \PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{ID}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb}{super}\PYG{p}{(}\PYG{n}{UNet\PYGZus{}up\PYGZus{}block}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{o}{.}\PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{kernel\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{3}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{ID} \PYG{o}{=} \PYG{n}{ID}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}sampling} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{ConvTranspose2d}\PYG{p}{(}\PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{prev\PYGZus{}channel} \PYG{o}{+} \PYG{n}{input\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=} \PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn1} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=} \PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn2} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{Conv2d}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{output\PYGZus{}channel}\PYG{p}{,} \PYG{n}{kernel\PYGZus{}size}\PYG{p}{,} \PYG{n}{stride}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{bias}\PYG{o}{=} \PYG{n+nb+bp}{False}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{bn3} \PYG{o}{=} \PYG{n}{Norm}\PYG{p}{(}\PYG{n}{output\PYGZus{}channel}\PYG{p}{)}
+
+
+    \PYG{k}{def} \PYG{n+nf}{forward}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{prev\PYGZus{}feature\PYGZus{}map}\PYG{p}{,} \PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{ID} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{p}{:}
+            \PYG{n}{x} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{up\PYGZus{}sampling}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+        \PYG{k}{elif} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{ID} \PYG{o}{==} \PYG{l+m+mi}{2}\PYG{p}{:}
+            \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{interpolate}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{scale\PYGZus{}factor}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{mode}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{nearest}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{elif} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{ID} \PYG{o}{==} \PYG{l+m+mi}{3}\PYG{p}{:}
+            \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{interpolate}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{scale\PYGZus{}factor}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{n}{mode}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{area}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}‘nearest’ \textbar{} ‘linear’ \textbar{} ‘bilinear’ \textbar{} ‘trilinear’ \textbar{} ‘area’}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{cat}\PYG{p}{(}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{prev\PYGZus{}feature\PYGZus{}map}\PYG{p}{)}\PYG{p}{,} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} x = torch.nn.functional.leaky\PYGZus{}relu(self.bn1((self.conv1(x))), 0.2)}
+        \PYG{c+c1}{\PYGZsh{} x = torch.nn.functional.leaky\PYGZus{}relu(self.bn2((self.conv2(x))), 0.2)}
+        \PYG{c+c1}{\PYGZsh{} x = torch.nn.functional.leaky\PYGZus{}relu(self.bn3((self.conv3(x))), 0.2)}
+        \PYG{c+c1}{\PYGZsh{} print(\PYGZsq{}up\PYGZsq{}, x.shape)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv1}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv2}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{n}{x} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{leaky\PYGZus{}relu}\PYG{p}{(}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{conv3}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mf}{0.2}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} print(x.shape)}
+        \PYG{k}{return} \PYG{n}{x}
+\end{sphinxVerbatim}
+
+Knowing the network, we can input the corrupted image, train the network, and output the cleaned image. Also note that the contracting path in UNet can be implemented based on differet kernels, say 3*3, 4*4 or 5*5.
+
+Added May 29 2019: I also find a interesting summary of UNet here \sphinxurl{http://www.deeplearning.net/tutorial/unet.html} .
+
+\begin{sphinxadmonition}{note}{Note:}
+Plus, we just give the example of UNet while there are plenties of networks worthy to explore and try, such as VGG, ResNet, FrameletNet. Just google it, and you will find something worthy to try.
+\end{sphinxadmonition}
+
+
+\section{Train your network}
 \label{\detokenize{usage/train:train-your-network}}\label{\detokenize{usage/train::doc}}
-
-\subsection{Train\_Unet!}
-\label{\detokenize{usage/train_file:module-train_unet}}\label{\detokenize{usage/train_file:train-unet}}\label{\detokenize{usage/train_file::doc}}\index{train\_unet (module)@\spxentry{train\_unet}\spxextra{module}}
-Created on Thu Jan 15 18:45:25 2019
-
-@author: bill
-@updated: Liang
-\index{Network\_Trainer (class in train\_unet)@\spxentry{Network\_Trainer}\spxextra{class in train\_unet}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{Network\_Trainer}}}{\emph{opts}, \emph{device\_ids}}{}~\index{test() (train\_unet.Network\_Trainer method)@\spxentry{test()}\spxextra{train\_unet.Network\_Trainer method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.test}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{test}}}{\emph{network}, \emph{batch\_size}, \emph{perform\_recon\_loss=False}, \emph{output\_all\_sinos=False}}{}
-\end{fulllineitems}
-
-\index{train() (train\_unet.Network\_Trainer method)@\spxentry{train()}\spxextra{train\_unet.Network\_Trainer method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.train}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{train}}}{}{}
-\end{fulllineitems}
-
-\index{visualize\_progress() (train\_unet.Network\_Trainer method)@\spxentry{visualize\_progress()}\spxextra{train\_unet.Network\_Trainer method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.visualize_progress}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{visualize\_progress}}}{\emph{opts}, \emph{images}, \emph{istest=False}}{}
-\end{fulllineitems}
-
-\index{write\_log() (train\_unet.Network\_Trainer method)@\spxentry{write\_log()}\spxextra{train\_unet.Network\_Trainer method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.Network_Trainer.write_log}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{write\_log}}}{\emph{value}, \emph{log\_type='test'}}{}
-\end{fulllineitems}
+In this part, we will focus on how to train our UNet. We will first cover several common loss functions and then go with how to train. Finally, we also give a method to further improve the training speed.
 
 
-\end{fulllineitems}
+\subsection{Loss functions}
+\label{\detokenize{usage/train:loss-functions}}
+The loss function is the function to map an event or values of one or more to prepresent the cost associated with the event. And if we view the deep learning as an optimization problem, our goal will be to minimize the loss function.
 
-\index{fill\_image() (in module train\_unet)@\spxentry{fill\_image()}\spxextra{in module train\_unet}}
+To be simple, the loss function is a method to evaluate how well our neural network is and we use backward proprogation to change the weights in the network to further improve our neural network or say to minimize our cost/loss.
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.fill_image}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{fill\_image}}}{\emph{input\_sino}, \emph{out\_img}}{}
-\end{fulllineitems}
+Here, I will enumerate several common used loss functions based on Pytorch.
 
-\index{main() (in module train\_unet)@\spxentry{main()}\spxextra{in module train\_unet}}
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.main}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{main}}}{}{}
-\end{fulllineitems}
+\subsubsection{L1Loss}
+\label{\detokenize{usage/train:l1loss}}
+L1Loss creates a criterion that measures the mean absolute error (MAE) between each element in the input x and target y.
 
-\index{preprocess() (in module train\_unet)@\spxentry{preprocess()}\spxextra{in module train\_unet}}
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{L1Loss}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+\begin{equation*}
+\begin{split}l(x,y) = L = \{l_1, ..., l_N\}^T, l_n = |x_n-y_n|\end{split}
+\end{equation*}
+where N is the batch size.
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.preprocess}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{preprocess}}}{\emph{input\_img}, \emph{target\_img}, \emph{train=False}}{}
-\end{fulllineitems}
 
-\index{random() (in module train\_unet)@\spxentry{random()}\spxextra{in module train\_unet}}
+\subsubsection{MSELoss}
+\label{\detokenize{usage/train:mseloss}}
+MSELoss creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input x and target y.
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{usage/train_file:train_unet.random}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{train\_unet.}}\sphinxbfcode{\sphinxupquote{random}}}{}{{ $\rightarrow$ x in the interval {[}0, 1).}}
-\end{fulllineitems}
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{MSELoss}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+\begin{equation*}
+\begin{split}l(x,y) = L = \{l_1, ..., l_N\}^T, l_n = (x_n-y_n)^2\end{split}
+\end{equation*}
 
+\subsubsection{MSSIM}
+\label{\detokenize{usage/train:mssim}}
+MSSIM is the structural similarity(SSIM) index, which predicts the perceived quality of digital television and cinematic pictures, as well as other kinds of digital images and videos. To be simple, SSIM is used for measuring the similarity between two images, while it ranges in {[}0,1{]}. SSIM is designed to improve the traditional methods, while it works well while being combined with traditional methods, such as L1, L2, in deep learning.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{MSSSIM}\PYG{p}{(}\PYG{n}{window\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{9}\PYG{p}{,} \PYG{n}{size\PYGZus{}average}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Combinations}
+\label{\detokenize{usage/train:combinations}}
+Try a combination of different loss functions.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{Loss} \PYG{o}{=} \PYG{n}{L1Loss} \PYG{o}{+} \PYG{n}{MSSSIM}
+\PYG{n}{Loss} \PYG{o}{=} \PYG{n}{L1Loss} \PYG{o}{+} \PYG{n}{MSELoss} \PYG{o}{+} \PYG{n}{MSSSIM}
+\end{sphinxVerbatim}
+
+\begin{sphinxadmonition}{note}{Note:}
+Here, only three loss functions are listed, and there are still a lot available there online. Google it! You can even define you own loss function based on your task. Network is flexible, and so with the loss functions. DIY!
+\end{sphinxadmonition}
+
+
+\subsection{Train, Train, Train}
+\label{\detokenize{usage/train:train-train-train}}
+We start with the optimizer and then the structure of training.
+
+
+\subsubsection{Optimizer}
+\label{\detokenize{usage/train:optimizer}}
+The optimizer is the package implementing optimization algorithms. Most commonly used methods are already supported in Pytorch, and we can easily construct an optimizer object in pytorch by using one line of code. Two examples of optimizers are listed below.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{optimizer} \PYG{o}{=} \PYG{n}{optim}\PYG{o}{.}\PYG{n}{SGD}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{lr}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{,} \PYG{n}{momentum}\PYG{o}{=}\PYG{l+m+mf}{0.9}\PYG{p}{)}
+\PYG{n}{optimizer} \PYG{o}{=} \PYG{n}{optim}\PYG{o}{.}\PYG{n}{Adam}\PYG{p}{(}\PYG{p}{[}\PYG{n}{var1}\PYG{p}{,} \PYG{n}{var2}\PYG{p}{]}\PYG{p}{,} \PYG{n}{lr}\PYG{o}{=}\PYG{l+m+mf}{0.0001}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+where the parameters of the optimizer can be set, such as the learning rate, weight decay and so on when initiating the optimizer.
+
+From my view, the optimizer takes job of the backward propagation and optimizes the neural network based on certain optimization algorithm. The details of pytorch optim can be found \sphinxurl{https://pytorch.org/docs/stable/optim.html} . To be simple, the optimizer change the weights in neural network to make it the optimal weights for mapping the input to target.
+
+
+\subsubsection{Backward Propagation}
+\label{\detokenize{usage/train:backward-propagation}}
+Training has been made really simple in Pytorch. As the example given in Pytorch, we only need to loop over the data iterator and feed the inputs into the neural network and optimize. The training is done!
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{for} \PYG{n}{epoch} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{:}  \PYG{c+c1}{\PYGZsh{} loop over the dataset multiple times}
+
+    \PYG{n}{running\PYGZus{}loss} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{data} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{trainloader}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} get the inputs}
+        \PYG{n}{badsino}\PYG{p}{,} \PYG{n}{goodsino} \PYG{o}{=} \PYG{n}{data}
+
+        \PYG{c+c1}{\PYGZsh{} zero the parameter gradients}
+        \PYG{n}{optimizer}\PYG{o}{.}\PYG{n}{zero\PYGZus{}grad}\PYG{p}{(}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} forward + backward + optimize}
+        \PYG{n}{outputs} \PYG{o}{=} \PYG{n}{Unet}\PYG{p}{(}\PYG{n}{badsino}\PYG{p}{)}
+        \PYG{n}{loss} \PYG{o}{=} \PYG{n}{criterion}\PYG{p}{(}\PYG{n}{outputs}\PYG{p}{,} \PYG{n}{goodsino}\PYG{p}{)}
+        \PYG{n}{loss}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{optimizer}\PYG{o}{.}\PYG{n}{step}\PYG{p}{(}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} print statistics}
+        \PYG{n}{running\PYGZus{}loss} \PYG{o}{+}\PYG{o}{=} \PYG{n}{loss}\PYG{o}{.}\PYG{n}{item}\PYG{p}{(}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2000} \PYG{o}{==} \PYG{l+m+mi}{1999}\PYG{p}{:}    \PYG{c+c1}{\PYGZsh{} print every 2000 mini\PYGZhy{}batches}
+            \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{[}\PYG{l+s+si}{\PYGZpc{}d}\PYG{l+s+s1}{, }\PYG{l+s+si}{\PYGZpc{}5d}\PYG{l+s+s1}{] loss: }\PYG{l+s+si}{\PYGZpc{}.3f}\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{\PYGZpc{}}
+                  \PYG{p}{(}\PYG{n}{epoch} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{running\PYGZus{}loss} \PYG{o}{/} \PYG{l+m+mi}{2000}\PYG{p}{)}\PYG{p}{)}
+            \PYG{n}{running\PYGZus{}loss} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+
+\PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Finished Training}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\begin{sphinxadmonition}{note}{Note:}
+We can train our neural network in GPU just simply transfering the tensors and the neural network onto the GPU.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{network}\PYG{o}{.}\PYG{n}{cuda}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+This would do all the work! That’s amazing, right?
+\end{sphinxadmonition}
+
+
+\subsection{Warm Restart?(Optional)}
+\label{\detokenize{usage/train:warm-restart-optional}}
+The restart techniques are common in gradient-free optimizaion to deal with multimodal functions. This warm restarts borrows the idea from \sphinxhref{https://arxiv.org/abs/1608.03983}{SGDR: Stochastic Gradient Descent with Warm Restarts}.
+
+The idea of the warm restart is to simulate a new warm-started run/restart of the optimizer once for every certain epochs.
+
+Try to restart your optimizer:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{if} \PYG{n}{epoch} \PYG{o}{\PYGZpc{}} \PYG{n}{next\PYGZus{}reset} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Resetting Optimizer}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{optimizer} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{optim}\PYG{o}{.}\PYG{n}{Adam}\PYG{p}{(}\PYG{n}{network}\PYG{o}{.}\PYG{n}{network}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{lr}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{opts}\PYG{o}{.}\PYG{n}{initial\PYGZus{}lr}\PYG{p}{,} \PYG{n}{betas}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{l+m+mf}{0.999}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{scheduler} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{optim}\PYG{o}{.}\PYG{n}{lr\PYGZus{}scheduler}\PYG{o}{.}\PYG{n}{StepLR}\PYG{p}{(}\PYG{n}{optimizer}\PYG{p}{,} \PYG{n}{step\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{gamma}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{opts}\PYG{o}{.}\PYG{n}{lr\PYGZus{}decay}\PYG{p}{)}
+    \PYG{n}{network}\PYG{o}{.}\PYG{n}{set\PYGZus{}optimizer}\PYG{p}{(}\PYG{n}{optimizer}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Set the next reset}
+    \PYG{n}{next\PYGZus{}reset} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{opts}\PYG{o}{.}\PYG{n}{warm\PYGZus{}reset\PYGZus{}length} \PYG{o}{+} \PYG{n}{warm\PYGZus{}reset\PYGZus{}increment}
+    \PYG{n}{warm\PYGZus{}reset\PYGZus{}increment} \PYG{o}{+}\PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{opts}\PYG{o}{.}\PYG{n}{warm\PYGZus{}reset\PYGZus{}increment}
+\end{sphinxVerbatim}
+
+Specially, from the paper, we can do the warm restarts that are not performed from scratch but emulated by decaying the learning rate.
+\begin{equation*}
+\begin{split}lr = lr_{min} + \frac{1}{2} (lr_{max} - lr_{min}) (1 + cos(\frac{T_{cur}}{T_i}\pi))\end{split}
+\end{equation*}
+where \(lr_{min}\) and \(lr_{max}\) are the ranges for the learning rate, and \(T_{cur}\) accounts for how many epochs have been performed since the last restart, and \(T_{i}\) is the index of epochs.
+
+\begin{sphinxadmonition}{note}{Note:}
+DIY warm starts.
+\end{sphinxadmonition}
 
 
 \section{Visualize your results!}
 \label{\detokenize{usage/view:visualize-your-results}}\label{\detokenize{usage/view::doc}}
 
+\subsection{Install Visdom and Open server}
+\label{\detokenize{usage/view:install-visdom-and-open-server}}
+Visdom is a flexible tool for creating, organizing, and sharing visualizations of live, rich data. Supports Torch and Numpy, which can be found \sphinxurl{https://github.com/facebookresearch/visdom/}.
+
+From my view, visdom is similar to the TensorBoard from Tensorflow while it is still under developing I hope it will be much more strong in the future.
+
+
+\subsubsection{Install}
+\label{\detokenize{usage/view:install}}
+Visdom can be easily installed by using pip.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{pip} \PYG{n}{install} \PYG{n}{visdom}
+\end{sphinxVerbatim}
+
+There are also other methods to install visdom which I am not familiar!
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Install Torch client}
+\PYG{c+c1}{\PYGZsh{} (STABLE VERSION, NOT ALL CURRENT FEATURES ARE SUPPORTED)}
+\PYG{n}{luarocks} \PYG{n}{install} \PYG{n}{visdom}
+\PYG{c+c1}{\PYGZsh{} Install visdom from source}
+\PYG{n}{pip} \PYG{n}{install} \PYG{o}{\PYGZhy{}}\PYG{n}{e} \PYG{o}{.}
+\PYG{c+c1}{\PYGZsh{} If the above runs into issues, you can try the below}
+\PYG{n}{easy\PYGZus{}install} \PYG{o}{.}
+
+\PYG{c+c1}{\PYGZsh{} Install Torch client from source (from th directory)}
+\PYG{n}{luarocks} \PYG{n}{make}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Open server}
+\label{\detokenize{usage/view:open-server}}
+After install visdom, you can start server from command line by running
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{python} \PYG{o}{\PYGZhy{}}\PYG{n}{m} \PYG{n}{visdom}\PYG{o}{.}\PYG{n}{server}
+\end{sphinxVerbatim}
+
+Then, the visdom can be accessed by going to \sphinxurl{http://localhost:8097} in your browser, or your own host address if specified.
+
+
+\subsection{Project your output to Visdom}
+\label{\detokenize{usage/view:project-your-output-to-visdom}}
+Now you have installed visdom, and next we will work on project our output to the server and then we can view them.
+
+
+\subsubsection{Step by step}
+\label{\detokenize{usage/view:step-by-step}}
+First, we need to initate our visdom object by:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{vis} \PYG{o}{=} \PYG{n}{visdom}\PYG{o}{.}\PYG{n}{Visdom}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+Second, we need to open one window project our output:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{window} \PYG{o}{=} \PYG{k+kc}{None}
+\end{sphinxVerbatim}
+
+Last, we need update our window with the output:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} project line}
+\PYG{n}{window} \PYG{o}{=} \PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n}{window}\PYG{p}{,} \PYG{n}{update}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{replace}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} project images}
+\PYG{n}{window} \PYG{o}{=} \PYG{n}{images}\PYG{p}{(}\PYG{n}{images}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n}{window}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+
+\subsubsection{A summary of code}
+\label{\detokenize{usage/view:a-summary-of-code}}
+In the following code, I have generated three windows for loss of ‘test’, ‘train’, ‘recon’ and two windows for ‘train\_image’, ‘test\_image’:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{visdom}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{c+c1}{\PYGZsh{} Start the server in terminal;}
+\PYG{c+c1}{\PYGZsh{} \PYGZsh{}  visdom/ python \PYGZhy{}m visdom.server}
+
+\PYG{k}{class} \PYG{n+nc}{Visualize\PYGZus{}Training}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis} \PYG{o}{=} \PYG{n}{visdom}\PYG{o}{.}\PYG{n}{Visdom}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win1} \PYG{o}{=} \PYG{k+kc}{None}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win3} \PYG{o}{=} \PYG{k+kc}{None}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win2} \PYG{o}{=} \PYG{k+kc}{None}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}images} \PYG{o}{=} \PYG{k+kc}{None}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{test\PYGZus{}images} \PYG{o}{=} \PYG{k+kc}{None}
+
+
+
+    \PYG{k}{def} \PYG{n+nf}{Plot\PYGZus{}Progress}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{path}\PYG{p}{,} \PYG{n}{window} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{train}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{:}
+        \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{         Plot progress}
+\PYG{l+s+sd}{        \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+        \PYG{c+c1}{\PYGZsh{}TODO: Graph these on the same graph dummy!!!!!}
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{loadtxt}\PYG{p}{(}\PYG{n}{path}\PYG{p}{)}
+            \PYG{k}{if} \PYG{n}{window} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{train}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}
+                \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win1} \PYG{o}{==} \PYG{k+kc}{None}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Historical Epoch}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{ylabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Training Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Training Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{legend}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Training Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+                \PYG{k}{else}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win1}\PYG{p}{,} \PYG{n}{update}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{replace}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+            \PYG{k}{elif} \PYG{n}{window} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{test}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}
+                \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win3} \PYG{o}{==} \PYG{k+kc}{None}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win3} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Historical Epoch}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{ylabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Testing Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Testing Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{legend}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Testing Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+                \PYG{k}{else}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win3}\PYG{p}{,} \PYG{n}{update}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{replace}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+            \PYG{k}{elif} \PYG{n}{window} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{recon}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}
+                \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win2} \PYG{o}{==} \PYG{k+kc}{None}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win2} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Historical Epoch}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{ylabel}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Recon Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Recon Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                                     \PYG{n}{legend}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Recon Loss}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+                \PYG{k}{else}\PYG{p}{:}
+                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{line}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{Y}\PYG{o}{=}\PYG{n}{data}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{win2}\PYG{p}{,} \PYG{n}{update}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{replace}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{except}\PYG{p}{:}
+            \PYG{k}{pass}
+
+
+    \PYG{k}{def} \PYG{n+nf}{Show\PYGZus{}Train\PYGZus{}Images}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{images}\PYG{p}{,} \PYG{n}{text}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Images}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{:}
+        \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{        images: a list of same size images}
+\PYG{l+s+sd}{        \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}images} \PYG{o}{==} \PYG{k+kc}{None}\PYG{p}{:}
+
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}images} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{images}\PYG{p}{(}\PYG{n}{images}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{n}{text}\PYG{p}{)}\PYG{p}{)}
+        \PYG{k}{else}\PYG{p}{:}
+
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{images}\PYG{p}{(}\PYG{n}{images}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}images}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{n}{text}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{Show\PYGZus{}Test\PYGZus{}Images}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{images}\PYG{p}{,} \PYG{n}{text}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Images}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{:}
+        \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{        images: a list of same size images}
+\PYG{l+s+sd}{        \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+        \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{test\PYGZus{}images} \PYG{o}{==} \PYG{k+kc}{None}\PYG{p}{:}
+
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{test\PYGZus{}images} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{images}\PYG{p}{(}\PYG{n}{images}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{n}{text}\PYG{p}{)}\PYG{p}{)}
+        \PYG{k}{else}\PYG{p}{:}
+
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{vis}\PYG{o}{.}\PYG{n}{images}\PYG{p}{(}\PYG{n}{images}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{win}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{test\PYGZus{}images}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{opts}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{n}{text}\PYG{p}{)}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\begin{sphinxadmonition}{note}{Note:}
+Try to generate your own visdom server!
+\end{sphinxadmonition}
+
+
 \section{Adjust your parameters!}
 \label{\detokenize{usage/adjust:adjust-your-parameters}}\label{\detokenize{usage/adjust::doc}}
-To start to view the result by using visdom:
+In this part, I will try to explain about the problems I have confronted with and the parameters I have tuned when I try to train the neural network and also the methods I have found to view or fixed the problems. There must be a lot of other problems I can not cover here, and in this case google it first and see if other people have solved it.
+
+
+\subsection{About memory and time consumption}
+\label{\detokenize{usage/adjust:about-memory-and-time-consumption}}
+
+\subsubsection{Memory}
+\label{\detokenize{usage/adjust:memory}}
+Let’s begin to view the usage{[}memory consumption{]} of GPU first, which can be easily done by calling the following code in terminal.
 
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+go}{python \PYGZhy{}m visdom.server}
-\end{sphinxVerbatim}
-
-To watch the using of GPU by using:
-
-\fvset{hllines={, ,}}%
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{nvidia\PYGZhy{}smi}
 \PYG{g+go}{watch \PYGZhy{}n 1 nvidia\PYGZhy{}smi}
 \end{sphinxVerbatim}
+
+Where nvidia-smi will show the results one time, by using \sphinxtitleref{watch -n 1 nvidia-smi} we can let the terminal update the results every 1 second. One sample of the results are shown below.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=500\sphinxpxdimen]{{memory}.png}\hspace*{\fill}}
+
+\begin{sphinxadmonition}{note}{Note:}
+Keeping an eye on the memory consumption can help us do the memory management during the traing. For example, if our peak usage of memory is too high, we better reduce some parameters in training. e.g. the size of data input, the batchsize of data input, even the size of network{[}the width or depth of the neural network{]}.
+\end{sphinxadmonition}
+
+
+\subsubsection{Time and memory}
+\label{\detokenize{usage/adjust:time-and-memory}}
+We can also check the memory consumption by using python wrapper. In the following, I have listed one example based on the \sphinxtitleref{profile} function from memory profiler package, where both the time and memory consumption of program can be monitored by adding a wrapper in front of our target function.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{memory\PYGZus{}profiler} \PYG{k+kn}{import} \PYG{n}{profile}
+
+\PYG{n+nd}{@profile}\PYG{p}{(}\PYG{p}{)}
+\PYG{k}{def} \PYG{n+nf}{basic\PYGZus{}mean}\PYG{p}{(}\PYG{n}{N}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{p}{:}
+   \PYG{n}{nbrs} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{10} \PYG{o}{*}\PYG{o}{*} \PYG{n}{N}\PYG{p}{)}\PYG{p}{)}
+   \PYG{n}{total} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{nbrs}\PYG{p}{)}
+   \PYG{n}{mean} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{nbrs}\PYG{p}{)} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{nbrs}\PYG{p}{)}
+   \PYG{k}{return} \PYG{n}{mean}
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:}
+    \PYG{n}{basic\PYGZus{}mean}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+After running
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{python \PYGZhy{}m memory\PYGZus{}profiler profile.py}
+\end{sphinxVerbatim}
+
+the log will be generated and shown in the terminal.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{Line \PYGZsh{}    Mem usage    Increment   Line Contents}
+\PYG{g+go}{=================================================}
+\PYG{g+go}{  2     36.7 MiB     36.7 MiB   @profile()}
+\PYG{g+go}{  3                             def basic\PYGZus{}mean(N=5):}
+\PYG{g+go}{  4     40.5 MiB      3.7 MiB       nbrs = list(range(0, 10 ** N))}
+\PYG{g+go}{  5     40.5 MiB      0.0 MiB       total = sum(nbrs)}
+\PYG{g+go}{  6     40.5 MiB      0.0 MiB       mean = sum(nbrs) / len(nbrs)}
+\PYG{g+go}{  7     40.5 MiB      0.0 MiB       return mean}
+\end{sphinxVerbatim}
+
+If we want to have the time-based memory usage, such as a report, we can run
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{mprof run \PYGZlt{}executable\PYGZgt{}}
+\PYG{g+go}{mprof plot}
+\end{sphinxVerbatim}
+
+In this way, a recorded file with the time-based memory usage will be generated as following,
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=700\sphinxpxdimen]{{MemoryManagement}.png}\hspace*{\fill}}
+
+This is super cool, right?! But for real time checking, \sphinxtitleref{watch -n 1 nvidia-smi} works better.
+
+\begin{sphinxadmonition}{note}{Note:}
+There must be other methods, which I can not enumerate, please keep an eye on them too.
+\end{sphinxadmonition}
+
+Next, let’s go into more parameters dealing with not only the memory and time consumption but also the learning accuracy.
+
+
+\subsection{Parameters in data}
+\label{\detokenize{usage/adjust:parameters-in-data}}
+If we are working on image denoising, the input are images with noise.
+In this case, the parameters we can change include but not limited to {[}the shape{]}, {[}the distribution{]}, {[}range/maximum/minimum/mean/median/deviation{]} of data. In this part, I would mainly focus on two of them, the shape and the distribution respectively.
+
+
+\subsubsection{Shape of data}
+\label{\detokenize{usage/adjust:shape-of-data}}
+When I am talking the shape of data, I mean the size of image. For example, each input of the neural network might be 3*256*256, which is a three-channel image with both width and height as 256. A bigger size of image will surely cost more operations and further affect the learning speed. Hence, choosing the right size or deciding the right resolution will be the first thing to track at the beginning or during the training.
+
+E.g., we can scale the origin 3*256*256 to grayscale as 1*256*256, and we can further reduce the height and width by sampling origin image by 4:1 and obtain images with the size of 1*64*64.
+
+\begin{sphinxadmonition}{note}{Note:}
+The options are flexible based on different targets.
+\end{sphinxadmonition}
+
+
+\subsubsection{Distribution of data}
+\label{\detokenize{usage/adjust:distribution-of-data}}
+I have tried several most and found that mapping the range of origin images to {[}0,1{]} can achive my best performance. But the case might be different based on different tasks.
+
+Normalization, as another method, is a technique often applied. The goal of normalization is to change the values of numeric columns in the dataset to a common scale, without distorting differences in the ranges of values. Normalization is required only when features have different ranges.
+
+\begin{sphinxadmonition}{note}{Note:}
+For more details, please refer to \sphinxurl{https://medium.com/@urvashilluniya/why-data-normalization-is-necessary-for-machine-learning-models-681b65a05029}, which is a good article about normalization.
+\end{sphinxadmonition}
+
+
+\subsection{Parameters in optimizer}
+\label{\detokenize{usage/adjust:parameters-in-optimizer}}
+Deep learning neural networks are trained using the stochastic gradient descent, which is an optimization algorithm that estimates the error gradient for the current state of the model using examples from the training dataset, then updates the weights of the model using the back-propagation of errors algorithm, referred to as simply backpropagation. Regarding to the otpimization, we will include two parameters which I have change frequently, inital learning rate and learning decay rate.
+
+
+\subsubsection{Inital Learning Rate}
+\label{\detokenize{usage/adjust:inital-learning-rate}}
+The learning rate is a hyperparameter that controls how much to change the model in response to the estimated error each time the model weights are updated. The learning rate may be the most important hyperparameter when configuring your neural network. Therefore it is vital to know how to investigate the effects of the learning rate on model performance and to build an intuition about the dynamics of the learning rate on model behavior. For more details, please refer to \sphinxurl{https://machinelearningmastery.com/understand-the-dynamics-of-learning-rate-on-deep-learning-neural-networks/}.
+
+\begin{sphinxadmonition}{note}{Note:}
+Overall, a learning rate that is too large can cause the model to converge too quickly to a suboptimal solution, whereas a learning rate that is too small can cause the process to get stuck.
+\end{sphinxadmonition}
+
+
+\subsubsection{Learning Decay Rate}
+\label{\detokenize{usage/adjust:learning-decay-rate}}
+Learning Decay Rate is the amount that the learning rate are updated during training is referred to as the step size or the “learning rate.”  The learning decay rate is usually initated with a big value and then decay to a small value based on different algorithms. The reason for this is to make the weights of the network converge quickly to the solution at the begining and then converge more slow to reach the optimal solution when it is close to the solution.
+
+
+\subsection{Parameters in neural network}
+\label{\detokenize{usage/adjust:parameters-in-neural-network}}
+last but not the last, we can also tune parameters in neural network, UNet. Since most layers in UNet are equipped as the convolutional layer, then we can change the kernel size which can be managed to reduce the weight Convnets while making them deeper.
+
+
+\subsubsection{Kernel Size}
+\label{\detokenize{usage/adjust:kernel-size}}
+The number of weights is dependent on the kernel size instead of the input size which is really important for images. Convolutional layers reduce memory usage and compute faster. For more, this article is a good reference -\textgreater{} \sphinxurl{https://blog.sicara.com/about-convolutional-layer-convolution-kernel-9a7325d34f7d}
+
+
+\subsubsection{Other Parameters}
+\label{\detokenize{usage/adjust:other-parameters}}
+There are also other things we could try, such as adding bias to fully connect layer, changing the number of upsampling and downsampling, trying different activation functions, revising the layers in up/down blocks and so on.
+
+
+\subsection{Try other neural networks}
+\label{\detokenize{usage/adjust:try-other-neural-networks}}
+UNet is one of many neural networks for computer vision, and there are a lot of other networks online with open source models available in github. For example, Facebook research has post several modern models in \sphinxurl{https://github.com/pytorch/vision/tree/master/torchvision/models} which include alexnet, densenet, googlenet, mobilenet, resnet, vgg. What we need to do is to change/revise certain parts of the networks and make it meet our requirements, and then the parameters tuning would be similar to what we have discussed above.
+
+\begin{sphinxadmonition}{note}{Note:}
+Never stop in learning, because this area has been developed so fast.
+\end{sphinxadmonition}
+
+Good Luck!
+
+Liang, May 30, 2019
 
 
 \chapter{Indices and tables}
@@ -660,21 +1388,6 @@ To watch the using of GPU by using:
 \end{itemize}
 
 
-\renewcommand{\indexname}{Python Module Index}
-\begin{sphinxtheindex}
-\let\bigletter\sphinxstyleindexlettergroup
-\bigletter{d}
-\item\relax\sphinxstyleindexentry{datasets}\sphinxstyleindexpageref{usage/datset_file:\detokenize{module-datasets}}
-\indexspace
-\bigletter{s}
-\item\relax\sphinxstyleindexentry{sino\_process\_tof}\sphinxstyleindexpageref{usage/tof_file:\detokenize{module-sino_process_tof}}
-\indexspace
-\bigletter{t}
-\item\relax\sphinxstyleindexentry{train\_unet}\sphinxstyleindexpageref{usage/train_file:\detokenize{module-train_unet}}
-\indexspace
-\bigletter{u}
-\item\relax\sphinxstyleindexentry{unet}\sphinxstyleindexpageref{usage/net_file:\detokenize{module-unet}}
-\end{sphinxtheindex}
 
 \renewcommand{\indexname}{Index}
 \printindex
